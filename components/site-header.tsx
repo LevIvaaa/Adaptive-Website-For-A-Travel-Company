@@ -22,7 +22,7 @@ export function SiteHeader() {
           <span className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground">
             <Plane className="h-4 w-4" />
           </span>
-          <span className="font-display text-lg font-bold">Мандри Світу</span>
+          <span className="font-display text-lg font-bold">{T.brand}</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">

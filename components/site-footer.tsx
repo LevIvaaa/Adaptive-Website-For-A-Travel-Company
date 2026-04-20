@@ -16,7 +16,7 @@ export function SiteFooter() {
             <span className="grid h-9 w-9 place-items-center rounded-full bg-primary">
               <Plane className="h-4 w-4" />
             </span>
-            <span className="font-display text-lg font-bold">Мандри Світу</span>
+            <span className="font-display text-lg font-bold">{T.brand}</span>
           </Link>
           <p className="mt-3 max-w-sm text-sm text-slate-400">{T.footer.tagline}</p>
         </div>
@@ -39,7 +39,7 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm">
             <li className="flex gap-2">
               <MapPin className="h-4 w-4 text-primary" />
-              м. Київ, вул. Саксаганського 28
+              {T.footer.address}
             </li>
             <li className="flex gap-2">
               <Phone className="h-4 w-4 text-primary" />
@@ -54,7 +54,7 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} Мандри Світу. {T.footer.rights}
+        © {new Date().getFullYear()} {T.brand}. {T.footer.rights}
       </div>
     </footer>
   )

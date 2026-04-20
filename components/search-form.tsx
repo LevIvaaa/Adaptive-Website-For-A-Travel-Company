@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useT } from "@/lib/i18n"
 
 interface FormValues {
   destination: string
@@ -13,6 +14,7 @@ interface FormValues {
 
 export function SearchForm() {
   const router = useRouter()
+  const T = useT()
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: { destination: "", date: "", travelers: "2" }
   })
@@ -28,32 +30,31 @@ export function SearchForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="grid gap-3 rounded-2xl bg-white/95 p-4 text-slate-800 shadow-xl backdrop-blur md:grid-cols-[1.2fr_1fr_1fr_auto] md:gap-2"
     >
-      <Field label="Куди">
+      <Field label={T.search.destination}>
         <input
           {...register("destination")}
           type="text"
-          placeholder="Країна або курорт"
+          placeholder={T.search.destinationPh}
           className="w-full bg-transparent text-sm outline-none"
         />
       </Field>
-      <Field label="Дата">
+      <Field label={T.search.date}>
         <input
           {...register("date")}
           type="date"
           className="w-full bg-transparent text-sm outline-none"
         />
       </Field>
-      <Field label="Туристів">
+      <Field label={T.search.travelers}>
         <select {...register("travelers")} className="w-full bg-transparent text-sm outline-none">
-          <option value="1">1 дорослий</option>
-          <option value="2">2 дорослих</option>
-          <option value="2+1">2 дорослих + 1 дитина</option>
-          <option value="2+2">2 дорослих + 2 дитини</option>
+          {T.search.options.map((opt, i) => (
+            <option key={i} value={String(i + 1)}>{opt}</option>
+          ))}
         </select>
       </Field>
       <Button type="submit" size="lg" className="md:self-stretch">
         <Search className="h-4 w-4" />
-        Шукати
+        {T.search.submit}
       </Button>
     </form>
   )
