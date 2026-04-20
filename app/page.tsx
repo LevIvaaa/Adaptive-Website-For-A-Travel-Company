@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { HeartHandshake, ShieldCheck, Wallet } from "lucide-react"
 import { SearchForm } from "@/components/search-form"
@@ -14,22 +13,12 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="relative">
-        <Image
-          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover"
-        />
-        <div className="absolute inset-0 -z-10 bg-hero" />
-
-        <div className="container flex min-h-[520px] flex-col justify-center py-16 text-white">
+      <section className="bg-primary text-primary-foreground">
+        <div className="container flex min-h-[480px] flex-col justify-center py-16">
           <h1 className="max-w-3xl text-4xl font-bold md:text-5xl lg:text-6xl">
             {T.home.heroTitle}
           </h1>
-          <p className="mt-4 max-w-xl text-white/90">{T.home.heroDescription}</p>
+          <p className="mt-4 max-w-xl text-primary-foreground/90">{T.home.heroDescription}</p>
           <div className="mt-8">
             <SearchForm />
           </div>
