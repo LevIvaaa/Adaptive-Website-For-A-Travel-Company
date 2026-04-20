@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 33% 98%;
+    --foreground: 215 30% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 30% 14%;
+    --primary: 196 78% 38%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 32 95% 54%;
+    --secondary-foreground: 215 30% 14%;
+    --muted: 210 20% 95%;
+    --muted-foreground: 215 15% 42%;
+    --accent: 32 95% 54%;
+    --accent-foreground: 215 30% 14%;
+    --destructive: 0 70% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 196 78% 38%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 215 28% 10%;
+    --foreground: 40 33% 96%;
+    --card: 215 28% 13%;
+    --card-foreground: 40 33% 96%;
+    --primary: 196 78% 50%;
+    --primary-foreground: 215 28% 10%;
+    --secondary: 32 95% 58%;
+    --secondary-foreground: 215 28% 10%;
+    --muted: 215 20% 18%;
+    --muted-foreground: 215 15% 70%;
+    --accent: 32 95% 58%;
+    --accent-foreground: 215 28% 10%;
+    --destructive: 0 65% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 20% 22%;
+    --input: 215 20% 22%;
+    --ring: 196 78% 50%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer utilities {
+  .bg-hero {
+    background-image: linear-gradient(180deg, rgba(10, 25, 45, 0.2) 0%, rgba(10, 25, 45, 0.65) 100%);
+  }
+
+  .section-padding {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+}
