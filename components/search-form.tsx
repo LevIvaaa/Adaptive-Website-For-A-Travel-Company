@@ -28,25 +28,25 @@ export function SearchForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="grid gap-3 rounded-2xl bg-white/95 p-4 text-slate-800 shadow-xl backdrop-blur md:grid-cols-[1.2fr_1fr_1fr_auto] md:gap-2"
+      className="grid gap-3 md:grid-cols-[1.2fr_1fr_1fr_auto] md:items-end md:gap-2"
     >
       <Field label={T.search.destination}>
         <input
           {...register("destination")}
           type="text"
           placeholder={T.search.destinationPh}
-          className="w-full bg-transparent text-sm outline-none"
+          className="w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-500"
         />
       </Field>
       <Field label={T.search.date}>
         <input
           {...register("date")}
           type="date"
-          className="w-full bg-transparent text-sm outline-none"
+          className="w-full bg-transparent text-sm text-slate-900 outline-none"
         />
       </Field>
       <Field label={T.search.travelers}>
-        <select {...register("travelers")} className="w-full bg-transparent text-sm outline-none">
+        <select {...register("travelers")} className="w-full bg-transparent text-sm text-slate-900 outline-none">
           {T.search.options.map((opt, i) => (
             <option key={i} value={String(i + 1)}>{opt}</option>
           ))}
@@ -62,7 +62,7 @@ export function SearchForm() {
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <label className="flex flex-col gap-0.5 rounded-lg bg-muted/50 px-3 py-2 md:bg-transparent">
+    <label className="flex flex-col gap-0.5 rounded-lg bg-white/90 px-3 py-2 backdrop-blur">
       <span className="text-xs font-semibold uppercase text-slate-500">{label}</span>
       {children}
     </label>

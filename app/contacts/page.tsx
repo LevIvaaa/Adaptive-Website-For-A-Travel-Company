@@ -51,7 +51,7 @@ export default function ContactsPage() {
               <div>
                 <h3 className="font-semibold">{T.contacts.emailTitle}</h3>
                 <div className="mt-1 text-sm text-muted-foreground">
-                  <p>hello@mandry-svitu.ua</p>
+                  <p>info@travel-agency.com</p>
                 </div>
               </div>
             </div>

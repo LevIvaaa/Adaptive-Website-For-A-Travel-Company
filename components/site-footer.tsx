@@ -47,7 +47,7 @@ export function SiteFooter() {
             </li>
             <li className="flex gap-2">
               <Mail className="h-4 w-4 text-primary" />
-              <a href="mailto:hello@mandry-svitu.ua" className="hover:text-white">hello@mandry-svitu.ua</a>
+              <a href="mailto:info@travel-agency.com" className="hover:text-white">info@travel-agency.com</a>
             </li>
           </ul>
         </div>
