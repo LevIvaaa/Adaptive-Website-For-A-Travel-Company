@@ -1,16 +1,16 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
-import { Check, Clock, MapPin, Star, Utensils } from "lucide-react"
+import { Check, Clock, MapPin, Plane, Star, Utensils } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { localizeTour, type Tour } from "@/lib/tours"
-import { useLocale } from "@/lib/store"
+import { useLocale, useCurrency } from "@/lib/store"
 import { useT, pluralNights } from "@/lib/i18n"
 import { formatPrice } from "@/lib/utils"
 
 export function TourView({ tour }: { tour: Tour }) {
   const { locale } = useLocale()
+  const { currency } = useCurrency()
   const T = useT()
   const t = localizeTour(tour, locale)
 
@@ -40,15 +40,8 @@ export function TourView({ tour }: { tour: Tour }) {
             <span className="text-muted-foreground">{t.hotel}</span>
           </div>
 
-          <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-xl">
-            <Image
-              src={t.image}
-              alt={t.title}
-              fill
-              priority
-              sizes="(min-width:1024px) 700px, 100vw"
-              className="object-cover"
-            />
+          <div className="mt-6 flex aspect-[16/9] items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5">
+            <Plane className="h-20 w-20 text-primary/30" />
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-4 rounded-xl border bg-card p-5 sm:grid-cols-3">
@@ -106,7 +99,7 @@ export function TourView({ tour }: { tour: Tour }) {
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-2xl border bg-card p-6 shadow-md">
             <div className="text-sm text-muted-foreground">{T.tourDetail.priceFrom}</div>
-            <div className="mt-1 text-3xl font-bold">{formatPrice(t.price)}</div>
+            <div className="mt-1 text-3xl font-bold">{formatPrice(t.price, currency)}</div>
             <div className="mt-1 text-xs text-muted-foreground">{T.tourDetail.priceNote}</div>
 
             <Button asChild className="mt-5 w-full" size="lg">

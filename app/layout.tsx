@@ -20,10 +20,10 @@ const merriweather = Merriweather({
 
 export const metadata: Metadata = {
   title: {
-    default: "Туристическая компания",
-    template: "%s · Туристическая компания"
+    default: "Travel Agency",
+    template: "%s · Travel Agency"
   },
-  description: "Підбираємо подорожі до Туреччини, Єгипту, Греції та інших країн."
+  description: "Travel agency — tours to Turkey, Egypt, Greece and other countries."
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

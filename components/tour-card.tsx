@@ -1,31 +1,25 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
-import { Clock, Heart, MapPin, Star } from "lucide-react"
+import { Clock, Heart, MapPin, Plane, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatPrice, cn } from "@/lib/utils"
-import { useFavorites, useLocale } from "@/lib/store"
+import { useFavorites, useLocale, useCurrency } from "@/lib/store"
 import { useT, pluralNights } from "@/lib/i18n"
 import { localizeTour, type Tour } from "@/lib/tours"
 
 export function TourCard({ tour }: { tour: Tour }) {
   const { has, toggle } = useFavorites()
   const { locale } = useLocale()
+  const { currency } = useCurrency()
   const T = useT()
   const t = localizeTour(tour, locale)
   const fav = has(t.id)
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-      <div className="relative aspect-[4/3]">
-        <Image
-          src={t.image}
-          alt={t.title}
-          fill
-          sizes="(min-width:1024px) 380px, 100vw"
-          className="object-cover transition duration-500 group-hover:scale-105"
-        />
+      <div className="relative flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-primary/15 to-primary/5">
+        <Plane className="h-14 w-14 text-primary/30" />
         <button
           type="button"
           onClick={() => toggle(t.id)}
@@ -65,7 +59,7 @@ export function TourCard({ tour }: { tour: Tour }) {
         <div className="mt-auto flex items-end justify-between pt-5">
           <div>
             <div className="text-xs text-muted-foreground">{T.card.from}</div>
-            <div className="text-2xl font-bold">{formatPrice(t.price)}</div>
+            <div className="text-2xl font-bold">{formatPrice(t.price, currency)}</div>
           </div>
           <Button asChild size="sm">
             <Link href={`/tours/${t.slug}`}>{T.card.details}</Link>

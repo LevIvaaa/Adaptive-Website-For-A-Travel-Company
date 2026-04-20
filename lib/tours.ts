@@ -6,7 +6,6 @@ type BiList = { uk: string[]; en: string[] }
 export interface Tour {
   id: string
   slug: string
-  image: string
   nights: number
   price: number
   rating: number
@@ -22,7 +21,6 @@ export interface Tour {
 export interface LocalizedTour {
   id: string
   slug: string
-  image: string
   nights: number
   price: number
   rating: number
@@ -39,8 +37,6 @@ export const tours: Tour[] = [
   {
     id: "1",
     slug: "turkey-antalya",
-    image:
-      "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=1200&q=80",
     nights: 7,
     price: 28900,
     rating: 4.8,
@@ -74,8 +70,6 @@ export const tours: Tour[] = [
   {
     id: "2",
     slug: "egypt-sharm",
-    image:
-      "https://images.unsplash.com/photo-1568322445389-f64ac2515020?w=1200&q=80",
     nights: 10,
     price: 32500,
     rating: 4.7,
@@ -99,8 +93,6 @@ export const tours: Tour[] = [
   {
     id: "3",
     slug: "greece-crete",
-    image:
-      "https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?w=1200&q=80",
     nights: 8,
     price: 41200,
     rating: 4.9,
@@ -124,8 +116,6 @@ export const tours: Tour[] = [
   {
     id: "4",
     slug: "georgia-gudauri",
-    image:
-      "https://images.unsplash.com/photo-1551524559-8af4e6624178?w=1200&q=80",
     nights: 6,
     price: 21500,
     rating: 4.6,
@@ -146,8 +136,6 @@ export const tours: Tour[] = [
   {
     id: "5",
     slug: "italy-rome",
-    image:
-      "https://images.unsplash.com/photo-1529260830199-42c24126f198?w=1200&q=80",
     nights: 5,
     price: 38700,
     rating: 4.8,
@@ -168,8 +156,6 @@ export const tours: Tour[] = [
   {
     id: "6",
     slug: "montenegro-budva",
-    image:
-      "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=1200&q=80",
     nights: 9,
     price: 26400,
     rating: 4.5,
@@ -193,7 +179,6 @@ export function localizeTour(tour: Tour, locale: Locale): LocalizedTour {
   return {
     id: tour.id,
     slug: tour.slug,
-    image: tour.image,
     nights: tour.nights,
     price: tour.price,
     rating: tour.rating,

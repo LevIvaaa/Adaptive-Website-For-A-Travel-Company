@@ -41,3 +41,20 @@ export const useLocale = create<LocaleState>()(
     { name: "locale" }
   )
 )
+
+export type Currency = "UAH" | "USD" | "EUR"
+
+interface CurrencyState {
+  currency: Currency
+  setCurrency: (c: Currency) => void
+}
+
+export const useCurrency = create<CurrencyState>()(
+  persist(
+    (set) => ({
+      currency: "UAH",
+      setCurrency: (c) => set({ currency: c })
+    }),
+    { name: "currency" }
+  )
+)
