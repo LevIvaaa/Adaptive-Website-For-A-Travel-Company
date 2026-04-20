@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { Mail, MapPin, Phone, Plane } from "lucide-react"
-import { navItems } from "@/lib/navigation"
 import { useT } from "@/lib/i18n"
 
 export function SiteFooter() {
@@ -10,7 +9,7 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t bg-slate-950 text-slate-300">
-      <div className="container grid gap-8 py-12 md:grid-cols-3">
+      <div className="container grid gap-8 py-12 md:grid-cols-2">
         <div>
           <Link href="/" className="flex items-center gap-2 text-white">
             <span className="grid h-9 w-9 place-items-center rounded-full bg-primary">
@@ -19,19 +18,6 @@ export function SiteFooter() {
             <span className="font-display text-lg font-bold">{T.brand}</span>
           </Link>
           <p className="mt-3 max-w-sm text-sm text-slate-400">{T.footer.tagline}</p>
-        </div>
-
-        <div>
-          <h4 className="mb-3 font-semibold text-white">{T.footer.menu}</h4>
-          <ul className="space-y-2 text-sm">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="hover:text-white">
-                  {T.nav[item.id]}
-                </Link>
-              </li>
-            ))}
-          </ul>
         </div>
 
         <div>
@@ -51,10 +37,6 @@ export function SiteFooter() {
             </li>
           </ul>
         </div>
-      </div>
-
-      <div className="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} {T.brand}. {T.footer.rights}
       </div>
     </footer>
   )
