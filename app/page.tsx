@@ -91,7 +91,7 @@ export default function HomePage() {
               Залиште заявку — менеджер підбере 2–3 варіанти під ваш бюджет і дати.
             </p>
             <div className="mt-6">
-              <Button asChild size="lg" variant="secondary">
+              <Button asChild size="lg" variant="accent">
                 <Link href="/contacts">Замовити підбір</Link>
               </Button>
             </div>
