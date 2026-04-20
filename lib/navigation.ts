@@ -1,6 +1,8 @@
-export const mainNav = [
-  { title: "Головна", href: "/" },
-  { title: "Тури", href: "/tours" },
-  { title: "Про нас", href: "/about" },
-  { title: "Контакти", href: "/contacts" }
+export type NavId = "home" | "tours" | "about" | "contacts"
+
+export const navItems: { id: NavId; href: string }[] = [
+  { id: "home", href: "/" },
+  { id: "tours", href: "/tours" },
+  { id: "about", href: "/about" },
+  { id: "contacts", href: "/contacts" }
 ]

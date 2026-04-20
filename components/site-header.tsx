@@ -5,12 +5,15 @@ import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { Menu, Plane, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { mainNav } from "@/lib/navigation"
+import { LocaleSwitcher } from "@/components/locale-switcher"
+import { navItems } from "@/lib/navigation"
+import { useT } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 export function SiteHeader() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const T = useT()
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
@@ -23,7 +26,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          {mainNav.map((item) => {
+          {navItems.map((item) => {
             const active =
               item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)
             return (
@@ -35,42 +38,46 @@ export function SiteHeader() {
                   active ? "text-primary" : "text-foreground/80 hover:text-primary"
                 )}
               >
-                {item.title}
+                {T.nav[item.id]}
               </Link>
             )
           })}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-2 md:flex">
+          <LocaleSwitcher />
           <Button asChild size="sm">
-            <Link href="/login">Увійти</Link>
+            <Link href="/login">{T.login}</Link>
           </Button>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="grid h-10 w-10 place-items-center rounded-md border md:hidden"
-          aria-label="Меню"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LocaleSwitcher />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="grid h-10 w-10 place-items-center rounded-md border"
+            aria-label="Menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {open && (
         <nav className="container flex flex-col gap-1 border-t py-3 md:hidden">
-          {mainNav.map((item) => (
+          {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
               className="rounded-md px-3 py-2.5 text-sm font-medium hover:bg-muted"
             >
-              {item.title}
+              {T.nav[item.id]}
             </Link>
           ))}
           <Button asChild className="mt-2">
-            <Link href="/login" onClick={() => setOpen(false)}>Увійти</Link>
+            <Link href="/login" onClick={() => setOpen(false)}>{T.login}</Link>
           </Button>
         </nav>
       )}

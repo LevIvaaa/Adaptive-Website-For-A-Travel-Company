@@ -22,3 +22,22 @@ export const useFavorites = create<FavoritesState>()(
     { name: "favorites" }
   )
 )
+
+export type Locale = "uk" | "en"
+
+interface LocaleState {
+  locale: Locale
+  toggle: () => void
+  setLocale: (l: Locale) => void
+}
+
+export const useLocale = create<LocaleState>()(
+  persist(
+    (set) => ({
+      locale: "uk",
+      toggle: () => set((s) => ({ locale: s.locale === "uk" ? "en" : "uk" })),
+      setLocale: (l) => set({ locale: l })
+    }),
+    { name: "locale" }
+  )
+)
