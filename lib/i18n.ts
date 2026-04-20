@@ -2,7 +2,7 @@ import { useLocale, type Locale } from "@/lib/store"
 
 export const translations = {
   uk: {
-    brand: "Туристическая компания",
+    brand: "Туристична компанія",
     nav: {
       home: "Головна",
       tours: "Тури",
