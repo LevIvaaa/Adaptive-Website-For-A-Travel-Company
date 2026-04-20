@@ -9,7 +9,7 @@ import { useLocale } from "@/lib/store"
 import { useT, pluralNights } from "@/lib/i18n"
 import { formatPrice } from "@/lib/utils"
 
-export function TourDetailContent({ tour }: { tour: Tour }) {
+export function TourView({ tour }: { tour: Tour }) {
   const { locale } = useLocale()
   const T = useT()
   const t = localizeTour(tour, locale)
@@ -46,19 +46,43 @@ export function TourDetailContent({ tour }: { tour: Tour }) {
               alt={t.title}
               fill
               priority
-              className="object-cover"
               sizes="(min-width:1024px) 700px, 100vw"
+              className="object-cover"
             />
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-4 rounded-xl border bg-card p-5 sm:grid-cols-3">
-            <Fact
-              icon={<Clock />}
-              label={T.tourDetail.duration}
-              value={`${t.nights} ${pluralNights(t.nights, locale)}`}
-            />
-            <Fact icon={<Utensils />} label={T.tourDetail.meal} value={t.meal} />
-            <Fact icon={<Star />} label={T.tourDetail.rating} value={`${t.rating}/5`} />
+            <div className="flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
+                <Clock className="h-5 w-5" />
+              </span>
+              <div>
+                <div className="text-xs text-muted-foreground">{T.tourDetail.duration}</div>
+                <div className="text-sm font-semibold">
+                  {t.nights} {pluralNights(t.nights, locale)}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
+                <Utensils className="h-5 w-5" />
+              </span>
+              <div>
+                <div className="text-xs text-muted-foreground">{T.tourDetail.meal}</div>
+                <div className="text-sm font-semibold">{t.meal}</div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
+                <Star className="h-5 w-5" />
+              </span>
+              <div>
+                <div className="text-xs text-muted-foreground">{T.tourDetail.rating}</div>
+                <div className="text-sm font-semibold">{t.rating}/5</div>
+              </div>
+            </div>
           </div>
 
           <div className="mt-8">
@@ -95,19 +119,5 @@ export function TourDetailContent({ tour }: { tour: Tour }) {
         </aside>
       </section>
     </>
-  )
-}
-
-function Fact({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary [&>svg]:h-5 [&>svg]:w-5">
-        {icon}
-      </span>
-      <div>
-        <div className="text-xs text-muted-foreground">{label}</div>
-        <div className="text-sm font-semibold">{value}</div>
-      </div>
-    </div>
   )
 }

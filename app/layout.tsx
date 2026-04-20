@@ -20,8 +20,8 @@ const merriweather = Merriweather({
 
 export const metadata: Metadata = {
   title: {
-    default: "Мандри Світу — туристична компанія",
-    template: "%s · Мандри Світу"
+    default: "Туристическая компания",
+    template: "%s · Туристическая компания"
   },
   description: "Підбираємо подорожі до Туреччини, Єгипту, Греції та інших країн."
 }

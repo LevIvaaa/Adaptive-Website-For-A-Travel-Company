@@ -2,7 +2,7 @@ import { useLocale, type Locale } from "@/lib/store"
 
 export const translations = {
   uk: {
-    brand: "Мандри Світу",
+    brand: "Туристическая компания",
     nav: {
       home: "Головна",
       tours: "Тури",
@@ -31,10 +31,7 @@ export const translations = {
       featurePrice: "Гарантія ціни",
       featurePriceText: "Знайдете дешевше — повернемо різницю.",
       featureSupport: "Менеджер 24/7",
-      featureSupportText: "На зв’язку від бронювання до повернення додому.",
-      ctaTitle: "Не знайшли свій тур?",
-      ctaDesc: "Залиште заявку — менеджер підбере 2–3 варіанти під ваш бюджет і дати.",
-      ctaButton: "Замовити підбір"
+      featureSupportText: "На зв’язку від бронювання до повернення додому."
     },
     search: {
       destination: "Куди",
@@ -138,7 +135,7 @@ export const translations = {
   },
 
   en: {
-    brand: "Mandry Svitu",
+    brand: "Travel Agency",
     nav: {
       home: "Home",
       tours: "Tours",
@@ -167,10 +164,7 @@ export const translations = {
       featurePrice: "Best price guarantee",
       featurePriceText: "Find a cheaper offer and we will refund the difference.",
       featureSupport: "24/7 manager",
-      featureSupportText: "In touch from booking until you are back home.",
-      ctaTitle: "Didn’t find your tour?",
-      ctaDesc: "Leave a request — a manager will suggest 2–3 options for your budget and dates.",
-      ctaButton: "Request a selection"
+      featureSupportText: "In touch from booking until you are back home."
     },
     search: {
       destination: "Where",

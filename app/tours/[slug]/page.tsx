@@ -1,23 +1,13 @@
-import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { TourDetailContent } from "@/components/pages/tour-detail-content"
+import { TourView } from "./tour-view"
 import { tours } from "@/lib/tours"
-
-interface Props {
-  params: { slug: string }
-}
 
 export function generateStaticParams() {
   return tours.map((t) => ({ slug: t.slug }))
 }
 
-export function generateMetadata({ params }: Props): Metadata {
-  const tour = tours.find((t) => t.slug === params.slug)
-  return tour ? { title: tour.title.uk } : {}
-}
-
-export default function TourPage({ params }: Props) {
+export default function TourPage({ params }: { params: { slug: string } }) {
   const tour = tours.find((t) => t.slug === params.slug)
   if (!tour) notFound()
-  return <TourDetailContent tour={tour} />
+  return <TourView tour={tour} />
 }
