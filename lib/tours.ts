@@ -20,6 +20,15 @@ export interface LocalizedTour {
   included: string[]
 }
 
+function parseList(raw: string): string[] {
+  try {
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed.map(String) : []
+  } catch {
+    return []
+  }
+}
+
 export function localizeTour(tour: Tour, locale: Locale): LocalizedTour {
   return {
     id: tour.id,
@@ -35,6 +44,6 @@ export function localizeTour(tour: Tour, locale: Locale): LocalizedTour {
     hotel: locale === "uk" ? tour.hotelUk : tour.hotelEn,
     meal: locale === "uk" ? tour.mealUk : tour.mealEn,
     description: locale === "uk" ? tour.descriptionUk : tour.descriptionEn,
-    included: locale === "uk" ? tour.includedUk : tour.includedEn
+    included: parseList(locale === "uk" ? tour.includedUk : tour.includedEn)
   }
 }

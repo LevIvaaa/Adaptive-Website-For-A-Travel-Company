@@ -9,3 +9,5 @@ out
 dist
 build
 prisma/migrations/dev*
+prisma/*.db
+prisma/*.db-journal

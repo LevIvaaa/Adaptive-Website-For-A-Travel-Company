@@ -1,105 +1,101 @@
 # Travel Agency
 
-Full-stack travel agency website built with the requested stack.
+Full-stack travel agency website.
 
 ## Stack
 
 **Frontend:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · shadcn/ui · React Hook Form + Zod · TanStack Query · Zustand
 
-**Backend:** Next.js API Routes · Prisma ORM · PostgreSQL · NextAuth.js · bcrypt
+**Backend:** Next.js API Routes · Prisma ORM · SQLite (file-based) · NextAuth.js · bcrypt
 
 ## Features
 
-- **Auth modal** in the header (login/register tabs, no separate page)
-- **Real filters** on `/tours` (type, price range, sort by price/rating)
+- **Auth modal** in the header — login / register tabs, no separate page
+- **Real filters** on `/tours` (type, price range, sort) — driven by URL params
 - **Bookings** — logged-in users can book tours, manage in `/account/bookings`
-- **Contact form** — saves requests to `ContactRequest` table
+- **Contact form** — saves to DB
 - **i18n** — UA / EN toggle for the whole site
-- **Currency switcher** — UAH / USD / EUR
+- **Currency switcher** — UAH / USD / EUR with conversion
 - **Favourites** — persist in `localStorage` (Zustand)
 - **CI** — typecheck, lint, build, npm audit
 - **CodeQL** — security scan
 
-## Local setup
+## Local setup (3 commands)
 
-### 1. Prerequisites
-- Node.js 20+
-- PostgreSQL (locally via Docker or [Neon](https://neon.tech) free tier)
-
-### 2. Install
 ```bash
 npm install
-```
-
-### 3. Configure environment
-```bash
-cp .env.example .env
-```
-Edit `.env` and set:
-- `DATABASE_URL` — Postgres connection string
-- `NEXTAUTH_SECRET` — generate with `openssl rand -base64 32`
-- `NEXTAUTH_URL` — `http://localhost:3000` for local
-
-### 4. Apply schema and seed
-```bash
-npx prisma db push
-npm run db:seed
-```
-This creates tables and inserts 6 demo tours plus an admin user `admin@travel-agency.com / admin12345`.
-
-### 5. Run
-```bash
+npm run db:push && npm run db:seed
 npm run dev
 ```
-Open http://localhost:3000
 
-## Production deploy (Vercel + Neon)
+Open **http://localhost:4000**
 
-1. Create a Postgres DB on [neon.tech](https://neon.tech) — copy the pooled connection string
-2. Push the repo to GitHub (already done)
-3. Import the repo on [vercel.com](https://vercel.com)
-4. In Vercel project settings → **Environment Variables** add:
-   - `DATABASE_URL` — from Neon
-   - `NEXTAUTH_SECRET` — `openssl rand -base64 32`
-   - `NEXTAUTH_URL` — your production URL (e.g. `https://travel-agency.vercel.app`)
-5. Deploy. After first deploy run once locally:
-   ```bash
-   DATABASE_URL="<production-neon-url>" npx prisma db push
-   DATABASE_URL="<production-neon-url>" npm run db:seed
-   ```
+That’s it — no Docker, no Postgres server. SQLite stores everything in `prisma/dev.db`.
 
-Vercel will auto-deploy every push to `main`.
+### Demo credentials
+After seeding:
+- Email: `admin@travel-agency.com`
+- Password: `admin12345`
+
+Or click **Sign up** in the header to register a new user.
+
+## Scripts
+
+| Command | What it does |
+|---------|--------------|
+| `npm run dev` | Dev server on http://localhost:4000 |
+| `npm run build` | Production build |
+| `npm run start` | Start production server on :4000 |
+| `npm run lint` | ESLint |
+| `npm run db:push` | Apply schema to SQLite |
+| `npm run db:seed` | Insert 6 demo tours + admin user |
+| `npm run db:studio` | Open Prisma Studio (visual DB editor) |
 
 ## Project structure
 
 ```
 app/
-  (root)              layout, providers, globals.css
-  page.tsx            home
-  tours/              catalogue + detail
-  account/            user dashboard + bookings
+  layout.tsx, providers.tsx, globals.css
+  page.tsx                 home
+  tours/                   list + [slug] detail
+  account/                 dashboard + bookings
   api/
-    auth/             NextAuth credentials provider
-    register/         POST — create user
-    tours/            GET — list with filters
-    bookings/         GET/POST — user bookings
-    contact/          POST — contact form
+    auth/[...nextauth]     NextAuth credentials
+    register               POST  create user
+    tours                  GET   list with filters
+    bookings               GET/POST  user bookings (auth)
+    contact                POST  contact form
+
 components/
-  auth-dialog.tsx     login/register modal
-  user-menu.tsx       avatar dropdown when logged in
-  tour-filters.tsx    sidebar filters (URL-driven)
-  tour-grid.tsx       fetches tours with TanStack Query
-  booking-form.tsx    book a tour (auth-gated)
-  contact-form.tsx    contact request → API
-  ui/                 shadcn primitives (button, card, dialog, tabs, ...)
+  auth-dialog.tsx          login/register modal
+  user-menu.tsx            avatar dropdown
+  tour-filters.tsx         URL-driven sidebar filters
+  tour-grid.tsx            TanStack Query grid
+  booking-form.tsx         book a tour (auth-gated)
+  contact-form.tsx         contact request → API
+  ui/                      shadcn primitives
+
 lib/
-  prisma.ts           Prisma singleton
-  auth.ts             NextAuth config
-  store.ts            Zustand stores (favs, locale, currency)
-  i18n.ts             translations + plural helper
-  tours.ts            Tour type + locale helper
-  utils.ts            cn(), formatPrice()
+  prisma.ts                Prisma singleton
+  auth.ts                  NextAuth config
+  store.ts                 Zustand stores (favs, locale, currency)
+  i18n.ts                  translations
+  tours.ts                 Tour helpers
+  utils.ts                 cn(), formatPrice()
+
 prisma/
-  schema.prisma       data model
-  seed.ts             initial data
+  schema.prisma            data model (User, Tour, Booking, Favorite, ContactRequest)
+  seed.ts                  initial data
+  dev.db                   SQLite file (gitignored)
 ```
+
+## Production deploy (when needed)
+
+For real traffic switch to PostgreSQL:
+
+1. In `prisma/schema.prisma` change `provider = "sqlite"` to `provider = "postgresql"`
+2. Switch back `String` JSON columns to `String[]` (Postgres supports arrays)
+3. Use [Neon](https://neon.tech) (free) for the DB and [Vercel](https://vercel.com) for hosting
+4. Set env vars on Vercel: `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
+
+For coursework / demo SQLite is enough.

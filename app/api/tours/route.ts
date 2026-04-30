@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { Prisma, TourType } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
-const allowedTypes = new Set<TourType>([
+const allowedTypes = new Set([
   "BEACH",
   "EXCURSION",
   "SKI",
@@ -14,9 +14,7 @@ const allowedTypes = new Set<TourType>([
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
 
-  const types = searchParams.getAll("type").filter((t): t is TourType =>
-    allowedTypes.has(t as TourType)
-  )
+  const types = searchParams.getAll("type").filter((t) => allowedTypes.has(t))
   const country = searchParams.get("country")
   const minPrice = parseInt(searchParams.get("minPrice") ?? "")
   const maxPrice = parseInt(searchParams.get("maxPrice") ?? "")
@@ -27,10 +25,7 @@ export async function GET(req: Request) {
   const where: Prisma.TourWhereInput = {}
   if (types.length) where.type = { in: types }
   if (country) {
-    where.OR = [
-      { countryEn: { equals: country, mode: "insensitive" } },
-      { countryUk: { equals: country, mode: "insensitive" } }
-    ]
+    where.OR = [{ countryEn: country }, { countryUk: country }]
   }
   if (!Number.isNaN(minPrice) || !Number.isNaN(maxPrice)) {
     where.price = {}

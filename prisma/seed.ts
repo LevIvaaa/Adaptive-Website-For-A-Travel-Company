@@ -1,4 +1,4 @@
-import { PrismaClient, TourType } from "@prisma/client"
+import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcrypt"
 
 const prisma = new PrismaClient()
@@ -32,7 +32,7 @@ const tours = [
       "Ultra All Inclusive meals",
       "Medical insurance"
     ],
-    type: TourType.BEACH,
+    type: "BEACH",
     nights: 7,
     price: 28900,
     rating: 4.8,
@@ -65,7 +65,7 @@ const tours = [
       "Free mask and fins",
       "Medical insurance"
     ],
-    type: TourType.BEACH,
+    type: "BEACH",
     nights: 10,
     price: 32500,
     rating: 4.7
@@ -97,7 +97,7 @@ const tours = [
       "Ukrainian-speaking guide-driver",
       "Food evening in Anogia village"
     ],
-    type: TourType.EXCURSION,
+    type: "EXCURSION",
     nights: 8,
     price: 41200,
     rating: 4.9
@@ -128,7 +128,7 @@ const tours = [
       "Tbilisi — Gudauri transfer",
       "Hotel sauna"
     ],
-    type: TourType.SKI,
+    type: "SKI",
     nights: 6,
     price: 21500,
     rating: 4.6,
@@ -161,7 +161,7 @@ const tours = [
       "Guided tours",
       "Tickets to the Colosseum and Uffizi"
     ],
-    type: TourType.EXCURSION,
+    type: "EXCURSION",
     nights: 5,
     price: 38700,
     rating: 4.8
@@ -182,7 +182,7 @@ const tours = [
     descriptionEn: "Quiet resort, spacious beaches, kids mini-club, old town nearby.",
     includedUk: ["Сніданок і вечеря", "Ранкова йога", "Анімація для дітей", "Водна гірка"],
     includedEn: ["Breakfast and dinner", "Morning yoga", "Kids animation programme", "Water slide"],
-    type: TourType.FAMILY,
+    type: "FAMILY",
     nights: 9,
     price: 26400,
     rating: 4.5
@@ -192,10 +192,15 @@ const tours = [
 async function main() {
   console.log("Seeding tours...")
   for (const tour of tours) {
+    const data = {
+      ...tour,
+      includedUk: JSON.stringify(tour.includedUk),
+      includedEn: JSON.stringify(tour.includedEn)
+    }
     await prisma.tour.upsert({
       where: { slug: tour.slug },
-      update: tour,
-      create: tour
+      update: data,
+      create: data
     })
   }
 
