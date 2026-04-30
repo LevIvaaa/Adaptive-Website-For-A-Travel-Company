@@ -3,9 +3,8 @@
 import Link from "next/link"
 import { HeartHandshake, ShieldCheck, Wallet } from "lucide-react"
 import { SearchForm } from "@/components/search-form"
-import { TourCard } from "@/components/tour-card"
+import { PopularTours } from "@/components/popular-tours"
 import { Button } from "@/components/ui/button"
-import { tours } from "@/lib/tours"
 import { useT } from "@/lib/i18n"
 
 export default function HomePage() {
@@ -39,10 +38,8 @@ export default function HomePage() {
             </Button>
           </div>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {tours.slice(0, 6).map((tour) => (
-              <TourCard key={tour.id} tour={tour} />
-            ))}
+          <div className="mt-8">
+            <PopularTours />
           </div>
         </div>
       </section>

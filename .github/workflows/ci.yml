@@ -8,6 +8,10 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test?schema=public
+      NEXTAUTH_SECRET: ci-test-secret-not-used-in-prod
+      NEXTAUTH_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
 
@@ -16,8 +20,9 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
+
+      - run: npx prisma generate
 
       - name: Type check
         run: npx tsc --noEmit
@@ -26,22 +31,15 @@ jobs:
         run: npm run lint
 
       - name: Build
-        env:
-          PAGES_BASE_PATH: /Adaptive-Website-For-A-Travel-Company
         run: npm run build
 
   audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run npm audit
-        run: npm audit --audit-level=critical
+      - run: npm ci
+      - run: npm audit --audit-level=critical

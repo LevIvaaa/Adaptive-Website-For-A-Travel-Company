@@ -1,13 +1,19 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { TourView } from "./tour-view"
-import { tours } from "@/lib/tours"
+import { prisma } from "@/lib/prisma"
 
-export function generateStaticParams() {
-  return tours.map((t) => ({ slug: t.slug }))
+interface Props {
+  params: { slug: string }
 }
 
-export default function TourPage({ params }: { params: { slug: string } }) {
-  const tour = tours.find((t) => t.slug === params.slug)
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const tour = await prisma.tour.findUnique({ where: { slug: params.slug } })
+  return tour ? { title: tour.titleUk } : {}
+}
+
+export default async function TourPage({ params }: Props) {
+  const tour = await prisma.tour.findUnique({ where: { slug: params.slug } })
   if (!tour) notFound()
   return <TourView tour={tour} />
 }

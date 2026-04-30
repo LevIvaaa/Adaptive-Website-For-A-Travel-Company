@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Check, Clock, MapPin, Plane, Star, Utensils } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { BookingForm } from "@/components/booking-form"
 import { localizeTour, type Tour } from "@/lib/tours"
 import { useLocale, useCurrency } from "@/lib/store"
 import { useT, pluralNights } from "@/lib/i18n"
@@ -102,12 +102,9 @@ export function TourView({ tour }: { tour: Tour }) {
             <div className="mt-1 text-3xl font-bold">{formatPrice(t.price, currency)}</div>
             <div className="mt-1 text-xs text-muted-foreground">{T.tourDetail.priceNote}</div>
 
-            <Button asChild className="mt-5 w-full" size="lg">
-              <Link href="/contacts">{T.tourDetail.book}</Link>
-            </Button>
-            <Button asChild variant="outline" className="mt-2 w-full">
-              <Link href="/contacts">{T.tourDetail.askManager}</Link>
-            </Button>
+            <div className="mt-5">
+              <BookingForm tourId={t.id} />
+            </div>
           </div>
         </aside>
       </section>

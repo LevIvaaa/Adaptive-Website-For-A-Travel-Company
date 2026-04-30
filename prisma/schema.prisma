@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  MANAGER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum TourType {
+  BEACH
+  EXCURSION
+  SKI
+  CRUISE
+  FAMILY
+  CUSTOM
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  firstName    String
+  lastName     String
+  phone        String?
+  passwordHash String
+  role         Role       @default(CLIENT)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  bookings  Booking[]
+  favorites Favorite[]
+}
+
+model Tour {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  titleUk       String
+  titleEn       String
+  countryUk     String
+  countryEn     String
+  cityUk        String
+  cityEn        String
+  hotelUk       String
+  hotelEn       String
+  mealUk        String
+  mealEn        String
+  descriptionUk String
+  descriptionEn String
+  includedUk    String[]
+  includedEn    String[]
+  type          TourType
+  nights        Int
+  price         Int
+  rating        Float    @default(0)
+  isHot         Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  bookings  Booking[]
+  favorites Favorite[]
+
+  @@index([type])
+  @@index([countryEn])
+  @@index([price])
+}
+
+model Booking {
+  id         String        @id @default(cuid())
+  userId     String
+  tourId     String
+  adults     Int           @default(2)
+  children   Int           @default(0)
+  departDate DateTime
+  total      Int
+  status     BookingStatus @default(PENDING)
+  comment    String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tour Tour @relation(fields: [tourId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@index([tourId])
+}
+
+model Favorite {
+  userId  String
+  tourId  String
+  addedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tour Tour @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@id([userId, tourId])
+}
+
+model ContactRequest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  createdAt DateTime @default(now())
+}

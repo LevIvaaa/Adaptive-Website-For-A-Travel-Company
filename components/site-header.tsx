@@ -4,9 +4,9 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { Menu, Plane, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { LocaleSwitcher } from "@/components/locale-switcher"
 import { CurrencySwitcher } from "@/components/currency-switcher"
+import { UserMenu } from "@/components/user-menu"
 import { navItems } from "@/lib/navigation"
 import { useT } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
@@ -48,14 +48,12 @@ export function SiteHeader() {
         <div className="hidden items-center gap-2 md:flex">
           <CurrencySwitcher />
           <LocaleSwitcher />
-          <Button asChild size="sm">
-            <Link href="/login">{T.login}</Link>
-          </Button>
+          <UserMenu />
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
-          <CurrencySwitcher />
           <LocaleSwitcher />
+          <UserMenu />
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -79,9 +77,6 @@ export function SiteHeader() {
               {T.nav[item.id]}
             </Link>
           ))}
-          <Button asChild className="mt-2">
-            <Link href="/login" onClick={() => setOpen(false)}>{T.login}</Link>
-          </Button>
         </nav>
       )}
     </header>
