@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Flame, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { PriceFilter } from "@/components/price-filter"
 import { useLocale } from "@/lib/store"
 
 const types = [
@@ -15,13 +16,6 @@ const types = [
   { value: "FAMILY", uk: "Сімейний", en: "Family" },
   { value: "CRUISE", uk: "Круїз", en: "Cruise" },
   { value: "CUSTOM", uk: "Індивідуальний", en: "Custom" }
-]
-
-const priceRanges = [
-  { id: "low", labelUk: "До 25 000 ₴", labelEn: "Up to 25 000 ₴", min: 0, max: 25000 },
-  { id: "mid", labelUk: "25 000 – 50 000 ₴", labelEn: "25 000 – 50 000 ₴", min: 25000, max: 50000 },
-  { id: "high", labelUk: "50 000 – 100 000 ₴", labelEn: "50 000 – 100 000 ₴", min: 50000, max: 100000 },
-  { id: "lux", labelUk: "Понад 100 000 ₴", labelEn: "100 000 ₴+", min: 100000, max: 999999 }
 ]
 
 const nightRanges = [
@@ -51,8 +45,6 @@ export function TourFilters() {
 
   const selectedTypes = new Set(params.getAll("type"))
   const selectedCountries = new Set(params.getAll("country"))
-  const minPrice = params.get("minPrice")
-  const maxPrice = params.get("maxPrice")
   const minNights = params.get("minNights")
   const maxNights = params.get("maxNights")
   const isHot = params.get("hot") === "1"
@@ -71,17 +63,6 @@ export function TourFilters() {
       current.filter((t) => t !== value).forEach((t) => next.append(key, t))
     } else {
       [...current, value].forEach((t) => next.append(key, t))
-    }
-    update(next)
-  }
-
-  function setPriceRange(range: { min: number; max: number } | null) {
-    const next = new URLSearchParams(params)
-    next.delete("minPrice")
-    next.delete("maxPrice")
-    if (range) {
-      next.set("minPrice", String(range.min))
-      next.set("maxPrice", String(range.max))
     }
     update(next)
   }
@@ -150,21 +131,7 @@ export function TourFilters() {
         </div>
       </Group>
 
-      <Group title={t("Ціна", "Price")}>
-        {priceRanges.map((r) => {
-          const isActive = minPrice === String(r.min) && maxPrice === String(r.max)
-          return (
-            <Row
-              key={r.id}
-              label={t(r.labelUk, r.labelEn)}
-              checked={isActive}
-              onChange={() => setPriceRange(isActive ? null : r)}
-              type="radio"
-              name="price"
-            />
-          )
-        })}
-      </Group>
+      <PriceFilter />
 
       <Group title={t("Тривалість", "Duration")}>
         {nightRanges.map((r) => {

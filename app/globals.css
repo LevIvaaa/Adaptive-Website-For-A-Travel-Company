@@ -71,3 +71,34 @@
     @apply py-16 md:py-20 lg:py-24;
   }
 }
+
+@layer components {
+  .range-thumb {
+    pointer-events: none;
+  }
+  .range-thumb::-webkit-slider-thumb {
+    pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 9999px;
+    background: hsl(var(--primary));
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: grab;
+  }
+  .range-thumb::-moz-range-thumb {
+    pointer-events: auto;
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 9999px;
+    background: hsl(var(--primary));
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: grab;
+  }
+  .range-thumb:active::-webkit-slider-thumb {
+    cursor: grabbing;
+  }
+}
