@@ -8,6 +8,7 @@ const schema = z.object({
   tourId: z.string().min(1),
   adults: z.number().int().min(1).max(10),
   children: z.number().int().min(0).max(10),
+  nights: z.number().int().min(1).max(30).optional(),
   departDate: z.string().refine((v) => !Number.isNaN(Date.parse(v)), {
     message: "Invalid date"
   }),
@@ -34,7 +35,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Tour not found" }, { status: 404 })
   }
 
-  const total = tour.price * parsed.data.adults + Math.round(tour.price * 0.5) * parsed.data.children
+  const nights = parsed.data.nights ?? tour.nights
+  const perNight = Math.round(tour.price / tour.nights)
+  const total = Math.round(perNight * nights * (parsed.data.adults + 0.5 * parsed.data.children))
 
   const booking = await prisma.booking.create({
     data: {

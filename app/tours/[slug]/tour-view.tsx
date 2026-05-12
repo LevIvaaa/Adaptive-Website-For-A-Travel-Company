@@ -103,7 +103,7 @@ export function TourView({ tour }: { tour: Tour }) {
             <div className="mt-1 text-xs text-muted-foreground">{T.tourDetail.priceNote}</div>
 
             <div className="mt-5">
-              <BookingForm tourId={t.id} />
+              <BookingForm tourId={t.id} basePrice={t.price} baseNights={t.nights} />
             </div>
           </div>
         </aside>
