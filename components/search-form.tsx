@@ -1,23 +1,36 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { TravelersPicker } from "@/components/travelers-picker"
 import { useT } from "@/lib/i18n"
 
 interface FormValues {
   destination: string
   date: string
-  travelers: string
+  adults: number
+  children: number
+  infants: number
 }
 
 export function SearchForm() {
   const router = useRouter()
   const T = useT()
-  const { register, handleSubmit } = useForm<FormValues>({
-    defaultValues: { destination: "", date: "", travelers: "2" }
+  const { register, handleSubmit, control, setValue } = useForm<FormValues>({
+    defaultValues: {
+      destination: "",
+      date: "",
+      adults: 2,
+      children: 0,
+      infants: 0
+    }
   })
+
+  const adults = useWatch({ control, name: "adults" })
+  const children = useWatch({ control, name: "children" })
+  const infants = useWatch({ control, name: "infants" })
 
   const onSubmit = (data: FormValues) => {
     const params = new URLSearchParams()
@@ -38,6 +51,7 @@ export function SearchForm() {
           className="w-full bg-transparent text-sm outline-none placeholder:text-slate-500"
         />
       </Field>
+
       <Field label={T.search.date}>
         <input
           {...register("date")}
@@ -45,13 +59,16 @@ export function SearchForm() {
           className="w-full bg-transparent text-sm outline-none"
         />
       </Field>
-      <Field label={T.search.travelers}>
-        <select {...register("travelers")} className="w-full bg-transparent text-sm outline-none">
-          {T.search.options.map((opt, i) => (
-            <option key={i} value={String(i + 1)}>{opt}</option>
-          ))}
-        </select>
-      </Field>
+
+      <TravelersPicker
+        value={{ adults, children, infants }}
+        onChange={(v) => {
+          setValue("adults", v.adults)
+          setValue("children", v.children)
+          setValue("infants", v.infants)
+        }}
+      />
+
       <Button type="submit" size="lg" className="md:self-stretch">
         <Search className="h-4 w-4" />
         {T.search.submit}

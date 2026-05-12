@@ -39,12 +39,23 @@ export const translations = {
       date: "Дата",
       travelers: "Туристів",
       submit: "Шукати",
-      options: [
-        "1 дорослий",
-        "2 дорослих",
-        "2 дорослих + 1 дитина",
-        "2 дорослих + 2 дитини"
-      ]
+      travelersPicker: {
+        title: "Кількість туристів",
+        adults: "Дорослі",
+        adultsHint: "12 років і старше",
+        children: "Діти",
+        childrenHint: "Від 2 до 11 років",
+        infants: "Немовлята",
+        infantsHint: "Молодші 2 років",
+        done: "Готово",
+        summary: (n: number) => {
+          const mod10 = n % 10
+          const mod100 = n % 100
+          if (mod10 === 1 && mod100 !== 11) return `${n} турист`
+          if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return `${n} туристи`
+          return `${n} туристів`
+        }
+      }
     },
     card: {
       from: "від",
@@ -172,12 +183,17 @@ export const translations = {
       date: "Date",
       travelers: "Travellers",
       submit: "Search",
-      options: [
-        "1 adult",
-        "2 adults",
-        "2 adults + 1 child",
-        "2 adults + 2 children"
-      ]
+      travelersPicker: {
+        title: "Number of travellers",
+        adults: "Adults",
+        adultsHint: "12 years and older",
+        children: "Children",
+        childrenHint: "Age 2 – 11",
+        infants: "Infants",
+        infantsHint: "Under 2 years",
+        done: "Done",
+        summary: (n: number) => (n === 1 ? "1 traveller" : `${n} travellers`)
+      }
     },
     card: {
       from: "from",
