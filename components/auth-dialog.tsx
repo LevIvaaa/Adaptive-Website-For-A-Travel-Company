@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -40,6 +40,10 @@ interface Props {
 
 export function AuthDialog({ open, onOpenChange, initialTab = "login" }: Props) {
   const [tab, setTab] = useState<"login" | "register">(initialTab)
+
+  useEffect(() => {
+    if (open) setTab(initialTab)
+  }, [open, initialTab])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
