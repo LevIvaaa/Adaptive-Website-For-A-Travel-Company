@@ -3,11 +3,13 @@
 import { useSearchParams, useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { TourCard } from "@/components/tour-card"
+import { useLocale } from "@/lib/store"
 import type { Tour } from "@/lib/tours"
 
 export function TourGrid() {
   const params = useSearchParams()
   const router = useRouter()
+  const { locale } = useLocale()
   const query = params.toString()
 
   const { data, isLoading } = useQuery<Tour[]>({
@@ -27,6 +29,15 @@ export function TourGrid() {
   }
 
   const currentSort = params.get("sort") ?? "popular"
+  const t = (uk: string, en: string) => (locale === "uk" ? uk : en)
+
+  const sortOptions = [
+    { value: "popular", label: t("Популярні", "Popular") },
+    { value: "price-asc", label: t("Спершу дешеві", "Cheapest first") },
+    { value: "price-desc", label: t("Спершу дорогі", "Most expensive first") },
+    { value: "rating", label: t("За рейтингом", "By rating") },
+    { value: "nights-asc", label: t("За тривалістю", "By duration") }
+  ]
 
   if (isLoading) {
     return (
@@ -40,21 +51,24 @@ export function TourGrid() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground">
-          Found <span className="font-semibold text-foreground">{data?.length ?? 0}</span> tours
+          {t("Знайдено", "Found")}{" "}
+          <span className="font-semibold text-foreground">{data?.length ?? 0}</span>{" "}
+          {t("турів", "tours")}
         </p>
         <label className="flex items-center gap-2 text-sm">
-          <span className="text-muted-foreground">Sort by:</span>
+          <span className="hidden text-muted-foreground sm:inline">
+            {t("Сортувати:", "Sort by:")}
+          </span>
           <select
             value={currentSort}
             onChange={(e) => setSort(e.target.value)}
             className="rounded-md border border-input bg-background px-2 py-1.5 text-sm"
           >
-            <option value="popular">Popular</option>
-            <option value="price-asc">Cheapest first</option>
-            <option value="price-desc">Most expensive first</option>
-            <option value="rating">By rating</option>
+            {sortOptions.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
           </select>
         </label>
       </div>
@@ -67,7 +81,9 @@ export function TourGrid() {
         </div>
       ) : (
         <div className="rounded-xl border bg-card p-12 text-center">
-          <p className="text-muted-foreground">No tours match the selected filters.</p>
+          <p className="text-muted-foreground">
+            {t("За вашими фільтрами турів не знайдено.", "No tours match the selected filters.")}
+          </p>
         </div>
       )}
     </div>

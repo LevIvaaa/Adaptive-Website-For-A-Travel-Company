@@ -15,18 +15,19 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
 
   const types = searchParams.getAll("type").filter((t) => allowedTypes.has(t))
-  const country = searchParams.get("country")
+  const countries = searchParams.getAll("country").filter(Boolean)
   const minPrice = parseInt(searchParams.get("minPrice") ?? "")
   const maxPrice = parseInt(searchParams.get("maxPrice") ?? "")
   const minNights = parseInt(searchParams.get("minNights") ?? "")
   const maxNights = parseInt(searchParams.get("maxNights") ?? "")
+  const hot = searchParams.get("hot") === "1"
   const sort = searchParams.get("sort") ?? "popular"
   const q = (searchParams.get("q") ?? "").trim().toLowerCase()
 
   const where: Prisma.TourWhereInput = {}
   if (types.length) where.type = { in: types }
-  if (country) {
-    where.OR = [{ countryEn: country }, { countryUk: country }]
+  if (countries.length) {
+    where.OR = countries.flatMap((c) => [{ countryEn: c }, { countryUk: c }])
   }
   if (!Number.isNaN(minPrice) || !Number.isNaN(maxPrice)) {
     where.price = {}
@@ -38,6 +39,7 @@ export async function GET(req: Request) {
     if (!Number.isNaN(minNights)) where.nights.gte = minNights
     if (!Number.isNaN(maxNights)) where.nights.lte = maxNights
   }
+  if (hot) where.isHot = true
 
   const orderBy: Prisma.TourOrderByWithRelationInput =
     sort === "price-asc"
@@ -46,7 +48,9 @@ export async function GET(req: Request) {
         ? { price: "desc" }
         : sort === "rating"
           ? { rating: "desc" }
-          : { isHot: "desc" }
+          : sort === "nights-asc"
+            ? { nights: "asc" }
+            : { isHot: "desc" }
 
   let tours = await prisma.tour.findMany({ where, orderBy })
 
