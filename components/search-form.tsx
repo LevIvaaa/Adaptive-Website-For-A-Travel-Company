@@ -56,7 +56,15 @@ export function SearchForm() {
         <input
           {...register("date")}
           type="date"
-          className="w-full bg-transparent text-sm outline-none"
+          onClick={(e) => {
+            const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
+            el.showPicker?.()
+          }}
+          onFocus={(e) => {
+            const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
+            el.showPicker?.()
+          }}
+          className="w-full cursor-pointer bg-transparent text-sm outline-none"
         />
       </Field>
 
