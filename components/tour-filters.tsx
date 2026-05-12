@@ -7,6 +7,7 @@ import { Flame, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { PriceFilter } from "@/components/price-filter"
+import { NightsFilter } from "@/components/nights-filter"
 import { useLocale } from "@/lib/store"
 
 const types = [
@@ -16,12 +17,6 @@ const types = [
   { value: "FAMILY", uk: "Сімейний", en: "Family" },
   { value: "CRUISE", uk: "Круїз", en: "Cruise" },
   { value: "CUSTOM", uk: "Індивідуальний", en: "Custom" }
-]
-
-const nightRanges = [
-  { id: "short", labelUk: "3–5 ночей", labelEn: "3–5 nights", min: 3, max: 5 },
-  { id: "week", labelUk: "6–8 ночей", labelEn: "6–8 nights", min: 6, max: 8 },
-  { id: "long", labelUk: "9+ ночей", labelEn: "9+ nights", min: 9, max: 30 }
 ]
 
 interface Country {
@@ -45,8 +40,6 @@ export function TourFilters() {
 
   const selectedTypes = new Set(params.getAll("type"))
   const selectedCountries = new Set(params.getAll("country"))
-  const minNights = params.get("minNights")
-  const maxNights = params.get("maxNights")
   const isHot = params.get("hot") === "1"
 
   function update(next: URLSearchParams) {
@@ -63,17 +56,6 @@ export function TourFilters() {
       current.filter((t) => t !== value).forEach((t) => next.append(key, t))
     } else {
       [...current, value].forEach((t) => next.append(key, t))
-    }
-    update(next)
-  }
-
-  function setNightRange(range: { min: number; max: number } | null) {
-    const next = new URLSearchParams(params)
-    next.delete("minNights")
-    next.delete("maxNights")
-    if (range) {
-      next.set("minNights", String(range.min))
-      next.set("maxNights", String(range.max))
     }
     update(next)
   }
@@ -133,21 +115,7 @@ export function TourFilters() {
 
       <PriceFilter />
 
-      <Group title={t("Тривалість", "Duration")}>
-        {nightRanges.map((r) => {
-          const isActive = minNights === String(r.min) && maxNights === String(r.max)
-          return (
-            <Row
-              key={r.id}
-              label={t(r.labelUk, r.labelEn)}
-              checked={isActive}
-              onChange={() => setNightRange(isActive ? null : r)}
-              type="radio"
-              name="nights"
-            />
-          )
-        })}
-      </Group>
+      <NightsFilter />
 
       {hasFilters && (
         <Button variant="outline" className="w-full" onClick={reset}>
