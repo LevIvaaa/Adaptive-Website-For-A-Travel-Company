@@ -21,6 +21,7 @@ export async function GET(req: Request) {
   const minNights = parseInt(searchParams.get("minNights") ?? "")
   const maxNights = parseInt(searchParams.get("maxNights") ?? "")
   const sort = searchParams.get("sort") ?? "popular"
+  const q = (searchParams.get("q") ?? "").trim().toLowerCase()
 
   const where: Prisma.TourWhereInput = {}
   if (types.length) where.type = { in: types }
@@ -47,6 +48,14 @@ export async function GET(req: Request) {
           ? { rating: "desc" }
           : { isHot: "desc" }
 
-  const tours = await prisma.tour.findMany({ where, orderBy })
+  let tours = await prisma.tour.findMany({ where, orderBy })
+
+  if (q) {
+    tours = tours.filter((t) =>
+      [t.titleEn, t.titleUk, t.countryEn, t.countryUk, t.cityEn, t.cityUk, t.hotelEn, t.hotelUk]
+        .some((field) => field.toLowerCase().includes(q))
+    )
+  }
+
   return NextResponse.json(tours)
 }
