@@ -9,9 +9,9 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test?schema=public
+      DATABASE_URL: file:./ci.db
       NEXTAUTH_SECRET: ci-test-secret-not-used-in-prod
-      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_URL: http://localhost:4000
     steps:
       - uses: actions/checkout@v4
 
@@ -22,7 +22,8 @@ jobs:
 
       - run: npm ci
 
-      - run: npx prisma generate
+      - name: Prepare SQLite database
+        run: npx prisma db push --skip-generate
 
       - name: Type check
         run: npx tsc --noEmit

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   const tours = await prisma.tour.findMany({
     select: { countryEn: true, countryUk: true },
