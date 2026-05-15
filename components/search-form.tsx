@@ -37,7 +37,12 @@ export function SearchForm() {
   const onSubmit = (data: FormValues) => {
     const params = new URLSearchParams()
     if (data.destination) params.set("q", data.destination)
-    router.push(`/tours?${params.toString()}`)
+    if (data.date) params.set("date", data.date)
+    if (data.adults && data.adults !== 2) params.set("adults", String(data.adults))
+    if (data.children && data.children > 0) params.set("children", String(data.children))
+    if (data.infants && data.infants > 0) params.set("infants", String(data.infants))
+    const qs = params.toString()
+    router.push(qs ? `/tours?${qs}` : "/tours")
   }
 
   return (
