@@ -18,8 +18,17 @@ export function TourCard({ tour }: { tour: Tour }) {
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-      <div className="relative flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-primary/15 to-primary/5">
-        <Plane className="h-14 w-14 text-primary/30" />
+      <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-gradient-to-br from-primary/15 to-primary/5">
+        {t.image ? (
+          <img
+            src={t.image}
+            alt={t.title}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition group-hover:scale-105"
+          />
+        ) : (
+          <Plane className="h-14 w-14 text-primary/30" />
+        )}
         <button
           type="button"
           onClick={() => toggle(t.id)}
