@@ -114,7 +114,7 @@ export const translations = {
     },
     contactForm: {
       name: "Ваше ім’я",
-      namePh: "Олена",
+      namePh: "Ваше ім’я",
       phone: "Телефон",
       phonePh: "+380 __ ___ __ __",
       email: "E-mail",
@@ -252,9 +252,9 @@ export const translations = {
     },
     contactForm: {
       name: "Your name",
-      namePh: "Jane",
+      namePh: "Your name",
       phone: "Phone",
-      phonePh: "+1 ___ ___ __ __",
+      phonePh: "+380 __ ___ __ __",
       email: "Email",
       emailPh: "you@example.com",
       message: "Message",
