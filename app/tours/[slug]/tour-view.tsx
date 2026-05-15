@@ -40,8 +40,16 @@ export function TourView({ tour }: { tour: Tour }) {
             <span className="text-muted-foreground">{t.hotel}</span>
           </div>
 
-          <div className="mt-6 flex aspect-[16/9] items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5">
-            <Plane className="h-20 w-20 text-primary/30" />
+          <div className="relative mt-6 flex aspect-[16/9] items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-primary/15 to-primary/5">
+            {t.image ? (
+              <img
+                src={t.image}
+                alt={t.title}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            ) : (
+              <Plane className="h-20 w-20 text-primary/30" />
+            )}
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-4 rounded-xl border bg-card p-5 sm:grid-cols-3">
