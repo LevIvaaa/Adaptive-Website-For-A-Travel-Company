@@ -12,12 +12,17 @@ const rates: Record<Currency, number> = {
   EUR: 1 / 43
 }
 
+const symbols: Record<Currency, string> = {
+  UAH: "₴",
+  USD: "$",
+  EUR: "€"
+}
+
 export function formatPrice(amountUah: number, currency: Currency = "UAH") {
   const amount = Math.round(amountUah * rates[currency])
-  const locale = currency === "UAH" ? "uk-UA" : "en-US"
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0
+  const numberPart = new Intl.NumberFormat("uk-UA", {
+    maximumFractionDigits: 0,
+    useGrouping: true
   }).format(amount)
+  return currency === "UAH" ? `${numberPart} ${symbols.UAH}` : `${symbols[currency]}${numberPart}`
 }
