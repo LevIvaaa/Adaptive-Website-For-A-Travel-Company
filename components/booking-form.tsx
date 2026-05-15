@@ -128,7 +128,7 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
           {...register("departDate")}
           onClick={(e) => {
             const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
-            el.showPicker?.()
+            try { el.showPicker?.() } catch {}
           }}
           className="mt-1.5 cursor-pointer"
         />

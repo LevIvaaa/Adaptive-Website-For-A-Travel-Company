@@ -62,11 +62,7 @@ export function SearchForm() {
           type="date"
           onClick={(e) => {
             const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
-            el.showPicker?.()
-          }}
-          onFocus={(e) => {
-            const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
-            el.showPicker?.()
+            try { el.showPicker?.() } catch {}
           }}
           className="w-full cursor-pointer bg-transparent text-sm outline-none"
         />
