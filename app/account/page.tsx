@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
+import { FavouritesCount } from "@/components/favourites-count"
 
 export default async function AccountPage() {
   const session = await getServerSession(authOptions)
@@ -19,7 +20,7 @@ export default async function AccountPage() {
         lastName: true,
         phone: true,
         createdAt: true,
-        _count: { select: { bookings: true, favorites: true } }
+        _count: { select: { bookings: true } }
       }
     }),
     prisma.booking.findMany({
@@ -45,7 +46,9 @@ export default async function AccountPage() {
           <div className="mt-1 text-sm text-muted-foreground">Bookings</div>
         </div>
         <div className="rounded-xl border bg-card p-6">
-          <div className="text-3xl font-bold text-primary">{user._count.favorites}</div>
+          <div className="text-3xl font-bold text-primary">
+            <FavouritesCount />
+          </div>
           <div className="mt-1 text-sm text-muted-foreground">Favourites</div>
         </div>
         <div className="rounded-xl border bg-card p-6">
