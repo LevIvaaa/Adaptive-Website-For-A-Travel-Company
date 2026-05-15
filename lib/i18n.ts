@@ -142,6 +142,24 @@ export const translations = {
       submit: "Увійти",
       errEmail: "Невірний e-mail",
       errPassword: "Мінімум 8 символів"
+    },
+    bookingForm: {
+      departure: "Дата виїзду",
+      adults: "Дорослі",
+      children: "Діти",
+      nights: "Ночей",
+      baseDuration: (n: number) => `Базова тривалість туру: ${n} ноч.`,
+      comment: "Коментар",
+      commentPh: "Маєте побажання? (необов’язково)",
+      total: "Разом",
+      breakdown: (adults: number, children: number, nights: number) =>
+        `${adults} доросл. ${children > 0 ? `, ${children} діт. ` : ""}· ${nights} ноч.`,
+      signInPrompt: "Увійдіть, щоб забронювати цей тур.",
+      signInButton: "Увійти / Зареєструватися",
+      submit: "Забронювати",
+      submitting: "Бронюємо...",
+      successTitle: "Заявку прийнято",
+      successDesc: "Менеджер зв’яжеться з вами протягом 15 хвилин для підтвердження."
     }
   },
 
@@ -280,6 +298,24 @@ export const translations = {
       submit: "Log in",
       errEmail: "Invalid email",
       errPassword: "At least 8 characters"
+    },
+    bookingForm: {
+      departure: "Departure date",
+      adults: "Adults",
+      children: "Children",
+      nights: "Nights",
+      baseDuration: (n: number) => `Base tour duration: ${n} night${n === 1 ? "" : "s"}`,
+      comment: "Comment",
+      commentPh: "Any preferences? (optional)",
+      total: "Total",
+      breakdown: (adults: number, children: number, nights: number) =>
+        `${adults} adult${adults === 1 ? "" : "s"}${children > 0 ? `, ${children} child${children === 1 ? "" : "ren"}` : ""} · ${nights} night${nights === 1 ? "" : "s"}`,
+      signInPrompt: "Sign in to book this tour.",
+      signInButton: "Log in / Sign up",
+      submit: "Book now",
+      submitting: "Booking...",
+      successTitle: "Booking received",
+      successDesc: "A manager will contact you within 15 minutes to confirm details."
     }
   }
 } as const

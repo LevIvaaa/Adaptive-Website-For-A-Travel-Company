@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AuthDialog } from "@/components/auth-dialog"
 import { useCurrency } from "@/lib/store"
+import { useT } from "@/lib/i18n"
 import { formatPrice } from "@/lib/utils"
 
 const schema = z.object({
@@ -43,6 +44,7 @@ interface Props {
 export function BookingForm({ tourId, basePrice, baseNights }: Props) {
   const { data: session } = useSession()
   const { currency } = useCurrency()
+  const T = useT()
   const [authOpen, setAuthOpen] = useState(false)
 
   const {
@@ -88,10 +90,8 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
     return (
       <div className="flex flex-col items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-5 text-center">
         <Check className="h-10 w-10 text-emerald-600" />
-        <h3 className="font-semibold">Booking received</h3>
-        <p className="text-sm text-muted-foreground">
-          A manager will contact you within 15 minutes to confirm details.
-        </p>
+        <h3 className="font-semibold">{T.bookingForm.successTitle}</h3>
+        <p className="text-sm text-muted-foreground">{T.bookingForm.successDesc}</p>
       </div>
     )
   }
@@ -100,10 +100,10 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
     return (
       <>
         <p className="rounded-md bg-muted p-3 text-sm text-muted-foreground">
-          Sign in to book this tour.
+          {T.bookingForm.signInPrompt}
         </p>
         <Button className="mt-3 w-full" onClick={() => setAuthOpen(true)}>
-          Log in / Sign up
+          {T.bookingForm.signInButton}
         </Button>
         <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
       </>
@@ -116,7 +116,7 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
       className="space-y-3"
     >
       <div>
-        <Label htmlFor="departDate">Departure date</Label>
+        <Label htmlFor="departDate">{T.bookingForm.departure}</Label>
         <Input
           id="departDate"
           type="date"
@@ -135,7 +135,7 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <Label htmlFor="adults">Adults</Label>
+          <Label htmlFor="adults">{T.bookingForm.adults}</Label>
           <Input
             id="adults"
             type="number"
@@ -146,7 +146,7 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
           />
         </div>
         <div>
-          <Label htmlFor="children">Children</Label>
+          <Label htmlFor="children">{T.bookingForm.children}</Label>
           <Input
             id="children"
             type="number"
@@ -159,7 +159,7 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
       </div>
 
       <div>
-        <Label htmlFor="nights">Nights</Label>
+        <Label htmlFor="nights">{T.bookingForm.nights}</Label>
         <Input
           id="nights"
           type="number"
@@ -169,31 +169,30 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
           className="mt-1.5"
         />
         <p className="mt-1 text-xs text-muted-foreground">
-          Base tour duration: {baseNights} nights
+          {T.bookingForm.baseDuration(baseNights)}
         </p>
       </div>
 
       <div>
-        <Label htmlFor="comment">Comment</Label>
+        <Label htmlFor="comment">{T.bookingForm.comment}</Label>
         <textarea
           id="comment"
           {...register("comment")}
           rows={3}
           className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-          placeholder="Any preferences? (optional)"
+          placeholder={T.bookingForm.commentPh}
         />
       </div>
 
       <div className="rounded-lg bg-primary/5 p-3">
         <div className="flex items-baseline justify-between">
-          <span className="text-sm text-muted-foreground">Total</span>
+          <span className="text-sm text-muted-foreground">{T.bookingForm.total}</span>
           <span className="text-2xl font-bold text-primary">
             {formatPrice(total, currency)}
           </span>
         </div>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          {Number(adults)} adult{Number(adults) > 1 ? "s" : ""}
-          {Number(children) > 0 && `, ${children} child${Number(children) > 1 ? "ren" : ""}`} · {nights} night{Number(nights) > 1 ? "s" : ""}
+          {T.bookingForm.breakdown(adults, children, nights)}
         </p>
       </div>
 
@@ -209,7 +208,7 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
         size="lg"
         disabled={mutation.isPending || !inputsValid}
       >
-        {mutation.isPending ? "Booking..." : "Book now"}
+        {mutation.isPending ? T.bookingForm.submitting : T.bookingForm.submit}
       </Button>
     </form>
   )
