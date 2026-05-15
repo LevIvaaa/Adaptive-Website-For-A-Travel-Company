@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { FavouritesCount } from "@/components/favourites-count"
+import { formatPrice } from "@/lib/utils"
 
 export default async function AccountPage() {
   const session = await getServerSession(authOptions)
@@ -89,7 +90,7 @@ export default async function AccountPage() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-semibold">{b.total.toLocaleString("uk-UA")} ₴</div>
+                <div className="font-semibold">{formatPrice(b.total)}</div>
                 <div className="text-xs uppercase text-muted-foreground">{b.status}</div>
               </div>
             </li>

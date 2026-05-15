@@ -3,6 +3,7 @@ import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { formatPrice } from "@/lib/utils"
 
 export default async function BookingsPage() {
   const session = await getServerSession(authOptions)
@@ -53,7 +54,7 @@ export default async function BookingsPage() {
                   )}
                 </div>
                 <div className="text-right">
-                  <div className="text-lg font-bold">{b.total.toLocaleString("uk-UA")} ₴</div>
+                  <div className="text-lg font-bold">{formatPrice(b.total)}</div>
                   <div className="mt-1 inline-flex rounded-full bg-muted px-2 py-1 text-xs font-medium">
                     {b.status}
                   </div>
