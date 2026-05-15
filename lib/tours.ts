@@ -11,6 +11,7 @@ export interface LocalizedTour {
   rating: number
   type: string
   isHot: boolean
+  image: string | null
   title: string
   country: string
   city: string
@@ -38,6 +39,7 @@ export function localizeTour(tour: Tour, locale: Locale): LocalizedTour {
     rating: tour.rating,
     type: tour.type,
     isHot: tour.isHot,
+    image: tour.image,
     title: locale === "uk" ? tour.titleUk : tour.titleEn,
     country: locale === "uk" ? tour.countryUk : tour.countryEn,
     city: locale === "uk" ? tour.cityUk : tour.cityEn,
