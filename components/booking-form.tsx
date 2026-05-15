@@ -18,9 +18,20 @@ const schema = z.object({
   adults: z.coerce.number().int().min(1).max(10),
   children: z.coerce.number().int().min(0).max(10),
   nights: z.coerce.number().int().min(1).max(30),
-  departDate: z.string().min(1, "Pick a date"),
+  departDate: z
+    .string()
+    .min(1, "Pick a date")
+    .refine((v) => {
+      const d = new Date(v)
+      if (Number.isNaN(d.getTime())) return false
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      return d >= today
+    }, "Departure date can't be in the past"),
   comment: z.string().max(1000).optional()
 })
+
+const todayIso = () => new Date().toISOString().split("T")[0]
 type FormInput = z.infer<typeof schema>
 
 interface Props {
@@ -109,6 +120,7 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
         <Input
           id="departDate"
           type="date"
+          min={todayIso()}
           {...register("departDate")}
           onClick={(e) => {
             const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }

@@ -9,9 +9,18 @@ const schema = z.object({
   adults: z.number().int().min(1).max(10),
   children: z.number().int().min(0).max(10),
   nights: z.number().int().min(1).max(30).optional(),
-  departDate: z.string().refine((v) => !Number.isNaN(Date.parse(v)), {
-    message: "Invalid date"
-  }),
+  departDate: z
+    .string()
+    .refine((v) => !Number.isNaN(Date.parse(v)), { message: "Invalid date" })
+    .refine(
+      (v) => {
+        const d = new Date(v)
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        return d >= today
+      },
+      { message: "Departure date can't be in the past" }
+    ),
   comment: z.string().max(1000).optional()
 })
 
@@ -36,8 +45,9 @@ export async function POST(req: Request) {
   }
 
   const nights = parsed.data.nights ?? tour.nights
-  const perNight = Math.round(tour.price / tour.nights)
-  const total = Math.round(perNight * nights * (parsed.data.adults + 0.5 * parsed.data.children))
+  const total = Math.round(
+    tour.price * (nights / tour.nights) * (parsed.data.adults + 0.5 * parsed.data.children)
+  )
 
   const booking = await prisma.booking.create({
     data: {
