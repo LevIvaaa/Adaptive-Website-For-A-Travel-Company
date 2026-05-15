@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { useId, useTransition } from "react"
+import { useTransition } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Flame, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -149,14 +149,9 @@ function Row({
   type: "checkbox" | "radio"
   name?: string
 }) {
-  const inputId = useId()
   return (
-    <Label
-      htmlFor={inputId}
-      className="flex cursor-pointer items-center gap-2.5 text-sm font-normal"
-    >
+    <Label className="flex cursor-pointer items-center gap-2.5 text-sm font-normal">
       <input
-        id={inputId}
         type={type}
         name={name}
         checked={checked}

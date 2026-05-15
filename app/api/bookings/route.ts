@@ -9,18 +9,11 @@ const schema = z.object({
   adults: z.number().int().min(1).max(10),
   children: z.number().int().min(0).max(10),
   nights: z.number().int().min(1).max(30).optional(),
-  departDate: z
-    .string()
-    .refine((v) => !Number.isNaN(Date.parse(v)), { message: "Invalid date" })
-    .refine(
-      (v) => {
-        const d = new Date(v)
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        return d >= today
-      },
-      { message: "Departure date can't be in the past" }
-    ),
+  departDate: z.string().refine((v) => {
+    if (Number.isNaN(Date.parse(v))) return false
+    const today = new Date().toISOString().split("T")[0]
+    return v >= today
+  }, "Invalid or past date"),
   comment: z.string().max(1000).optional()
 })
 

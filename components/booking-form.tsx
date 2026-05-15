@@ -19,20 +19,16 @@ const schema = z.object({
   adults: z.coerce.number().int().min(1).max(10),
   children: z.coerce.number().int().min(0).max(10),
   nights: z.coerce.number().int().min(1).max(30),
-  departDate: z
-    .string()
-    .min(1, "Pick a date")
-    .refine((v) => {
-      const d = new Date(v)
-      if (Number.isNaN(d.getTime())) return false
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      return d >= today
-    }, "Departure date can't be in the past"),
+  departDate: z.string().min(1, "Pick a date").refine((v) => {
+    const today = new Date().toISOString().split("T")[0]
+    return v >= today
+  }, "Departure date can't be in the past"),
   comment: z.string().max(1000).optional()
 })
 
-const todayIso = () => new Date().toISOString().split("T")[0]
+function todayIso() {
+  return new Date().toISOString().split("T")[0]
+}
 type FormInput = z.infer<typeof schema>
 
 interface Props {
@@ -57,17 +53,14 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
     defaultValues: { adults: 2, children: 0, nights: baseNights }
   })
 
-  const rawAdults = useWatch({ control, name: "adults" })
-  const rawChildren = useWatch({ control, name: "children" })
-  const rawNights = useWatch({ control, name: "nights" })
+  const rawAdults = Number(useWatch({ control, name: "adults" })) || 2
+  const rawChildren = Number(useWatch({ control, name: "children" })) || 0
+  const rawNights = Number(useWatch({ control, name: "nights" })) || baseNights
 
-  const adults = clampInt(rawAdults, 1, 10, 2)
-  const children = clampInt(rawChildren, 0, 10, 0)
-  const nights = clampInt(rawNights, 1, 30, baseNights)
-  const inputsValid =
-    isValidInt(rawAdults, 1, 10) &&
-    isValidInt(rawChildren, 0, 10) &&
-    isValidInt(rawNights, 1, 30)
+  const adults = Math.max(1, Math.min(10, rawAdults))
+  const children = Math.max(0, Math.min(10, rawChildren))
+  const nights = Math.max(1, Math.min(30, rawNights))
+  const inputsValid = rawAdults >= 1 && rawChildren >= 0 && rawNights >= 1
 
   const total = Math.round(basePrice * (nights / baseNights) * (adults + 0.5 * children))
 
@@ -223,15 +216,4 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
       </Button>
     </form>
   )
-}
-
-function clampInt(value: unknown, min: number, max: number, fallback: number) {
-  const n = Number(value)
-  if (!Number.isFinite(n)) return fallback
-  return Math.min(max, Math.max(min, Math.trunc(n)))
-}
-
-function isValidInt(value: unknown, min: number, max: number) {
-  const n = Number(value)
-  return Number.isInteger(n) && n >= min && n <= max
 }

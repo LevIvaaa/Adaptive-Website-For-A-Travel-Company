@@ -6,23 +6,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-const rates: Record<Currency, number> = {
+const rates = {
   UAH: 1,
   USD: 1 / 40,
   EUR: 1 / 43
 }
 
-const symbols: Record<Currency, string> = {
-  UAH: "₴",
-  USD: "$",
-  EUR: "€"
-}
-
 export function formatPrice(amountUah: number, currency: Currency = "UAH") {
   const amount = Math.round(amountUah * rates[currency])
-  const numberPart = new Intl.NumberFormat("uk-UA", {
-    maximumFractionDigits: 0,
-    useGrouping: true
-  }).format(amount)
-  return currency === "UAH" ? `${numberPart} ${symbols.UAH}` : `${symbols[currency]}${numberPart}`
+  const formatted = amount.toLocaleString("uk-UA")
+  if (currency === "USD") return "$" + formatted
+  if (currency === "EUR") return "€" + formatted
+  return formatted + " ₴"
 }
