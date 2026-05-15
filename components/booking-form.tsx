@@ -44,12 +44,19 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
     defaultValues: { adults: 2, children: 0, nights: baseNights }
   })
 
-  const adults = useWatch({ control, name: "adults" }) ?? 2
-  const children = useWatch({ control, name: "children" }) ?? 0
-  const nights = useWatch({ control, name: "nights" }) ?? baseNights
+  const rawAdults = useWatch({ control, name: "adults" })
+  const rawChildren = useWatch({ control, name: "children" })
+  const rawNights = useWatch({ control, name: "nights" })
 
-  const perNight = Math.round(basePrice / baseNights)
-  const total = Math.round(perNight * nights * (Number(adults) + 0.5 * Number(children)))
+  const adults = clampInt(rawAdults, 1, 10, 2)
+  const children = clampInt(rawChildren, 0, 10, 0)
+  const nights = clampInt(rawNights, 1, 30, baseNights)
+  const inputsValid =
+    isValidInt(rawAdults, 1, 10) &&
+    isValidInt(rawChildren, 0, 10) &&
+    isValidInt(rawNights, 1, 30)
+
+  const total = Math.round(basePrice * (nights / baseNights) * (adults + 0.5 * children))
 
   const mutation = useMutation({
     mutationFn: async (data: FormInput) => {
@@ -184,9 +191,25 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
         </p>
       )}
 
-      <Button type="submit" className="w-full" size="lg" disabled={mutation.isPending}>
+      <Button
+        type="submit"
+        className="w-full"
+        size="lg"
+        disabled={mutation.isPending || !inputsValid}
+      >
         {mutation.isPending ? "Booking..." : "Book now"}
       </Button>
     </form>
   )
+}
+
+function clampInt(value: unknown, min: number, max: number, fallback: number) {
+  const n = Number(value)
+  if (!Number.isFinite(n)) return fallback
+  return Math.min(max, Math.max(min, Math.trunc(n)))
+}
+
+function isValidInt(value: unknown, min: number, max: number) {
+  const n = Number(value)
+  return Number.isInteger(n) && n >= min && n <= max
 }
