@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { formatPrice } from "@/lib/utils"
+import { LocalizedText, LocalizedDate } from "@/components/localized-tour-fields"
 
 export default async function BookingsPage() {
   const session = await getServerSession(authOptions)
@@ -39,13 +40,15 @@ export default async function BookingsPage() {
                     href={`/tours/${b.tour.slug}`}
                     className="text-lg font-semibold hover:text-primary"
                   >
-                    {b.tour.titleUk}
+                    <LocalizedText uk={b.tour.titleUk} en={b.tour.titleEn} />
                   </Link>
                   <div className="mt-1 text-sm text-muted-foreground">
-                    {b.tour.countryUk}, {b.tour.cityUk} · {b.tour.hotelUk}
+                    <LocalizedText uk={b.tour.countryUk} en={b.tour.countryEn} />,{" "}
+                    <LocalizedText uk={b.tour.cityUk} en={b.tour.cityEn} /> ·{" "}
+                    <LocalizedText uk={b.tour.hotelUk} en={b.tour.hotelEn} />
                   </div>
                   <div className="mt-2 text-sm">
-                    Departure: <strong>{b.departDate.toLocaleDateString("uk-UA")}</strong> ·{" "}
+                    Departure: <strong><LocalizedDate date={b.departDate} /></strong> ·{" "}
                     {b.adults} adult{b.adults > 1 ? "s" : ""}
                     {b.children > 0 && `, ${b.children} child${b.children > 1 ? "ren" : ""}`}
                   </div>

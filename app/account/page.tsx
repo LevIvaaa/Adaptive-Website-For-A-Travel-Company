@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { FavouritesCount } from "@/components/favourites-count"
+import { LocalizedText, LocalizedDate } from "@/components/localized-tour-fields"
 import { formatPrice } from "@/lib/utils"
 
 export default async function AccountPage() {
@@ -81,10 +82,10 @@ export default async function AccountPage() {
                   href={`/tours/${b.tour.slug}`}
                   className="font-semibold hover:text-primary"
                 >
-                  {b.tour.titleUk}
+                  <LocalizedText uk={b.tour.titleUk} en={b.tour.titleEn} />
                 </Link>
                 <div className="text-sm text-muted-foreground">
-                  Departure: {b.departDate.toLocaleDateString("uk-UA")} · {b.adults} adult
+                  Departure: <LocalizedDate date={b.departDate} /> · {b.adults} adult
                   {b.adults > 1 ? "s" : ""}
                   {b.children > 0 && `, ${b.children} child${b.children > 1 ? "ren" : ""}`}
                 </div>
