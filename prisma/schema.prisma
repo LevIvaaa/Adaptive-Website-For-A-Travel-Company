@@ -49,6 +49,7 @@ model Tour {
   price         Int
   rating        Float    @default(0)
   isHot         Boolean  @default(false)
+  image         String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
