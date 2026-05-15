@@ -42,7 +42,7 @@ interface Props {
 }
 
 export function BookingForm({ tourId, basePrice, baseNights }: Props) {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const { currency } = useCurrency()
   const T = useT()
   const [authOpen, setAuthOpen] = useState(false)
@@ -85,6 +85,17 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
       return res.json()
     }
   })
+
+  if (status === "loading") {
+    return (
+      <div className="space-y-3">
+        <div className="h-9 animate-pulse rounded-md bg-muted" />
+        <div className="h-9 animate-pulse rounded-md bg-muted" />
+        <div className="h-9 animate-pulse rounded-md bg-muted" />
+        <div className="h-20 animate-pulse rounded-md bg-muted" />
+      </div>
+    )
+  }
 
   if (mutation.isSuccess) {
     return (
