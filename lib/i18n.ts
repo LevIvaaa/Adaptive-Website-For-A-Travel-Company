@@ -250,7 +250,7 @@ export const translations = {
       },
       storyTitle: "Our story",
       storyPar1:
-        "In 2012 three friends came back from Crete and couldn’t find a travel agency whose staff had actually stayed in the hotels they were selling. That question became the starting point of Mandry Svitu.",
+        "In 2012 three friends came back from Crete and couldn’t find a travel agency whose staff had actually stayed in the hotels they were selling. That question became the starting point of our company.",
       storyPar2:
         "Today we are a team of 23, with more than 180 destinations in the catalogue — and, most importantly, every hotel has been personally verified by a manager or a returning client.",
       storyPar3:
