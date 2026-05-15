@@ -12,3 +12,5 @@ prisma/migrations/dev*
 prisma/*.db
 prisma/*.db-journal
 tsconfig.tsbuildinfo
+Image/
+.claude/
