@@ -47,20 +47,29 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors }
   } = useForm<FormInput>({
     resolver: zodResolver(schema),
     defaultValues: { adults: 2, children: 0, nights: baseNights }
   })
 
-  const rawAdults = Number(useWatch({ control, name: "adults" })) || 2
-  const rawChildren = Number(useWatch({ control, name: "children" })) || 0
-  const rawNights = Number(useWatch({ control, name: "nights" })) || baseNights
+  // useWatch повертає те, що користувач реально ввів. Може бути будь-яким числом або NaN.
+  const rawAdults = Number(useWatch({ control, name: "adults" }))
+  const rawChildren = Number(useWatch({ control, name: "children" }))
+  const rawNights = Number(useWatch({ control, name: "nights" }))
 
-  const adults = Math.max(1, Math.min(10, rawAdults))
-  const children = Math.max(0, Math.min(10, rawChildren))
-  const nights = Math.max(1, Math.min(30, rawNights))
-  const inputsValid = rawAdults >= 1 && rawChildren >= 0 && rawNights >= 1
+  // Окремо рахуємо «прийняті» значення в межах допустимого діапазону для Total —
+  // щоб ціна не пливла, поки користувач править число.
+  const adults = Math.max(1, Math.min(10, Number.isFinite(rawAdults) ? rawAdults : 2))
+  const children = Math.max(0, Math.min(10, Number.isFinite(rawChildren) ? rawChildren : 0))
+  const nights = Math.max(1, Math.min(30, Number.isFinite(rawNights) ? rawNights : baseNights))
+
+  // Помилки по конкретних полях — показуємо текст під інпутом + блокуємо submit.
+  const adultsError = Number.isFinite(rawAdults) && (rawAdults < 1 || rawAdults > 10)
+  const childrenError = Number.isFinite(rawChildren) && (rawChildren < 0 || rawChildren > 10)
+  const nightsError = Number.isFinite(rawNights) && (rawNights < 1 || rawNights > 30)
+  const inputsValid = !adultsError && !childrenError && !nightsError
 
   const total = Math.round(basePrice * (nights / baseNights) * (adults + 0.5 * children))
 
@@ -146,8 +155,17 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
             min={1}
             max={10}
             {...register("adults")}
+            onBlur={(e) => {
+              // Коли користувач виходить з поля — клампимо число в межі [1..10]
+              const v = Number(e.currentTarget.value)
+              if (!Number.isFinite(v) || v < 1) setValue("adults", 1, { shouldValidate: true })
+              else if (v > 10) setValue("adults", 10, { shouldValidate: true })
+            }}
             className="mt-1.5"
           />
+          {adultsError && (
+            <p className="mt-1 text-xs text-destructive">{T.bookingForm.adultsError}</p>
+          )}
         </div>
         <div>
           <Label htmlFor="children">{T.bookingForm.children}</Label>
@@ -157,8 +175,16 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
             min={0}
             max={10}
             {...register("children")}
+            onBlur={(e) => {
+              const v = Number(e.currentTarget.value)
+              if (!Number.isFinite(v) || v < 0) setValue("children", 0, { shouldValidate: true })
+              else if (v > 10) setValue("children", 10, { shouldValidate: true })
+            }}
             className="mt-1.5"
           />
+          {childrenError && (
+            <p className="mt-1 text-xs text-destructive">{T.bookingForm.childrenError}</p>
+          )}
         </div>
       </div>
 
@@ -170,11 +196,19 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
           min={1}
           max={30}
           {...register("nights")}
+          onBlur={(e) => {
+            const v = Number(e.currentTarget.value)
+            if (!Number.isFinite(v) || v < 1) setValue("nights", 1, { shouldValidate: true })
+            else if (v > 30) setValue("nights", 30, { shouldValidate: true })
+          }}
           className="mt-1.5"
         />
         <p className="mt-1 text-xs text-muted-foreground">
           {T.bookingForm.baseDuration(baseNights)}
         </p>
+        {nightsError && (
+          <p className="mt-1 text-xs text-destructive">{T.bookingForm.nightsError}</p>
+        )}
       </div>
 
       <div>

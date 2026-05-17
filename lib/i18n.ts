@@ -176,7 +176,10 @@ export const translations = {
       submit: "Забронювати",
       submitting: "Бронюємо...",
       successTitle: "Заявку прийнято",
-      successDesc: "Менеджер зв’яжеться з вами протягом 15 хвилин для підтвердження."
+      successDesc: "Менеджер зв’яжеться з вами протягом 15 хвилин для підтвердження.",
+      adultsError: "Від 1 до 10",
+      childrenError: "Від 0 до 10",
+      nightsError: "Від 1 до 30"
     }
   },
 
@@ -349,7 +352,10 @@ export const translations = {
       submit: "Book now",
       submitting: "Booking...",
       successTitle: "Booking received",
-      successDesc: "A manager will contact you within 15 minutes to confirm details."
+      successDesc: "A manager will contact you within 15 minutes to confirm details.",
+      adultsError: "Between 1 and 10",
+      childrenError: "Between 0 and 10",
+      nightsError: "Between 1 and 30"
     }
   }
 } as const
