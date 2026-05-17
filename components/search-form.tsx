@@ -30,14 +30,21 @@ export function SearchForm() {
   })
 
   const destination = useWatch({ control, name: "destination" })
+  const date = useWatch({ control, name: "date" })
   const adults = useWatch({ control, name: "adults" })
   const children = useWatch({ control, name: "children" })
   const infants = useWatch({ control, name: "infants" })
 
+  const today = new Date().toISOString().split("T")[0]
+  const hasInput = Boolean(destination || date)
+
   const onSubmit = (data: FormValues) => {
     const params = new URLSearchParams()
     if (data.destination) params.set("q", data.destination)
-    if (data.date) params.set("date", data.date)
+    if (data.date) {
+      const today = new Date().toISOString().split("T")[0]
+      if (data.date >= today) params.set("date", data.date)
+    }
     if (data.adults && data.adults !== 2) params.set("adults", String(data.adults))
     if (data.children && data.children > 0) params.set("children", String(data.children))
     if (data.infants && data.infants > 0) params.set("infants", String(data.infants))
@@ -60,6 +67,7 @@ export function SearchForm() {
         <input
           {...register("date")}
           type="date"
+          min={today}
           onClick={(e) => {
             const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
             try { el.showPicker?.() } catch {}
@@ -77,7 +85,7 @@ export function SearchForm() {
         }}
       />
 
-      <Button type="submit" size="lg" className="md:self-stretch">
+      <Button type="submit" size="lg" className="md:self-stretch" disabled={!hasInput}>
         <Search className="h-4 w-4" />
         {T.search.submit}
       </Button>
