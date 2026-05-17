@@ -7,6 +7,7 @@ import { Menu, Plane, X } from "lucide-react"
 import { LocaleSwitcher } from "@/components/locale-switcher"
 import { CurrencySwitcher } from "@/components/currency-switcher"
 import { UserMenu } from "@/components/user-menu"
+import { FavouritesIcon } from "@/components/favourites-icon"
 import { navItems } from "@/lib/navigation"
 import { useT } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
@@ -17,7 +18,7 @@ export function SiteHeader() {
   const T = useT()
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground">
@@ -48,11 +49,13 @@ export function SiteHeader() {
         <div className="hidden items-center gap-2 md:flex">
           <CurrencySwitcher />
           <LocaleSwitcher />
+          <FavouritesIcon />
           <UserMenu />
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
           <LocaleSwitcher />
+          <FavouritesIcon />
           <UserMenu />
           <button
             type="button"

@@ -7,14 +7,21 @@ import { formatPrice, cn } from "@/lib/utils"
 import { useFavorites, useLocale, useCurrency } from "@/lib/store"
 import { useT, pluralNights } from "@/lib/i18n"
 import { localizeTour, type Tour } from "@/lib/tours"
+import { useToast } from "@/components/toast"
 
 export function TourCard({ tour }: { tour: Tour }) {
   const { has, toggle } = useFavorites()
   const { locale } = useLocale()
   const { currency } = useCurrency()
   const T = useT()
+  const showToast = useToast((s) => s.show)
   const t = localizeTour(tour, locale)
   const fav = has(t.id)
+
+  function onFavClick() {
+    toggle(t.id)
+    showToast(fav ? T.favourites.removed : T.favourites.added)
+  }
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
@@ -31,7 +38,7 @@ export function TourCard({ tour }: { tour: Tour }) {
         )}
         <button
           type="button"
-          onClick={() => toggle(t.id)}
+          onClick={onFavClick}
           aria-label="Add to favourites"
           className={cn(
             "absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/90 backdrop-blur",
