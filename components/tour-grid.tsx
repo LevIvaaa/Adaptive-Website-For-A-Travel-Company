@@ -5,6 +5,7 @@
 import { useSearchParams, useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { TourCard } from "@/components/tour-card"
+import { ActiveFilters } from "@/components/active-filters"
 import { useLocale } from "@/lib/store"
 import type { Tour } from "@/lib/tours"
 
@@ -62,6 +63,7 @@ export function TourGrid() {
 
   return (
     <div>
+      <ActiveFilters />
       <div className="mb-6 flex items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground">
           {t("Знайдено", "Found")}{" "}

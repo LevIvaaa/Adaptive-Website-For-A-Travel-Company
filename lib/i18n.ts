@@ -193,6 +193,19 @@ export const translations = {
       home: "На головну",
       tours: "Дивитись каталог"
     },
+    activeFilters: {
+      label: "Активні фільтри",
+      clearAll: "Скинути все",
+      hot: "Тільки гарячі",
+      type: {
+        BEACH: "Пляжний",
+        EXCURSION: "Екскурсійний",
+        SKI: "Гірськолижний",
+        FAMILY: "Сімейний",
+        CRUISE: "Круїз",
+        CUSTOM: "Індивідуальний"
+      }
+    },
     favorites: {
       title: "Обране",
       description: "Тури, які ви зберегли.",
@@ -449,6 +462,19 @@ export const translations = {
       description: "We couldn’t find this page. The tour may have been removed.",
       home: "Back to home",
       tours: "Browse tours"
+    },
+    activeFilters: {
+      label: "Active filters",
+      clearAll: "Clear all",
+      hot: "Hot only",
+      type: {
+        BEACH: "Beach",
+        EXCURSION: "Excursion",
+        SKI: "Ski",
+        FAMILY: "Family",
+        CRUISE: "Cruise",
+        CUSTOM: "Custom"
+      }
     },
     favorites: {
       title: "Favorites",
