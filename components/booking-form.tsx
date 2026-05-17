@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 import { AuthDialog } from "@/components/auth-dialog"
 import { useCurrency } from "@/lib/store"
 import { useT } from "@/lib/i18n"
-import { formatPrice } from "@/lib/utils"
+import { formatAmountInCurrency } from "@/lib/utils"
 
 const schema = z.object({
   adults: z.coerce.number().int().min(1).max(10),
@@ -71,7 +71,13 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
   const nightsError = Number.isFinite(rawNights) && (rawNights < 1 || rawNights > 30)
   const inputsValid = !adultsError && !childrenError && !nightsError
 
-  const total = Math.round(basePrice * (nights / baseNights) * (adults + 0.5 * children))
+  // Total для відображення: рахуємо у валюті користувача через ОКРУГЛЕНУ ціну за людину.
+  // Інакше «$723 × 2» давало б 1446, а ми показували 1445 (через round тільки на фінальному UAH).
+  // Тепер $723 × 2 → $1446 — як інтуїтивно очікує користувач.
+  const displayRates = { UAH: 1, USD: 1 / 40, EUR: 1 / 43 }
+  const rate = displayRates[currency]
+  const perPersonDisplay = Math.round(basePrice * rate)
+  const total = Math.round(perPersonDisplay * (nights / baseNights) * (adults + 0.5 * children))
 
   const mutation = useMutation({
     mutationFn: async (data: FormInput) => {
@@ -242,7 +248,7 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
         <div className="flex items-baseline justify-between">
           <span className="text-sm text-muted-foreground">{T.bookingForm.total}</span>
           <span className="text-2xl font-bold text-primary">
-            {formatPrice(total, currency)}
+            {formatAmountInCurrency(total, currency)}
           </span>
         </div>
         <p className="mt-0.5 text-xs text-muted-foreground">
