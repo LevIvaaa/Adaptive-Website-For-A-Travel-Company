@@ -48,8 +48,13 @@ export function TourFilters() {
     })
   }
 
+  function currentParams() {
+    if (typeof window === "undefined") return new URLSearchParams(params)
+    return new URLSearchParams(window.location.search)
+  }
+
   function toggleMulti(key: "type" | "country", value: string) {
-    const next = new URLSearchParams(params)
+    const next = currentParams()
     const current = next.getAll(key)
     next.delete(key)
     if (current.includes(value)) {
@@ -61,8 +66,8 @@ export function TourFilters() {
   }
 
   function toggleHot() {
-    const next = new URLSearchParams(params)
-    if (isHot) next.delete("hot")
+    const next = currentParams()
+    if (next.get("hot") === "1") next.delete("hot")
     else next.set("hot", "1")
     update(next)
   }
