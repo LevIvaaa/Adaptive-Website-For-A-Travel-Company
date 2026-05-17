@@ -73,6 +73,7 @@ export function NightsFilter() {
         step={NIGHTS_STEP}
         value={range}
         onChange={setRange}
+        invalid={invalid}
       />
 
       {invalid && (

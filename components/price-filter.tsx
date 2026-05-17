@@ -112,6 +112,7 @@ export function PriceFilter() {
         step={PRICE_STEP_UAH}
         value={range}
         onChange={setRange}
+        invalid={invalid}
       />
 
       {invalid && (

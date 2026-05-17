@@ -1,23 +1,32 @@
 "use client"
 
+// Двопозиційний слайдер (low/high). Два <input type="range"> один над одним.
 interface Props {
   min: number
   max: number
   step?: number
   value: [number, number]
   onChange: (next: [number, number]) => void
+  invalid?: boolean
 }
 
-export function RangeSlider({ min, max, step = 1, value, onChange }: Props) {
+export function RangeSlider({ min, max, step = 1, value, onChange, invalid = false }: Props) {
   const [low, high] = value
   const pct = (v: number) => Math.max(0, Math.min(100, ((v - min) / (max - min)) * 100))
+
+  // Якщо діапазон невалідний — підсвічуємо смугу червоним.
+  const trackColor = invalid ? "bg-destructive" : "bg-primary"
 
   return (
     <div className="relative h-6">
       <div className="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-muted" />
       <div
-        className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-primary"
-        style={{ left: `${pct(low)}%`, right: `${100 - pct(high)}%` }}
+        className={`absolute top-1/2 h-1 -translate-y-1/2 rounded-full ${trackColor}`}
+        style={
+          invalid
+            ? { left: `${pct(high)}%`, right: `${100 - pct(low)}%` }
+            : { left: `${pct(low)}%`, right: `${100 - pct(high)}%` }
+        }
       />
       <input
         type="range"
