@@ -3,23 +3,37 @@ import { persist } from "zustand/middleware"
 
 interface FavoritesState {
   ids: string[]
+  authenticated: boolean
   toggle: (id: string) => void
   has: (id: string) => boolean
+  setAuthenticated: (v: boolean) => void
+  setAll: (ids: string[]) => void
 }
 
 export const useFavorites = create<FavoritesState>()(
   persist(
     (set, get) => ({
       ids: [],
-      toggle: (id) =>
-        set((state) => ({
-          ids: state.ids.includes(id)
-            ? state.ids.filter((x) => x !== id)
-            : [...state.ids, id]
-        })),
-      has: (id) => get().ids.includes(id)
+      authenticated: false,
+      toggle: (id) => {
+        const state = get()
+        const isFav = state.ids.includes(id)
+        set({
+          ids: isFav ? state.ids.filter((x) => x !== id) : [...state.ids, id]
+        })
+        if (state.authenticated && typeof window !== "undefined") {
+          fetch("/api/favourites", {
+            method: isFav ? "DELETE" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ tourId: id })
+          }).catch(() => {})
+        }
+      },
+      has: (id) => get().ids.includes(id),
+      setAuthenticated: (v) => set({ authenticated: v }),
+      setAll: (ids) => set({ ids })
     }),
-    { name: "favorites" }
+    { name: "favorites", partialize: (s) => ({ ids: s.ids }) }
   )
 )
 
