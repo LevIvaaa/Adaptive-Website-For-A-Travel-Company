@@ -34,6 +34,7 @@ export function PriceFilter() {
   }, [params.get("minPrice"), params.get("maxPrice")])
 
   useEffect(() => {
+    if (range[0] > range[1]) return
     const handler = setTimeout(() => {
       const next = new URLSearchParams(params)
       if (range[0] === PRICE_MIN_UAH) next.delete("minPrice")
@@ -52,12 +53,14 @@ export function PriceFilter() {
   const displayMin = Math.round(range[0] / rate)
   const displayMax = Math.round(range[1] / rate)
 
+  const invalid = range[0] > range[1]
+
   function setDisplayMin(v: number) {
-    const uah = Math.max(PRICE_MIN_UAH, Math.min(range[1] - PRICE_STEP_UAH, Math.round(v * rate)))
+    const uah = Math.max(PRICE_MIN_UAH, Math.min(PRICE_MAX_UAH, Math.round(v * rate)))
     setRange([uah, range[1]])
   }
   function setDisplayMax(v: number) {
-    const uah = Math.min(PRICE_MAX_UAH, Math.max(range[0] + PRICE_STEP_UAH, Math.round(v * rate)))
+    const uah = Math.max(PRICE_MIN_UAH, Math.min(PRICE_MAX_UAH, Math.round(v * rate)))
     setRange([range[0], uah])
   }
 
@@ -89,6 +92,12 @@ export function PriceFilter() {
         value={range}
         onChange={setRange}
       />
+
+      {invalid && (
+        <p className="mt-2 text-xs text-destructive">
+          {t("«від» має бути ≤ «до»", "“from” must be ≤ “to”")}
+        </p>
+      )}
     </div>
   )
 }

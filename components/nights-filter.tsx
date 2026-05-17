@@ -27,6 +27,7 @@ export function NightsFilter() {
   }, [params.get("minNights"), params.get("maxNights")])
 
   useEffect(() => {
+    if (range[0] > range[1]) return
     const handler = setTimeout(() => {
       const next = new URLSearchParams(params)
       if (range[0] === NIGHTS_MIN) next.delete("minNights")
@@ -44,12 +45,14 @@ export function NightsFilter() {
 
   const t = (uk: string, en: string) => (locale === "uk" ? uk : en)
 
+  const invalid = range[0] > range[1]
+
   function setMin(v: number) {
-    const next = Math.max(NIGHTS_MIN, Math.min(range[1] - NIGHTS_STEP, v))
+    const next = Math.max(NIGHTS_MIN, Math.min(NIGHTS_MAX, v))
     setRange([next, range[1]])
   }
   function setMax(v: number) {
-    const next = Math.min(NIGHTS_MAX, Math.max(range[0] + NIGHTS_STEP, v))
+    const next = Math.max(NIGHTS_MIN, Math.min(NIGHTS_MAX, v))
     setRange([range[0], next])
   }
 
@@ -71,6 +74,12 @@ export function NightsFilter() {
         value={range}
         onChange={setRange}
       />
+
+      {invalid && (
+        <p className="mt-2 text-xs text-destructive">
+          {t("«від» має бути ≤ «до»", "“from” must be ≤ “to”")}
+        </p>
+      )}
     </div>
   )
 }
