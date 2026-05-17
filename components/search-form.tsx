@@ -8,9 +8,11 @@ import { TravelersPicker } from "@/components/travelers-picker"
 import { DestinationPicker } from "@/components/destination-picker"
 import { useT } from "@/lib/i18n"
 
+// Поля форми пошуку. Замість одного date — діапазон dateFrom/dateTo.
 interface FormValues {
   destination: string
-  date: string
+  dateFrom: string
+  dateTo: string
   adults: number
   children: number
   infants: number
@@ -22,7 +24,8 @@ export function SearchForm() {
   const { register, handleSubmit, control, setValue } = useForm<FormValues>({
     defaultValues: {
       destination: "",
-      date: "",
+      dateFrom: "",
+      dateTo: "",
       adults: 2,
       children: 0,
       infants: 0
@@ -30,20 +33,22 @@ export function SearchForm() {
   })
 
   const destination = useWatch({ control, name: "destination" })
-  const date = useWatch({ control, name: "date" })
+  const dateFrom = useWatch({ control, name: "dateFrom" })
+  const dateTo = useWatch({ control, name: "dateTo" })
   const adults = useWatch({ control, name: "adults" })
   const children = useWatch({ control, name: "children" })
   const infants = useWatch({ control, name: "infants" })
 
   const today = new Date().toISOString().split("T")[0]
-  const hasInput = Boolean(destination || date)
+  const hasInput = Boolean(destination || dateFrom || dateTo)
 
   const onSubmit = (data: FormValues) => {
     const params = new URLSearchParams()
     if (data.destination) params.set("q", data.destination)
-    if (data.date) {
-      const today = new Date().toISOString().split("T")[0]
-      if (data.date >= today) params.set("date", data.date)
+    if (data.dateFrom && data.dateFrom >= today) params.set("dateFrom", data.dateFrom)
+    // dateTo має бути не раніше dateFrom — інакше відкидаємо.
+    if (data.dateTo && data.dateTo >= today && (!data.dateFrom || data.dateTo >= data.dateFrom)) {
+      params.set("dateTo", data.dateTo)
     }
     if (data.adults && data.adults !== 2) params.set("adults", String(data.adults))
     if (data.children && data.children > 0) params.set("children", String(data.children))
@@ -55,19 +60,34 @@ export function SearchForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="grid gap-3 rounded-2xl bg-white p-4 text-slate-800 shadow-xl md:grid-cols-[1.2fr_1fr_1fr_auto] md:items-end md:gap-2 md:p-3"
+      className="grid gap-3 rounded-2xl bg-white p-4 text-slate-800 shadow-xl md:grid-cols-[1.2fr_1fr_1fr_1fr_auto] md:items-end md:gap-2 md:p-3"
     >
       <DestinationPicker
         value={destination}
         onChange={(v) => setValue("destination", v)}
       />
 
+      {/* Пара інпутів «від»/«до» — щоб юзер задавав інтервал поїздки. */}
       <label className="flex flex-col gap-0.5 rounded-lg bg-muted/60 px-3 py-2 md:bg-transparent">
-        <span className="text-xs font-semibold uppercase text-slate-500">{T.search.date}</span>
+        <span className="text-xs font-semibold uppercase text-slate-500">{T.search.dateFrom}</span>
         <input
-          {...register("date")}
+          {...register("dateFrom")}
           type="date"
           min={today}
+          onClick={(e) => {
+            const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
+            try { el.showPicker?.() } catch {}
+          }}
+          className="w-full cursor-pointer bg-transparent text-sm outline-none"
+        />
+      </label>
+
+      <label className="flex flex-col gap-0.5 rounded-lg bg-muted/60 px-3 py-2 md:bg-transparent">
+        <span className="text-xs font-semibold uppercase text-slate-500">{T.search.dateTo}</span>
+        <input
+          {...register("dateTo")}
+          type="date"
+          min={dateFrom || today}
           onClick={(e) => {
             const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
             try { el.showPicker?.() } catch {}

@@ -29,6 +29,19 @@ export async function GET(req: Request) {
   const sort = searchParams.get("sort") ?? "popular"
   const q = (searchParams.get("q") ?? "").trim().toLowerCase()
 
+  // Якщо передано dateFrom/dateTo з hero — рахуємо кількість ночей у вибраному інтервалі
+  // і додаємо фільтр: тур має «вміщуватися» — кількість його ночей не більша за інтервал.
+  const dateFromStr = searchParams.get("dateFrom") ?? ""
+  const dateToStr = searchParams.get("dateTo") ?? ""
+  let intervalNights = NaN
+  if (dateFromStr && dateToStr) {
+    const from = new Date(dateFromStr).getTime()
+    const to = new Date(dateToStr).getTime()
+    if (Number.isFinite(from) && Number.isFinite(to) && to >= from) {
+      intervalNights = Math.round((to - from) / (1000 * 60 * 60 * 24))
+    }
+  }
+
   // Якщо фільтр позначив себе невалідним — повертаємо порожній список, щоб користувач бачив empty state.
   if (searchParams.get("_invalid") === "1") {
     return NextResponse.json([])
@@ -44,10 +57,14 @@ export async function GET(req: Request) {
     if (!Number.isNaN(minPrice)) where.price.gte = minPrice
     if (!Number.isNaN(maxPrice)) where.price.lte = maxPrice
   }
-  if (!Number.isNaN(minNights) || !Number.isNaN(maxNights)) {
+  // Фільтр по ночам комбінуємо з тривалістю інтервалу з hero — беремо найжорсткіший maxNights.
+  const effectiveMaxNights = Number.isFinite(intervalNights)
+    ? (Number.isNaN(maxNights) ? intervalNights : Math.min(maxNights, intervalNights))
+    : maxNights
+  if (!Number.isNaN(minNights) || !Number.isNaN(effectiveMaxNights)) {
     where.nights = {}
     if (!Number.isNaN(minNights)) where.nights.gte = minNights
-    if (!Number.isNaN(maxNights)) where.nights.lte = maxNights
+    if (!Number.isNaN(effectiveMaxNights)) where.nights.lte = effectiveMaxNights
   }
   if (hot) where.isHot = true
 
