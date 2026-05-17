@@ -162,6 +162,11 @@ export const translations = {
       adults: "доросл.",
       children: "діт."
     },
+    notFound: {
+      description: "Цю сторінку не знайдено. Можливо, тур уже зняли з продажу.",
+      home: "На головну",
+      tours: "Дивитись каталог"
+    },
     favorites: {
       title: "Обране",
       description: "Тури, які ви зберегли.",
@@ -354,6 +359,11 @@ export const translations = {
       nights: "nights",
       adults: "adults",
       children: "children"
+    },
+    notFound: {
+      description: "We couldn’t find this page. The tour may have been removed.",
+      home: "Back to home",
+      tours: "Browse tours"
     },
     favorites: {
       title: "Favorites",
