@@ -65,7 +65,8 @@ export const translations = {
     },
     card: {
       from: "від",
-      details: "Детальніше"
+      details: "Детальніше",
+      hot: "Гарячий"
     },
     toursPage: {
       title: "Каталог турів",
@@ -321,7 +322,8 @@ export const translations = {
     },
     card: {
       from: "from",
-      details: "Details"
+      details: "Details",
+      hot: "Hot"
     },
     toursPage: {
       title: "Tour catalogue",

@@ -1,9 +1,9 @@
 "use client"
 
-// Картка одного туру в каталозі. Показує фото, країну/місто, рейтинг, ціну.
-// Сердечко зверху додає/прибирає тур з обраного + показує тост.
+// Картка одного туру в каталозі. Уся картка клікабельна (через absolute overlay-link).
+// Сердечко й кнопка «Детальніше» з більшим z-index і stopPropagation — щоб не плодити подвійні кліки.
 import Link from "next/link"
-import { Clock, Heart, MapPin, Plane, Star } from "lucide-react"
+import { Clock, Flame, Heart, MapPin, Plane, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatPrice, cn } from "@/lib/utils"
 import { useFavorites, useLocale, useCurrency } from "@/lib/store"
@@ -20,13 +20,23 @@ export function TourCard({ tour }: { tour: Tour }) {
   const t = localizeTour(tour, locale)
   const fav = has(t.id)
 
-  function onFavClick() {
+  function onFavClick(e: React.MouseEvent) {
+    // stop, щоб клік сердечка не «провалився» через overlay-link на /tours/[slug].
+    e.preventDefault()
+    e.stopPropagation()
     toggle(t.id)
     showToast(fav ? T.favorites.removed : T.favorites.added)
   }
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+      {/* Прозоре посилання на всю картку. Інтерактиви всередині мають вищий z-index. */}
+      <Link
+        href={`/tours/${t.slug}`}
+        aria-label={t.title}
+        className="absolute inset-0 z-0"
+      />
+
       <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-gradient-to-br from-primary/15 to-primary/5">
         {t.image ? (
           <img
@@ -38,12 +48,21 @@ export function TourCard({ tour }: { tour: Tour }) {
         ) : (
           <Plane className="h-14 w-14 text-primary/30" />
         )}
+
+        {/* Бейдж «Гарячий» для турів з isHot=true. */}
+        {t.isHot && (
+          <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-500 px-2.5 py-1 text-xs font-semibold text-white shadow">
+            <Flame className="h-3 w-3" />
+            {T.card.hot}
+          </span>
+        )}
+
         <button
           type="button"
           onClick={onFavClick}
           aria-label={fav ? T.favorites.remove : T.favorites.add}
           className={cn(
-            "absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/90 backdrop-blur",
+            "absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white/90 backdrop-blur",
             fav ? "text-red-500" : "text-slate-600 hover:text-red-500"
           )}
         >
@@ -51,16 +70,14 @@ export function TourCard({ tour }: { tour: Tour }) {
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
+      <div className="relative z-10 flex flex-1 flex-col p-5 pointer-events-none">
         <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
           <MapPin className="h-4 w-4 text-primary" />
           {t.country}, {t.city}
         </div>
 
-        <h3 className="mt-1 text-lg font-semibold leading-snug">
-          <Link href={`/tours/${t.slug}`} className="hover:text-primary">
-            {t.title}
-          </Link>
+        <h3 className="mt-1 text-lg font-semibold leading-snug group-hover:text-primary">
+          {t.title}
         </h3>
 
         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
@@ -79,7 +96,7 @@ export function TourCard({ tour }: { tour: Tour }) {
             <div className="text-xs text-muted-foreground">{T.card.from}</div>
             <div className="text-2xl font-bold">{formatPrice(t.price, currency)}</div>
           </div>
-          <Button asChild size="sm">
+          <Button asChild size="sm" className="pointer-events-auto">
             <Link href={`/tours/${t.slug}`}>{T.card.details}</Link>
           </Button>
         </div>
