@@ -8,8 +8,23 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    # Піднімаємо PostgreSQL як сервіс — Prisma з postgresql provider інакше не запуститься.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: travel
+          POSTGRES_PASSWORD: travel123
+          POSTGRES_DB: travel_agency
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U travel"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
-      DATABASE_URL: file:./ci.db
+      DATABASE_URL: postgresql://travel:travel123@localhost:5432/travel_agency?schema=public
       NEXTAUTH_SECRET: ci-test-secret-not-used-in-prod
       NEXTAUTH_URL: http://localhost:4000
     steps:
@@ -22,7 +37,7 @@ jobs:
 
       - run: npm ci
 
-      - name: Prepare SQLite database
+      - name: Prepare database
         run: npx prisma db push --skip-generate
 
       - name: Type check
