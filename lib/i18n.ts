@@ -15,6 +15,10 @@ export const translations = {
     footer: {
       menu: "Меню",
       contacts: "Контакти",
+      legal: "Документи",
+      privacy: "Політика конфіденційності",
+      terms: "Договір оферти",
+      cookies: "Cookie",
       tagline: "Туристична компанія. Перевірені готелі, чесні ціни, супровід 24/7.",
       rights: "Усі права захищені.",
       address: "м. Київ, вул. Саксаганського 28"
@@ -291,6 +295,10 @@ export const translations = {
     footer: {
       menu: "Menu",
       contacts: "Contacts",
+      legal: "Legal",
+      privacy: "Privacy Policy",
+      terms: "Terms of Service",
+      cookies: "Cookies",
       tagline: "Travel agency. Trusted hotels, fair prices, 24/7 support.",
       rights: "All rights reserved.",
       address: "Kyiv, Saksahanskoho St. 28"
