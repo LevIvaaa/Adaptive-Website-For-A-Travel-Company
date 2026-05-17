@@ -31,6 +31,15 @@ export function TourGrid() {
   const currentSort = params.get("sort") ?? "popular"
   const t = (uk: string, en: string) => (locale === "uk" ? uk : en)
 
+  function pluralTours(n: number) {
+    if (locale === "en") return n === 1 ? "tour" : "tours"
+    const mod10 = n % 10
+    const mod100 = n % 100
+    if (mod10 === 1 && mod100 !== 11) return "тур"
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return "тури"
+    return "турів"
+  }
+
   const sortOptions = [
     { value: "popular", label: t("Популярні", "Popular") },
     { value: "price-asc", label: t("Спершу дешеві", "Cheapest first") },
@@ -55,7 +64,7 @@ export function TourGrid() {
         <p className="text-sm text-muted-foreground">
           {t("Знайдено", "Found")}{" "}
           <span className="font-semibold text-foreground">{data?.length ?? 0}</span>{" "}
-          {t("турів", "tours")}
+          {pluralTours(data?.length ?? 0)}
         </p>
         <label className="flex items-center gap-2 text-sm">
           <span className="hidden text-muted-foreground sm:inline">
@@ -84,6 +93,13 @@ export function TourGrid() {
           <p className="text-muted-foreground">
             {t("За вашими фільтрами турів не знайдено.", "No tours match the selected filters.")}
           </p>
+          <button
+            type="button"
+            onClick={() => router.replace("/tours")}
+            className="mt-4 inline-flex items-center justify-center rounded-md border bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
+          >
+            {t("Скинути фільтри", "Reset filters")}
+          </button>
         </div>
       )}
     </div>
