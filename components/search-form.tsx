@@ -41,6 +41,9 @@ export function SearchForm() {
 
   const today = new Date().toISOString().split("T")[0]
   const hasInput = Boolean(destination || dateFrom || dateTo)
+  // Помилка діапазону дат — коли «до» раніше за «від». Показуємо одразу під полями.
+  const datesInvalid = Boolean(dateFrom && dateTo && dateTo < dateFrom)
+  const canSubmit = hasInput && !datesInvalid
 
   const onSubmit = (data: FormValues) => {
     const params = new URLSearchParams()
@@ -92,7 +95,8 @@ export function SearchForm() {
             const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
             try { el.showPicker?.() } catch {}
           }}
-          className="w-full cursor-pointer bg-transparent text-sm outline-none"
+          aria-invalid={datesInvalid}
+          className={`w-full cursor-pointer bg-transparent text-sm outline-none ${datesInvalid ? "text-destructive" : ""}`}
         />
       </label>
 
@@ -105,17 +109,21 @@ export function SearchForm() {
         }}
       />
 
-      {/* Якщо нічого не введено — кнопка disabled. У title пояснюємо, чому. */}
+      {/* Якщо нічого не введено АБО діапазон дат невалідний — кнопка disabled. */}
       <Button
         type="submit"
         size="lg"
         className="md:self-stretch"
-        disabled={!hasInput}
-        title={!hasInput ? T.search.submitHint : undefined}
+        disabled={!canSubmit}
+        title={!canSubmit ? (datesInvalid ? T.search.datesInvalid : T.search.submitHint) : undefined}
       >
         <Search className="h-4 w-4" />
         {T.search.submit}
       </Button>
+
+      {datesInvalid && (
+        <p className="text-xs text-destructive md:col-span-5">{T.search.datesInvalid}</p>
+      )}
     </form>
   )
 }
