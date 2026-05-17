@@ -146,6 +146,7 @@ export function TourView({ tour }: { tour: Tour }) {
                 presetAdults={Number.isFinite(presetAdults) ? presetAdults : undefined}
                 presetChildren={Number.isFinite(presetChildren) ? presetChildren : undefined}
                 presetDate={presetDateFrom || undefined}
+                presetDateTo={presetDateTo || undefined}
                 presetNights={presetNights}
               />
             </div>

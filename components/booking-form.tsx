@@ -20,17 +20,29 @@ import { formatAmountInCurrency } from "@/lib/utils"
 const schema = z.object({
   adults: z.coerce.number().int().min(1).max(10),
   children: z.coerce.number().int().min(0).max(10),
-  nights: z.coerce.number().int().min(1).max(30),
-  departDate: z.string().min(1, "Pick a date").refine((v) => {
+  dateFrom: z.string().min(1, "Pick a date").refine((v) => {
     const today = new Date().toISOString().split("T")[0]
     return v >= today
   }, "Departure date can't be in the past"),
+  dateTo: z.string().min(1, "Pick a return date"),
   comment: z.string().max(1000).optional()
+}).refine((d) => d.dateTo > d.dateFrom, {
+  path: ["dateTo"],
+  message: "Return date must be after departure"
 })
 
 function todayIso() {
   return new Date().toISOString().split("T")[0]
 }
+
+// Скільки ночей між двома датами у форматі YYYY-MM-DD.
+function nightsBetween(from: string, to: string) {
+  if (!from || !to) return 0
+  const ms = new Date(to).getTime() - new Date(from).getTime()
+  if (!Number.isFinite(ms) || ms <= 0) return 0
+  return Math.round(ms / 86400000)
+}
+
 type FormInput = z.infer<typeof schema>
 
 interface Props {
@@ -41,6 +53,7 @@ interface Props {
   presetAdults?: number
   presetChildren?: number
   presetDate?: string
+  presetDateTo?: string
   presetNights?: number
 }
 
@@ -51,12 +64,24 @@ export function BookingForm({
   presetAdults,
   presetChildren,
   presetDate,
+  presetDateTo,
   presetNights
 }: Props) {
   const { data: session, status } = useSession()
   const { currency } = useCurrency()
   const T = useT()
   const [authOpen, setAuthOpen] = useState(false)
+
+  // Рахуємо дефолтний dateTo: presetDateTo якщо є, інакше dateFrom + baseNights днів.
+  const defaultDateTo = (() => {
+    if (presetDateTo) return presetDateTo
+    if (presetDate) {
+      const d = new Date(presetDate)
+      d.setDate(d.getDate() + (presetNights ?? baseNights))
+      return d.toISOString().split("T")[0]
+    }
+    return ""
+  })()
 
   const {
     register,
@@ -69,27 +94,27 @@ export function BookingForm({
     defaultValues: {
       adults: presetAdults && presetAdults >= 1 && presetAdults <= 10 ? presetAdults : 2,
       children: presetChildren && presetChildren >= 0 && presetChildren <= 10 ? presetChildren : 0,
-      nights: presetNights && presetNights >= 1 && presetNights <= 30 ? presetNights : baseNights,
-      departDate: presetDate ?? ""
+      dateFrom: presetDate ?? "",
+      dateTo: defaultDateTo
     }
   })
 
-  // useWatch повертає те, що користувач реально ввів. Може бути будь-яким числом або NaN.
   const rawAdults = Number(useWatch({ control, name: "adults" }))
   const rawChildren = Number(useWatch({ control, name: "children" }))
-  const rawNights = Number(useWatch({ control, name: "nights" }))
+  const dateFrom = useWatch({ control, name: "dateFrom" }) || ""
+  const dateTo = useWatch({ control, name: "dateTo" }) || ""
 
-  // Окремо рахуємо «прийняті» значення в межах допустимого діапазону для Total —
-  // щоб ціна не пливла, поки користувач править число.
   const adults = Math.max(1, Math.min(10, Number.isFinite(rawAdults) ? rawAdults : 2))
   const children = Math.max(0, Math.min(10, Number.isFinite(rawChildren) ? rawChildren : 0))
-  const nights = Math.max(1, Math.min(30, Number.isFinite(rawNights) ? rawNights : baseNights))
+  // Ночі рахуємо з обраного діапазону. Якщо невалідно — fallback на базову тривалість туру.
+  const computedNights = nightsBetween(dateFrom, dateTo)
+  const nights = computedNights >= 1 && computedNights <= 30 ? computedNights : baseNights
 
-  // Помилки по конкретних полях — показуємо текст під інпутом + блокуємо submit.
   const adultsError = Number.isFinite(rawAdults) && (rawAdults < 1 || rawAdults > 10)
   const childrenError = Number.isFinite(rawChildren) && (rawChildren < 0 || rawChildren > 10)
-  const nightsError = Number.isFinite(rawNights) && (rawNights < 1 || rawNights > 30)
-  const inputsValid = !adultsError && !childrenError && !nightsError
+  // Помилка дат: «до» має бути пізніше «від» і не пізніше ніж +30 ночей.
+  const datesError = Boolean(dateFrom && dateTo && (dateTo <= dateFrom || computedNights > 30))
+  const inputsValid = !adultsError && !childrenError && !datesError && Boolean(dateFrom && dateTo)
 
   // Total для відображення: рахуємо у валюті користувача через ОКРУГЛЕНУ ціну за людину.
   // Інакше «$723 × 2» давало б 1446, а ми показували 1445 (через round тільки на фінальному UAH).
@@ -101,14 +126,19 @@ export function BookingForm({
 
   const mutation = useMutation({
     mutationFn: async (data: FormInput) => {
-      // Передаємо також displayTotal + displayCurrency — щоб у /account/bookings
-      // показалась саме та сума, яку юзер бачив тут.
+      // Передаємо обчислені ночі + departDate (для зворотньої сумісності з API) +
+      // snapshot displayTotal/displayCurrency, щоб у /account/bookings ціна збігалась.
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           tourId,
-          ...data,
+          adults: data.adults,
+          children: data.children,
+          nights,
+          departDate: data.dateFrom,
+          returnDate: data.dateTo,
+          comment: data.comment,
           displayTotal: total,
           displayCurrency: currency
         })
@@ -177,23 +207,53 @@ export function BookingForm({
         )}
       </div>
 
-      <div>
-        <Label htmlFor="departDate">{T.bookingForm.departure}</Label>
-        <Input
-          id="departDate"
-          type="date"
-          min={todayIso()}
-          {...register("departDate")}
-          onClick={(e) => {
-            const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
-            try { el.showPicker?.() } catch {}
-          }}
-          className="mt-1.5 cursor-pointer"
-        />
-        {errors.departDate && (
-          <p className="mt-1 text-xs text-destructive">{errors.departDate.message}</p>
-        )}
+      {/* Пара інпутів дат — як у hero-формі. Ночі рахуються з різниці і показуються readonly. */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label htmlFor="dateFrom">{T.bookingForm.dateFrom}</Label>
+          <Input
+            id="dateFrom"
+            type="date"
+            min={todayIso()}
+            {...register("dateFrom")}
+            onClick={(e) => {
+              const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
+              try { el.showPicker?.() } catch {}
+            }}
+            className="mt-1.5 cursor-pointer"
+          />
+          {errors.dateFrom && (
+            <p className="mt-1 text-xs text-destructive">{errors.dateFrom.message}</p>
+          )}
+        </div>
+        <div>
+          <Label htmlFor="dateTo">{T.bookingForm.dateTo}</Label>
+          <Input
+            id="dateTo"
+            type="date"
+            min={dateFrom || todayIso()}
+            {...register("dateTo")}
+            onClick={(e) => {
+              const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void }
+              try { el.showPicker?.() } catch {}
+            }}
+            className="mt-1.5 cursor-pointer"
+          />
+          {errors.dateTo && (
+            <p className="mt-1 text-xs text-destructive">{errors.dateTo.message}</p>
+          )}
+        </div>
       </div>
+
+      {/* Підказка з обчисленою тривалістю поїздки. */}
+      {dateFrom && dateTo && !datesError && (
+        <p className="text-xs text-muted-foreground">
+          {T.bookingForm.computedNights(nights)}
+        </p>
+      )}
+      {datesError && (
+        <p className="text-xs text-destructive">{T.bookingForm.datesError}</p>
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -235,29 +295,6 @@ export function BookingForm({
             <p className="mt-1 text-xs text-destructive">{T.bookingForm.childrenError}</p>
           )}
         </div>
-      </div>
-
-      <div>
-        <Label htmlFor="nights">{T.bookingForm.nights}</Label>
-        <Input
-          id="nights"
-          type="number"
-          min={1}
-          max={30}
-          {...register("nights")}
-          onBlur={(e) => {
-            const v = Number(e.currentTarget.value)
-            if (!Number.isFinite(v) || v < 1) setValue("nights", 1, { shouldValidate: true })
-            else if (v > 30) setValue("nights", 30, { shouldValidate: true })
-          }}
-          className="mt-1.5"
-        />
-        <p className="mt-1 text-xs text-muted-foreground">
-          {T.bookingForm.baseDuration(baseNights)}
-        </p>
-        {nightsError && (
-          <p className="mt-1 text-xs text-destructive">{T.bookingForm.nightsError}</p>
-        )}
       </div>
 
       <div>

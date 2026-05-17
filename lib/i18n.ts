@@ -286,7 +286,11 @@ export const translations = {
       childrenError: "Від 0 до 10",
       nightsError: "Від 1 до 30",
       contactNote: "Менеджер зателефонує на:",
-      contactNoPhone: "У вашому профілі немає телефону. Менеджер напише на e-mail."
+      contactNoPhone: "У вашому профілі немає телефону. Менеджер напише на e-mail.",
+      dateFrom: "Виїзд з",
+      dateTo: "Повернення до",
+      datesError: "Перевірте діапазон дат (макс. 30 ночей)",
+      computedNights: (n: number) => `Тривалість поїздки: ${n} ${n === 1 ? "ніч" : n >= 2 && n <= 4 ? "ночі" : "ночей"}`
     }
   },
 
@@ -560,7 +564,11 @@ export const translations = {
       childrenError: "Between 0 and 10",
       nightsError: "Between 1 and 30",
       contactNote: "The manager will call you at:",
-      contactNoPhone: "No phone in your profile — the manager will email you."
+      contactNoPhone: "No phone in your profile — the manager will email you.",
+      dateFrom: "Departure",
+      dateTo: "Return",
+      datesError: "Check date range (max 30 nights)",
+      computedNights: (n: number) => `Trip duration: ${n} night${n === 1 ? "" : "s"}`
     }
   }
 } as const

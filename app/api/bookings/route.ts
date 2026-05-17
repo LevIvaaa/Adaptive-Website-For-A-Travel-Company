@@ -17,6 +17,8 @@ const schema = z.object({
     const today = new Date().toISOString().split("T")[0]
     return v >= today
   }, "Invalid or past date"),
+  // Опціональна дата повернення — якщо передана, з неї перерахуємо nights.
+  returnDate: z.string().optional(),
   comment: z.string().max(1000).optional(),
   // Валюта, в якій юзер бачив суму, та її значення — для збереження snapshot'у.
   displayCurrency: z.enum(["UAH", "USD", "EUR"]).optional(),
@@ -43,7 +45,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Tour not found" }, { status: 404 })
   }
 
-  const nights = parsed.data.nights ?? tour.nights
+  // Спочатку пробуємо взяти nights з returnDate (якщо переданий діапазон).
+  // Інакше — поле nights, інакше — базова тривалість туру.
+  let nights = parsed.data.nights ?? tour.nights
+  if (parsed.data.returnDate) {
+    const ms = new Date(parsed.data.returnDate).getTime() - new Date(parsed.data.departDate).getTime()
+    if (Number.isFinite(ms) && ms > 0) {
+      const computed = Math.round(ms / 86400000)
+      if (computed >= 1 && computed <= 30) nights = computed
+    }
+  }
   const total = Math.round(
     tour.price * (nights / tour.nights) * (parsed.data.adults + 0.5 * parsed.data.children)
   )
