@@ -5,11 +5,14 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { formatPrice } from "@/lib/utils"
 import { LocalizedText, LocalizedDate } from "@/components/localized-tour-fields"
+import { BookingsPageHeading } from "@/components/bookings-page-heading"
 
+// Сторінка «Мої бронювання». Серверна — тягне дані напряму через Prisma.
 export default async function BookingsPage() {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) redirect("/")
 
+  // Бронювання тільки поточного юзера, від нових до старих.
   const bookings = await prisma.booking.findMany({
     where: { userId: session.user.id },
     include: { tour: true },
@@ -21,7 +24,7 @@ export default async function BookingsPage() {
       <Link href="/account" className="text-sm text-muted-foreground hover:text-primary">
         ← Account
       </Link>
-      <h1 className="mt-3 text-3xl font-bold md:text-4xl">My bookings</h1>
+      <BookingsPageHeading />
 
       {bookings.length === 0 ? (
         <div className="mt-6 rounded-xl border bg-card p-8 text-center text-muted-foreground">
@@ -49,6 +52,7 @@ export default async function BookingsPage() {
                   </div>
                   <div className="mt-2 text-sm">
                     Departure: <strong><LocalizedDate date={b.departDate} /></strong> ·{" "}
+                    {b.tour.nights} night{b.tour.nights > 1 ? "s" : ""} ·{" "}
                     {b.adults} adult{b.adults > 1 ? "s" : ""}
                     {b.children > 0 && `, ${b.children} child${b.children > 1 ? "ren" : ""}`}
                   </div>

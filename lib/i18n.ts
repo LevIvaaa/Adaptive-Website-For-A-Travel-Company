@@ -145,6 +145,16 @@ export const translations = {
       errEmail: "Невірний e-mail",
       errPassword: "Мінімум 8 символів"
     },
+    bookings: {
+      title: "Мої бронювання",
+      empty: "Бронювань поки немає.",
+      browse: "Переглянути каталог",
+      backToAccount: "← Особистий кабінет",
+      departure: "Виїзд",
+      nights: "ноч.",
+      adults: "доросл.",
+      children: "діт."
+    },
     favorites: {
       title: "Обране",
       description: "Тури, які ви зберегли.",
@@ -322,6 +332,16 @@ export const translations = {
       submit: "Log in",
       errEmail: "Invalid email",
       errPassword: "At least 8 characters"
+    },
+    bookings: {
+      title: "My bookings",
+      empty: "No bookings yet.",
+      browse: "Browse tours",
+      backToAccount: "← Account",
+      departure: "Departure",
+      nights: "nights",
+      adults: "adults",
+      children: "children"
     },
     favorites: {
       title: "Favorites",
