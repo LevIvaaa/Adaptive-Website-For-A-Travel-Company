@@ -16,9 +16,11 @@ export function TourView({ tour }: { tour: Tour }) {
   const T = useT()
   const t = localizeTour(tour, locale)
 
+  // Title вкладки оновлюємо на клієнті — щоб він реагував на зміну локалі.
+  // (Серверний generateMetadata встановлює його лише на початковий рендер.)
   useEffect(() => {
     document.title = `${t.title} · Travel Agency`
-  }, [t.title])
+  }, [t.title, locale])
 
   return (
     <>
