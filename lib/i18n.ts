@@ -267,8 +267,15 @@ export const translations = {
       comment: "Коментар",
       commentPh: "Маєте побажання? (необов’язково)",
       total: "Разом",
-      breakdown: (adults: number, children: number, nights: number) =>
-        `${adults} доросл. ${children > 0 ? `, ${children} діт. ` : ""}· ${nights} ноч.`,
+      breakdown: (adults: number, children: number, nights: number) => {
+        // Складаємо рядок без зайвих пробілів. Для UA — повні слова замість «доросл./діт.».
+        const adultsWord = adults === 1 ? "дорослий" : "дорослих"
+        const childrenWord = children === 1 ? "дитина" : children >= 2 && children <= 4 ? "дитини" : "дітей"
+        const parts = [`${adults} ${adultsWord}`]
+        if (children > 0) parts.push(`${children} ${childrenWord}`)
+        parts.push(`${nights} ${nights === 1 ? "ніч" : nights >= 2 && nights <= 4 ? "ночі" : "ночей"}`)
+        return parts.join(" · ")
+      },
       signInPrompt: "Увійдіть, щоб забронювати цей тур.",
       signInButton: "Увійти / Зареєструватися",
       submit: "Забронювати",
