@@ -10,8 +10,10 @@ export default function AboutPage() {
     document.title = `${T.about.title} · Travel Agency`
   }, [T])
 
+  // Рік заснування — 2012. Стаж рахуємо динамічно від поточного року, щоб не «застрявало».
+  const yearsOnMarket = new Date().getFullYear() - 2012
   const stats = [
-    { value: "12+", label: T.about.stats.years },
+    { value: `${yearsOnMarket}+`, label: T.about.stats.years },
     { value: "180", label: T.about.stats.destinations },
     { value: "42 000", label: T.about.stats.clients },
     { value: "4.9", label: T.about.stats.rating }
