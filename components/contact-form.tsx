@@ -26,7 +26,10 @@ export function ContactForm() {
       z.object({
         name: z.string().min(2, T.contactForm.errName),
         phone: z.string().min(6, T.contactForm.errPhone),
-        email: z.string().email(T.contactForm.errEmail),
+        email: z
+          .string()
+          .min(1, T.contactForm.errEmailEmpty)
+          .email(T.contactForm.errEmail),
         message: z.string().min(5, T.contactForm.errMessage)
       }),
     [T]
