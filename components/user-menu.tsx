@@ -6,6 +6,7 @@ import { signOut, useSession } from "next-auth/react"
 import { ChevronDown, LogOut, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AuthDialog } from "@/components/auth-dialog"
+import { useT } from "@/lib/i18n"
 
 export function UserMenu() {
   const { data: session, status } = useSession()
@@ -13,6 +14,7 @@ export function UserMenu() {
   const [authOpen, setAuthOpen] = useState(false)
   const [authTab, setAuthTab] = useState<"login" | "register">("login")
   const ref = useRef<HTMLDivElement>(null)
+  const T = useT()
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
@@ -38,7 +40,7 @@ export function UserMenu() {
               setAuthOpen(true)
             }}
           >
-            Log in
+            {T.userMenu.logIn}
           </Button>
           <Button
             size="sm"
@@ -47,7 +49,7 @@ export function UserMenu() {
               setAuthOpen(true)
             }}
           >
-            Sign up
+            {T.userMenu.signUp}
           </Button>
         </div>
         <Button
@@ -58,7 +60,7 @@ export function UserMenu() {
             setAuthOpen(true)
           }}
         >
-          Log in
+          {T.userMenu.logIn}
         </Button>
         <AuthDialog open={authOpen} onOpenChange={setAuthOpen} initialTab={authTab} />
       </>
@@ -92,7 +94,7 @@ export function UserMenu() {
               onClick={() => setOpen(false)}
               className="block px-3 py-2 text-sm hover:bg-muted"
             >
-              My account
+              {T.userMenu.account}
             </Link>
           </li>
           <li>
@@ -101,7 +103,7 @@ export function UserMenu() {
               onClick={() => setOpen(false)}
               className="block px-3 py-2 text-sm hover:bg-muted"
             >
-              My bookings
+              {T.userMenu.bookings}
             </Link>
           </li>
           <li className="border-t">
@@ -114,7 +116,7 @@ export function UserMenu() {
               className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-muted"
             >
               <LogOut className="h-4 w-4" />
-              Sign out
+              {T.userMenu.signOut}
             </button>
           </li>
         </ul>
