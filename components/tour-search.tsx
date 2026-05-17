@@ -42,13 +42,14 @@ export function TourSearch() {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      const next = new URLSearchParams(params)
-      if (value) next.set("q", value)
-      else next.delete("q")
-      const current = params.get("q") ?? ""
-      if (current !== value) {
-        router.replace(`/tours?${next.toString()}`)
-      }
+      const live = typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search)
+        : new URLSearchParams(params)
+      const current = live.get("q") ?? ""
+      if (current === value) return
+      if (value) live.set("q", value)
+      else live.delete("q")
+      router.replace(`/tours?${live.toString()}`)
     }, 300)
     return () => clearTimeout(handler)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,9 +65,15 @@ export function TourSearch() {
   }, [countries, value])
 
   function pick(c: Country) {
-    const name = locale === "uk" ? c.uk : c.en
-    setValue(name)
     setOpen(false)
+    setValue("")
+    const live = typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams(params)
+    live.delete("q")
+    live.delete("country")
+    live.append("country", c.en)
+    router.replace(`/tours?${live.toString()}`)
   }
 
   const placeholder =
