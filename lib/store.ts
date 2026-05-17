@@ -22,7 +22,7 @@ export const useFavorites = create<FavoritesState>()(
           ids: isFav ? state.ids.filter((x) => x !== id) : [...state.ids, id]
         })
         if (state.authenticated && typeof window !== "undefined") {
-          fetch("/api/favourites", {
+          fetch("/api/favorites", {
             method: isFav ? "DELETE" : "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tourId: id })

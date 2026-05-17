@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useFavorites } from "@/lib/store"
 
-export function FavouritesSync() {
+export function FavoritesSync() {
   const { status } = useSession()
   const setAuthenticated = useFavorites((s) => s.setAuthenticated)
   const setAll = useFavorites((s) => s.setAll)
@@ -14,14 +14,14 @@ export function FavouritesSync() {
       const localIds = useFavorites.getState().ids
       Promise.all(
         localIds.map((id) =>
-          fetch("/api/favourites", {
+          fetch("/api/favorites", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tourId: id })
           }).catch(() => {})
         )
       ).then(() =>
-        fetch("/api/favourites")
+        fetch("/api/favorites")
           .then((r) => r.json())
           .then((ids: string[]) => {
             setAll(ids)

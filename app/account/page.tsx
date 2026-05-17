@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
-import { FavouritesCount } from "@/components/favourites-count"
+import { FavoritesCount } from "@/components/favorites-count"
 import { LocalizedText, LocalizedDate } from "@/components/localized-tour-fields"
 import { formatPrice } from "@/lib/utils"
 
@@ -49,9 +49,9 @@ export default async function AccountPage() {
         </div>
         <div className="rounded-xl border bg-card p-6">
           <div className="text-3xl font-bold text-primary">
-            <FavouritesCount />
+            <FavoritesCount />
           </div>
-          <div className="mt-1 text-sm text-muted-foreground">Favourites</div>
+          <div className="mt-1 text-sm text-muted-foreground">Favorites</div>
         </div>
         <div className="rounded-xl border bg-card p-6">
           <div className="text-3xl font-bold text-primary">3%</div>

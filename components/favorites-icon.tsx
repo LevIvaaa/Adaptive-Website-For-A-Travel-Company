@@ -4,12 +4,12 @@ import Link from "next/link"
 import { Heart } from "lucide-react"
 import { useFavorites } from "@/lib/store"
 
-export function FavouritesIcon() {
+export function FavoritesIcon() {
   const count = useFavorites((s) => s.ids.length)
   return (
     <Link
-      href="/favourites"
-      aria-label="Favourites"
+      href="/favorites"
+      aria-label="Favorites"
       className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border hover:bg-muted"
     >
       <Heart className="h-4 w-4" />

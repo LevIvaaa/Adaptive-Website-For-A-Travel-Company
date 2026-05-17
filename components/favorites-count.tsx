@@ -2,7 +2,7 @@
 
 import { useFavorites } from "@/lib/store"
 
-export function FavouritesCount() {
+export function FavoritesCount() {
   const ids = useFavorites((s) => s.ids)
   return <>{ids.length}</>
 }

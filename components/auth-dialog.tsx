@@ -51,7 +51,7 @@ export function AuthDialog({ open, onOpenChange, initialTab = "login" }: Props) 
         <DialogTitle>{tab === "login" ? "Welcome back" : "Create account"}</DialogTitle>
         <DialogDescription>
           {tab === "login"
-            ? "Sign in to see your bookings and favourites."
+            ? "Sign in to see your bookings and favorites."
             : "Register to save tours and manage your bookings."}
         </DialogDescription>
 

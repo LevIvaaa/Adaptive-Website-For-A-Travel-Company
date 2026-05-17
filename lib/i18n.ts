@@ -145,7 +145,7 @@ export const translations = {
       errEmail: "Невірний e-mail",
       errPassword: "Мінімум 8 символів"
     },
-    favourites: {
+    favorites: {
       title: "Обране",
       description: "Тури, які ви зберегли.",
       empty: "Поки що немає збережених турів.",
@@ -318,13 +318,13 @@ export const translations = {
       errEmail: "Invalid email",
       errPassword: "At least 8 characters"
     },
-    favourites: {
-      title: "Favourites",
+    favorites: {
+      title: "Favorites",
       description: "Tours you have saved.",
       empty: "No saved tours yet.",
       browse: "Browse catalogue →",
-      added: "Added to favourites",
-      removed: "Removed from favourites"
+      added: "Added to favorites",
+      removed: "Removed from favorites"
     },
     userMenu: {
       logIn: "Log in",

@@ -20,7 +20,7 @@ export function TourCard({ tour }: { tour: Tour }) {
 
   function onFavClick() {
     toggle(t.id)
-    showToast(fav ? T.favourites.removed : T.favourites.added)
+    showToast(fav ? T.favorites.removed : T.favorites.added)
   }
 
   return (
@@ -39,7 +39,7 @@ export function TourCard({ tour }: { tour: Tour }) {
         <button
           type="button"
           onClick={onFavClick}
-          aria-label="Add to favourites"
+          aria-label="Add to favorites"
           className={cn(
             "absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/90 backdrop-blur",
             fav ? "text-red-500" : "text-slate-600 hover:text-red-500"

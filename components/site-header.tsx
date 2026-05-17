@@ -7,7 +7,7 @@ import { Menu, Plane, X } from "lucide-react"
 import { LocaleSwitcher } from "@/components/locale-switcher"
 import { CurrencySwitcher } from "@/components/currency-switcher"
 import { UserMenu } from "@/components/user-menu"
-import { FavouritesIcon } from "@/components/favourites-icon"
+import { FavoritesIcon } from "@/components/favorites-icon"
 import { navItems } from "@/lib/navigation"
 import { useT } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
@@ -49,13 +49,13 @@ export function SiteHeader() {
         <div className="hidden items-center gap-2 md:flex">
           <CurrencySwitcher />
           <LocaleSwitcher />
-          <FavouritesIcon />
+          <FavoritesIcon />
           <UserMenu />
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
           <LocaleSwitcher />
-          <FavouritesIcon />
+          <FavoritesIcon />
           <UserMenu />
           <button
             type="button"
