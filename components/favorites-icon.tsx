@@ -1,15 +1,18 @@
 "use client"
 
+// Іконка-сердечко в шапці з лічильником обраних турів. Веде на /favorites.
 import Link from "next/link"
 import { Heart } from "lucide-react"
 import { useFavorites } from "@/lib/store"
+import { useT } from "@/lib/i18n"
 
 export function FavoritesIcon() {
   const count = useFavorites((s) => s.ids.length)
+  const T = useT()
   return (
     <Link
       href="/favorites"
-      aria-label="Favorites"
+      aria-label={T.favorites.title}
       className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border hover:bg-muted"
     >
       <Heart className="h-4 w-4" />

@@ -41,7 +41,7 @@ export function TourCard({ tour }: { tour: Tour }) {
         <button
           type="button"
           onClick={onFavClick}
-          aria-label="Add to favorites"
+          aria-label={fav ? T.favorites.remove : T.favorites.add}
           className={cn(
             "absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/90 backdrop-blur",
             fav ? "text-red-500" : "text-slate-600 hover:text-red-500"

@@ -198,7 +198,9 @@ export const translations = {
       empty: "Поки що немає збережених турів.",
       browse: "Переглянути каталог →",
       added: "Додано в обране",
-      removed: "Видалено з обраного"
+      removed: "Видалено з обраного",
+      add: "Додати в обране",
+      remove: "Видалити з обраного"
     },
     userMenu: {
       logIn: "Увійти",
@@ -452,7 +454,9 @@ export const translations = {
       empty: "No saved tours yet.",
       browse: "Browse catalogue →",
       added: "Added to favorites",
-      removed: "Removed from favorites"
+      removed: "Removed from favorites",
+      add: "Add to favorites",
+      remove: "Remove from favorites"
     },
     userMenu: {
       logIn: "Log in",
