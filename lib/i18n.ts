@@ -80,7 +80,8 @@ export const translations = {
       priceFrom: "Ціна від",
       priceNote: "на 2 дорослих з перельотом",
       book: "Забронювати",
-      askManager: "Запитати менеджера"
+      askManager: "Запитати менеджера",
+      similar: "Схожі тури"
     },
     about: {
       title: "Про компанію",
@@ -128,6 +129,7 @@ export const translations = {
       successAgain: "Надіслати ще одну",
       errName: "Вкажіть ім’я",
       errPhone: "Вкажіть телефон",
+      errEmailEmpty: "Вкажіть e-mail",
       errEmail: "Невірний e-mail",
       errMessage: "Опишіть ваш запит"
     },
@@ -142,6 +144,21 @@ export const translations = {
       submit: "Увійти",
       errEmail: "Невірний e-mail",
       errPassword: "Мінімум 8 символів"
+    },
+    favourites: {
+      title: "Обране",
+      description: "Тури, які ви зберегли.",
+      empty: "Поки що немає збережених турів.",
+      browse: "Переглянути каталог →",
+      added: "Додано в обране",
+      removed: "Видалено з обраного"
+    },
+    userMenu: {
+      logIn: "Увійти",
+      signUp: "Реєстрація",
+      account: "Особистий кабінет",
+      bookings: "Мої бронювання",
+      signOut: "Вийти"
     },
     bookingForm: {
       departure: "Дата виїзду",
@@ -236,7 +253,8 @@ export const translations = {
       priceFrom: "Price from",
       priceNote: "for 2 adults, flight included",
       book: "Book now",
-      askManager: "Ask a manager"
+      askManager: "Ask a manager",
+      similar: "Similar tours"
     },
     about: {
       title: "About the company",
@@ -254,7 +272,7 @@ export const translations = {
       storyPar2:
         "Today we are a team of 23, with more than 180 destinations in the catalogue — and, most importantly, every hotel has been personally verified by a manager or a returning client.",
       storyPar3:
-        "We don’t sell cats in a bag. If we haven’t been to the hotel ourselves, we say so and help you pick a verified alternative."
+        "We don’t sell sight-unseen. If we haven’t stayed at the hotel ourselves, we say so up front and help you pick a verified alternative."
     },
     contacts: {
       title: "Contacts",
@@ -284,6 +302,7 @@ export const translations = {
       successAgain: "Send another",
       errName: "Please enter your name",
       errPhone: "Please enter your phone",
+      errEmailEmpty: "Please enter your email",
       errEmail: "Invalid email",
       errMessage: "Please describe your request"
     },
@@ -298,6 +317,21 @@ export const translations = {
       submit: "Log in",
       errEmail: "Invalid email",
       errPassword: "At least 8 characters"
+    },
+    favourites: {
+      title: "Favourites",
+      description: "Tours you have saved.",
+      empty: "No saved tours yet.",
+      browse: "Browse catalogue →",
+      added: "Added to favourites",
+      removed: "Removed from favourites"
+    },
+    userMenu: {
+      logIn: "Log in",
+      signUp: "Sign up",
+      account: "My account",
+      bookings: "My bookings",
+      signOut: "Sign out"
     },
     bookingForm: {
       departure: "Departure date",
