@@ -23,6 +23,8 @@ export default async function BookingsPage() {
   const serialized = bookings.map((b) => ({
     id: b.id,
     total: b.total,
+    displayTotal: b.displayTotal,
+    displayCurrency: b.displayCurrency,
     status: b.status,
     departDate: b.departDate.toISOString(),
     adults: b.adults,

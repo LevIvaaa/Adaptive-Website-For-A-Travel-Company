@@ -17,7 +17,10 @@ const schema = z.object({
     const today = new Date().toISOString().split("T")[0]
     return v >= today
   }, "Invalid or past date"),
-  comment: z.string().max(1000).optional()
+  comment: z.string().max(1000).optional(),
+  // Валюта, в якій юзер бачив суму, та її значення — для збереження snapshot'у.
+  displayCurrency: z.enum(["UAH", "USD", "EUR"]).optional(),
+  displayTotal: z.number().int().nonnegative().optional()
 })
 
 export async function POST(req: Request) {
@@ -53,6 +56,9 @@ export async function POST(req: Request) {
       children: parsed.data.children,
       departDate: new Date(parsed.data.departDate),
       total,
+      // Snapshot того, що бачив юзер — щоб у списку бронювань ціна співпала з очікуваною.
+      displayTotal: parsed.data.displayTotal ?? total,
+      displayCurrency: parsed.data.displayCurrency ?? "UAH",
       comment: parsed.data.comment
     }
   })

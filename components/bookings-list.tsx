@@ -5,11 +5,14 @@
 import Link from "next/link"
 import { useT } from "@/lib/i18n"
 import { LocalizedText, LocalizedDate } from "@/components/localized-tour-fields"
-import { formatPrice } from "@/lib/utils"
+import { formatPrice, formatAmountInCurrency } from "@/lib/utils"
+import type { Currency } from "@/lib/store"
 
 interface Booking {
   id: string
   total: number
+  displayTotal: number | null
+  displayCurrency: string | null
   status: string
   departDate: string
   adults: number
@@ -71,7 +74,12 @@ export function BookingsList({ bookings }: { bookings: Booking[] }) {
               )}
             </div>
             <div className="text-right">
-              <div className="text-lg font-bold">{formatPrice(b.total)}</div>
+              {/* Якщо є snapshot — показуємо саме його (точна сума, яку бачив юзер при бронюванні). */}
+              <div className="text-lg font-bold">
+                {b.displayTotal != null && b.displayCurrency
+                  ? formatAmountInCurrency(b.displayTotal, b.displayCurrency as Currency)
+                  : formatPrice(b.total)}
+              </div>
               <div className="mt-1 inline-flex rounded-full bg-muted px-2 py-1 text-xs font-medium">
                 {b.status}
               </div>

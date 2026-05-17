@@ -101,10 +101,17 @@ export function BookingForm({
 
   const mutation = useMutation({
     mutationFn: async (data: FormInput) => {
+      // Передаємо також displayTotal + displayCurrency — щоб у /account/bookings
+      // показалась саме та сума, яку юзер бачив тут.
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tourId, ...data })
+        body: JSON.stringify({
+          tourId,
+          ...data,
+          displayTotal: total,
+          displayCurrency: currency
+        })
       })
       if (!res.ok) {
         const err = await res.json().catch(() => ({}))

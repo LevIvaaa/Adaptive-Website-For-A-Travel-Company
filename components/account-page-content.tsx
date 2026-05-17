@@ -8,11 +8,14 @@ import { Button } from "@/components/ui/button"
 import { FavoritesCount } from "@/components/favorites-count"
 import { LocalizedText, LocalizedDate } from "@/components/localized-tour-fields"
 import { useT } from "@/lib/i18n"
-import { formatPrice } from "@/lib/utils"
+import { formatPrice, formatAmountInCurrency } from "@/lib/utils"
+import type { Currency } from "@/lib/store"
 
 interface Booking {
   id: string
   total: number
+  displayTotal: number | null
+  displayCurrency: string | null
   status: string
   departDate: string | Date
   adults: number
@@ -98,7 +101,11 @@ export function AccountPageContent({ firstName, email, bookingsCount, bookings }
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-semibold">{formatPrice(b.total)}</div>
+                <div className="font-semibold">
+                  {b.displayTotal != null && b.displayCurrency
+                    ? formatAmountInCurrency(b.displayTotal, b.displayCurrency as Currency)
+                    : formatPrice(b.total)}
+                </div>
                 <div className="text-xs uppercase text-muted-foreground">{b.status}</div>
               </div>
             </li>
