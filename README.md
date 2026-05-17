@@ -87,15 +87,3 @@ prisma/
   schema.prisma            data model (User, Tour, Booking, Favorite, ContactRequest)
   seed.ts                  initial data
   dev.db                   SQLite file (gitignored)
-```
-
-## Production deploy (when needed)
-
-For real traffic switch to PostgreSQL:
-
-1. In `prisma/schema.prisma` change `provider = "sqlite"` to `provider = "postgresql"`
-2. Switch back `String` JSON columns to `String[]` (Postgres supports arrays)
-3. Use [Neon](https://neon.tech) (free) for the DB and [Vercel](https://vercel.com) for hosting
-4. Set env vars on Vercel: `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
-
-For coursework / demo SQLite is enough.
