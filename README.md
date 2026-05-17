@@ -43,9 +43,9 @@ Or click **Sign up** in the header to register a new user.
 
 | Command | What it does |
 |---------|--------------|
-| `npm run dev` | Dev server on http://localhost:4000 |
-| `npm run build` | Production build |
-| `npm run start` | Start production server on :4000 |
+| `npm run dev` | Dev server on http://localhost:4000 (slower, dev bundle) |
+| `npm run build` | Production build — required before `start` |
+| `npm run start` | Start production server on :4000 (smaller bundle, faster) |
 | `npm run lint` | ESLint |
 | `npm run db:push` | Apply schema to SQLite |
 | `npm run db:seed` | Insert 6 demo tours + admin user |
