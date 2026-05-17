@@ -64,10 +64,12 @@ export function DestinationPicker({ value, onChange }: Props) {
           type="text"
           value={value}
           onChange={(e) => {
-            onChange(e.target.value)
+            // maxLength=80 — захист від вставки величезного тексту в інпут пошуку.
+            onChange(e.target.value.slice(0, 80))
             if (!open) setOpen(true)
           }}
           onFocus={() => setOpen(true)}
+          maxLength={80}
           placeholder={T.search.destinationPh}
           className="w-full bg-transparent text-sm outline-none placeholder:text-slate-500"
         />

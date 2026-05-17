@@ -98,10 +98,12 @@ export function TourSearch() {
         type="text"
         value={value}
         onChange={(e) => {
-          setValue(e.target.value)
+          // Обрізаємо введення на 80 символів (захист від вставки великого тексту/паст-payload).
+          setValue(e.target.value.slice(0, 80))
           if (!open) setOpen(true)
         }}
         onFocus={() => setOpen(true)}
+        maxLength={80}
         placeholder={placeholder}
         className="h-11 w-full rounded-md border border-input bg-background pl-10 pr-10 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
       />
