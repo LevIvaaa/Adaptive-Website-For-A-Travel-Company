@@ -8,8 +8,14 @@ export const translations = {
     nav: {
       home: "Головна",
       tours: "Тури",
+      articles: "Блог",
       about: "Про нас",
       contacts: "Контакти"
+    },
+    articles: {
+      title: "Блог",
+      description: "Поради, гайди й новини з туристичного світу.",
+      backToList: "Усі статті"
     },
     login: "Увійти",
     footer: {
@@ -299,8 +305,14 @@ export const translations = {
     nav: {
       home: "Home",
       tours: "Tours",
+      articles: "Blog",
       about: "About",
       contacts: "Contacts"
+    },
+    articles: {
+      title: "Blog",
+      description: "Tips, guides and news from the travel world.",
+      backToList: "All articles"
     },
     login: "Log in",
     footer: {

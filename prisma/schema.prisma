@@ -3,11 +3,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// SQLite has no enums — using string fields with documented allowed values.
+// Допустимі значення документуються коментарями (зберігаємо як String для простоти):
 // Role: CLIENT | MANAGER | ADMIN
 // BookingStatus: PENDING | CONFIRMED | CANCELLED | COMPLETED
 // TourType: BEACH | EXCURSION | SKI | CRUISE | FAMILY | CUSTOM
@@ -101,4 +101,23 @@ model ContactRequest {
   phone     String?
   message   String
   createdAt DateTime @default(now())
+}
+
+// Стаття/новина для блогу.
+// Зберігаємо двома мовами одразу — як і тури — щоб мати спільну схему підходу.
+model Article {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  titleUk     String
+  titleEn     String
+  excerptUk   String
+  excerptEn   String
+  bodyUk      String
+  bodyEn      String
+  cover       String?
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([publishedAt])
 }

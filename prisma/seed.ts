@@ -146,6 +146,40 @@ const tours: SeedInput[] = [
   { slug: "bulgaria-sunny-beach-melia", ukCountry: "Болгарія", enCountry: "Bulgaria", ukCity: "Сонячний берег", enCity: "Sunny Beach", ukHotel: "Melia Sunny Beach 4★", enHotel: "Melia Sunny Beach 4★", type: "FAMILY", nights: 10, price: 23400, rating: 4.3, image: "/tours/bulgaria-sunny-beach-melia.jpg" }
 ]
 
+// Демо-статті для блогу.
+const articles = [
+  {
+    slug: "top-5-hotels-turkey-2026",
+    titleUk: "ТОП-5 готелів Туреччини на сезон 2026",
+    titleEn: "Top 5 hotels in Turkey for 2026 season",
+    excerptUk: "Перевірені нашими менеджерами п'ять готелів, які варто бронювати першими.",
+    excerptEn: "Five hotels personally inspected by our managers — book these first.",
+    bodyUk: "Кожного сезону ми особисто перевіряємо новинки і повертаємось до перевірених фаворитів. У 2026 році ставку робимо на сімейні all-inclusive в Анталії та преміум-сегмент у Бодрумі. Detalхnі огляди — у наших менеджерів.",
+    bodyEn: "Every season we personally inspect new properties and revisit verified favourites. For 2026 we recommend family all-inclusive resorts in Antalya and the premium segment in Bodrum. Detailed reviews available from our managers.",
+    cover: "/tours/turkey-belek-rixos.jpg"
+  },
+  {
+    slug: "maldives-when-to-go",
+    titleUk: "Мальдіви: коли краще їхати?",
+    titleEn: "Maldives: when is the best time to go?",
+    excerptUk: "Сухий і вологий сезон, ціни, погода — повний гайд для планування.",
+    excerptEn: "Dry and wet seasons, prices, weather — a complete planning guide.",
+    bodyUk: "Найкращий сезон на Мальдівах — з грудня по квітень: мало дощу, спокійне море, ідеальна видимість для дайвінгу. Високий сезон — і високі ціни. Якщо хочеться зекономити, дивіться травень/листопад — це shoulder season.",
+    bodyEn: "The best season in the Maldives is December–April: minimal rain, calm sea, perfect diving visibility. High season means high prices. To save, look at May or November — these are shoulder months.",
+    cover: "/tours/maldives-baa-soneva.jpg"
+  },
+  {
+    slug: "winter-georgia-ski",
+    titleUk: "Гудаурі взимку: чому обрати Грузію для лиж",
+    titleEn: "Gudauri in winter: why pick Georgia for skiing",
+    excerptUk: "Стабільний сніг, помірні ціни, фрірайд і кавказька кухня — все в одному турі.",
+    excerptEn: "Reliable snow, moderate prices, freeride and Caucasian cuisine — all in one trip.",
+    bodyUk: "Гудаурі — один із найбільш недооцінених гірськолижних курортів у регіоні. Снігу багато з грудня по березень, ціни на проживання й ski-pass нижчі за Альпи в кілька разів, а вечорами — справжня грузинська кухня з вином.",
+    bodyEn: "Gudauri is one of the most underrated ski resorts in the region. Plenty of snow from December to March, lodging and ski-pass prices are several times lower than in the Alps, and your evenings end with real Georgian cuisine and wine.",
+    cover: "/tours/georgia-gudauri-marco-polo.webp"
+  }
+]
+
 async function main() {
   console.log(`Seeding ${tours.length} tours...`)
 
@@ -185,9 +219,19 @@ async function main() {
     })
   }
 
+  // Засіваємо статті блогу.
+  for (const article of articles) {
+    await prisma.article.upsert({
+      where: { slug: article.slug },
+      update: article,
+      create: article
+    })
+  }
+
   const totalTours = await prisma.tour.count()
   const totalUsers = await prisma.user.count()
-  console.log(`Done. Tours: ${totalTours}, Users: ${totalUsers}`)
+  const totalArticles = await prisma.article.count()
+  console.log(`Done. Tours: ${totalTours}, Users: ${totalUsers}, Articles: ${totalArticles}`)
 }
 
 main()
