@@ -1,8 +1,10 @@
 "use client"
 
+import { useEffect } from "react"
 import Link from "next/link"
 import { Check, Clock, MapPin, Plane, Star, Utensils } from "lucide-react"
 import { BookingForm } from "@/components/booking-form"
+import { SimilarTours } from "@/components/similar-tours"
 import { localizeTour, type Tour } from "@/lib/tours"
 import { useLocale, useCurrency } from "@/lib/store"
 import { useT, pluralNights } from "@/lib/i18n"
@@ -14,13 +16,22 @@ export function TourView({ tour }: { tour: Tour }) {
   const T = useT()
   const t = localizeTour(tour, locale)
 
+  useEffect(() => {
+    document.title = `${t.title} · Travel Agency`
+  }, [t.title])
+
   return (
     <>
       <section className="border-b bg-muted/40">
         <div className="container py-6 text-sm text-muted-foreground">
           <Link href="/" className="hover:text-primary">{T.tourDetail.breadcrumbHome}</Link> /{" "}
           <Link href="/tours" className="hover:text-primary">{T.tourDetail.breadcrumbTours}</Link> /{" "}
-          {t.country}
+          <Link
+            href={`/tours?country=${encodeURIComponent(tour.countryEn)}`}
+            className="hover:text-primary"
+          >
+            {t.country}
+          </Link>
         </div>
       </section>
 
@@ -116,6 +127,8 @@ export function TourView({ tour }: { tour: Tour }) {
           </div>
         </aside>
       </section>
+
+      <SimilarTours currentSlug={tour.slug} country={tour.countryEn} />
     </>
   )
 }

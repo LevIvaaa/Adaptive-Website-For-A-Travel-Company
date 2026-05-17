@@ -1,9 +1,14 @@
 "use client"
 
+import { useEffect } from "react"
 import { useT } from "@/lib/i18n"
 
 export default function AboutPage() {
   const T = useT()
+
+  useEffect(() => {
+    document.title = `${T.about.title} · Travel Agency`
+  }, [T])
 
   const stats = [
     { value: "12+", label: T.about.stats.years },

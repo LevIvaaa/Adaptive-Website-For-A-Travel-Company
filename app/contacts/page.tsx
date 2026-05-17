@@ -1,11 +1,16 @@
 "use client"
 
+import { useEffect } from "react"
 import { Clock, Mail, MapPin, Phone } from "lucide-react"
 import { ContactForm } from "@/components/contact-form"
 import { useT } from "@/lib/i18n"
 
 export default function ContactsPage() {
   const T = useT()
+
+  useEffect(() => {
+    document.title = `${T.contacts.title} · Travel Agency`
+  }, [T])
 
   return (
     <>

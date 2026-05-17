@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import { TourFilters } from "@/components/tour-filters"
 import { TourGrid } from "@/components/tour-grid"
 import { TourSearch } from "@/components/tour-search"
+import { ToursPageHeading } from "@/components/tours-page-heading"
 
 export const metadata: Metadata = {
   title: "Tour catalogue"
@@ -15,10 +16,7 @@ export default function ToursPage() {
     <>
       <section className="border-b bg-muted/40">
         <div className="container py-10">
-          <h1 className="text-3xl font-bold md:text-4xl">Tour catalogue</h1>
-          <p className="mt-2 max-w-2xl text-muted-foreground">
-            Browse all current offers, search by destination and filter to find your match.
-          </p>
+          <ToursPageHeading />
           <div className="mt-6 max-w-2xl">
             <Suspense fallback={<div className="h-11 animate-pulse rounded-md bg-muted" />}>
               <TourSearch />

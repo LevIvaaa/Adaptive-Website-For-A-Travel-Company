@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import Link from "next/link"
 import { HeartHandshake, ShieldCheck, Wallet } from "lucide-react"
 import { SearchForm } from "@/components/search-form"
@@ -9,6 +10,10 @@ import { useT } from "@/lib/i18n"
 
 export default function HomePage() {
   const T = useT()
+
+  useEffect(() => {
+    document.title = `${T.nav.home} · Travel Agency`
+  }, [T])
 
   return (
     <>
