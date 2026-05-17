@@ -162,6 +162,31 @@ export const translations = {
       adults: "доросл.",
       children: "діт."
     },
+    account: {
+      hi: "Вітаємо",
+      bookings: "Бронювання",
+      favorites: "Обране",
+      loyalty: "Кешбек лояльності",
+      recentBookings: "Останні бронювання",
+      allBookings: "Усі бронювання",
+      noBookings: "Бронювань ще немає.",
+      browseTours: "Переглянути тури",
+      back: "← Особистий кабінет",
+      settings: "Налаштування профілю"
+    },
+    settings: {
+      title: "Налаштування профілю",
+      description: "Тут можна оновити ім'я, прізвище та номер телефону.",
+      firstName: "Ім'я",
+      lastName: "Прізвище",
+      phone: "Телефон",
+      email: "E-mail (не редагується)",
+      save: "Зберегти",
+      saving: "Зберігаємо...",
+      saved: "Дані оновлено",
+      errFirst: "Вкажіть ім'я",
+      errLast: "Вкажіть прізвище"
+    },
     notFound: {
       description: "Цю сторінку не знайдено. Можливо, тур уже зняли з продажу.",
       home: "На головну",
@@ -180,6 +205,7 @@ export const translations = {
       signUp: "Реєстрація",
       account: "Особистий кабінет",
       bookings: "Мої бронювання",
+      settings: "Налаштування",
       signOut: "Вийти"
     },
     bookingForm: {
@@ -360,6 +386,31 @@ export const translations = {
       adults: "adults",
       children: "children"
     },
+    account: {
+      hi: "Hi",
+      bookings: "Bookings",
+      favorites: "Favorites",
+      loyalty: "Loyalty cashback",
+      recentBookings: "Recent bookings",
+      allBookings: "All bookings",
+      noBookings: "You don't have bookings yet.",
+      browseTours: "Browse tours",
+      back: "← Account",
+      settings: "Profile settings"
+    },
+    settings: {
+      title: "Profile settings",
+      description: "Update your first name, last name and phone here.",
+      firstName: "First name",
+      lastName: "Last name",
+      phone: "Phone",
+      email: "Email (read-only)",
+      save: "Save",
+      saving: "Saving...",
+      saved: "Profile updated",
+      errFirst: "Enter your first name",
+      errLast: "Enter your last name"
+    },
     notFound: {
       description: "We couldn’t find this page. The tour may have been removed.",
       home: "Back to home",
@@ -378,6 +429,7 @@ export const translations = {
       signUp: "Sign up",
       account: "My account",
       bookings: "My bookings",
+      settings: "Settings",
       signOut: "Sign out"
     },
     bookingForm: {

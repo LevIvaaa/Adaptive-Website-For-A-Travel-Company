@@ -106,6 +106,15 @@ export function UserMenu() {
               {T.userMenu.bookings}
             </Link>
           </li>
+          <li>
+            <Link
+              href="/account/settings"
+              onClick={() => setOpen(false)}
+              className="block px-3 py-2 text-sm hover:bg-muted"
+            >
+              {T.userMenu.settings}
+            </Link>
+          </li>
           <li className="border-t">
             <button
               type="button"
