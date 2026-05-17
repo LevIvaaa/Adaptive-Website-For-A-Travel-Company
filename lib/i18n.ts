@@ -179,7 +179,9 @@ export const translations = {
       successDesc: "Менеджер зв’яжеться з вами протягом 15 хвилин для підтвердження.",
       adultsError: "Від 1 до 10",
       childrenError: "Від 0 до 10",
-      nightsError: "Від 1 до 30"
+      nightsError: "Від 1 до 30",
+      contactNote: "Менеджер зателефонує на:",
+      contactNoPhone: "У вашому профілі немає телефону. Менеджер напише на e-mail."
     }
   },
 
@@ -355,7 +357,9 @@ export const translations = {
       successDesc: "A manager will contact you within 15 minutes to confirm details.",
       adultsError: "Between 1 and 10",
       childrenError: "Between 0 and 10",
-      nightsError: "Between 1 and 30"
+      nightsError: "Between 1 and 30",
+      contactNote: "The manager will call you at:",
+      contactNoPhone: "No phone in your profile — the manager will email you."
     }
   }
 } as const

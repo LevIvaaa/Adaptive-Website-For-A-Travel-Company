@@ -123,11 +123,27 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
     )
   }
 
+  const phone = session.user.phone
+  const email = session.user.email
+
   return (
     <form
       onSubmit={handleSubmit((d) => mutation.mutate(d))}
       className="space-y-3"
     >
+      {/* Показуємо контакти юзера — щоб він знав, як з ним зв'яжеться менеджер. */}
+      <div className="rounded-md bg-muted/60 p-3 text-xs text-muted-foreground">
+        {phone ? (
+          <>
+            {T.bookingForm.contactNote} <span className="font-semibold text-foreground">{phone}</span>
+          </>
+        ) : (
+          <>
+            {T.bookingForm.contactNoPhone} <span className="font-semibold text-foreground">{email}</span>
+          </>
+        )}
+      </div>
+
       <div>
         <Label htmlFor="departDate">{T.bookingForm.departure}</Label>
         <Input

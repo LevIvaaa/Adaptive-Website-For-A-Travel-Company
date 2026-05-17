@@ -35,23 +35,28 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: `${user.firstName} ${user.lastName}`.trim(),
-          role: user.role
+          role: user.role,
+          phone: user.phone
         }
       }
     })
   ],
   callbacks: {
+    // Кладемо id, role, phone з User у JWT — щоб не ходити в БД на кожен рендер.
     async jwt({ token, user }) {
       if (user) {
         token.id = (user as { id: string }).id
         token.role = (user as { role?: string }).role
+        token.phone = (user as { phone?: string | null }).phone
       }
       return token
     },
+    // Прокидуємо ці ж поля з JWT у session.user — щоб клієнт міг їх читати.
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
         session.user.role = token.role as string | undefined
+        session.user.phone = token.phone as string | null | undefined
       }
       return session
     }
