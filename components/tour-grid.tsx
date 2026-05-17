@@ -21,7 +21,9 @@ export function TourGrid() {
       const res = await fetch(`/api/tours?${query}`)
       if (!res.ok) throw new Error("Failed to load tours")
       return res.json()
-    }
+    },
+    // Тримаємо старі результати поки тягнемо нові — щоб skeleton не мерехтів при зміні фільтра.
+    placeholderData: (prev) => prev
   })
 
   function setSort(value: string) {
