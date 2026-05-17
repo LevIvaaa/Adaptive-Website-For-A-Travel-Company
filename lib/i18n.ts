@@ -39,6 +39,7 @@ export const translations = {
       date: "Дата",
       travelers: "Туристів",
       submit: "Шукати",
+      submitHint: "Виберіть країну або дату",
       travelersPicker: {
         title: "Кількість туристів",
         adults: "Дорослі",
@@ -234,6 +235,7 @@ export const translations = {
       date: "Date",
       travelers: "Travellers",
       submit: "Search",
+      submitHint: "Pick a destination or date",
       travelersPicker: {
         title: "Number of travellers",
         adults: "Adults",

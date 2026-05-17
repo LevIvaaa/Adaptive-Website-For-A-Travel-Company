@@ -85,7 +85,14 @@ export function SearchForm() {
         }}
       />
 
-      <Button type="submit" size="lg" className="md:self-stretch" disabled={!hasInput}>
+      {/* Якщо нічого не введено — кнопка disabled. У title пояснюємо, чому. */}
+      <Button
+        type="submit"
+        size="lg"
+        className="md:self-stretch"
+        disabled={!hasInput}
+        title={!hasInput ? T.search.submitHint : undefined}
+      >
         <Search className="h-4 w-4" />
         {T.search.submit}
       </Button>
