@@ -20,12 +20,13 @@ type ContactInput = {
   message: string
 }
 
+// Дозволені символи для імені: літери (UA/EN), пробіл, дефіс, апостроф.
+// Так відсікаємо HTML/JS-навантаження ще на клієнті. Виносимо назовні —
+// щоб не пересоздавалось на кожен рендер і не псувало deps useMemo.
+const NAME_REGEX = /^[\p{L}\s'\-]+$/u
+
 export function ContactForm() {
   const T = useT()
-
-  // Дозволені символи для імені: літери (UA/EN), пробіл, дефіс, апостроф.
-  // Так відсікаємо HTML/JS-навантаження ще на клієнті.
-  const nameRegex = /^[\p{L}\s'\-]+$/u
 
   const schema = useMemo(
     () =>
@@ -34,7 +35,7 @@ export function ContactForm() {
           .string()
           .min(2, T.contactForm.errName)
           .max(80)
-          .regex(nameRegex, T.contactForm.errNameChars),
+          .regex(NAME_REGEX, T.contactForm.errNameChars),
         phone: z.string().min(6, T.contactForm.errPhone),
         email: z
           .string()
