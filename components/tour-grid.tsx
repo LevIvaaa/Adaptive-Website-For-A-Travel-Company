@@ -1,5 +1,7 @@
 "use client"
 
+// Сітка карток на /tours. Тягне дані через TanStack Query, ключ кешу залежить від URL —
+// тож зміна будь-якого фільтру в адресі автоматично робить новий запит.
 import { useSearchParams, useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { TourCard } from "@/components/tour-card"

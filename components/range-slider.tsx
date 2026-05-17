@@ -1,6 +1,7 @@
 "use client"
 
-// Двопозиційний слайдер (low/high). Два <input type="range"> один над одним.
+// Двопозиційний слайдер (low/high). Накладаємо два <input type="range"> один на одного
+// й позиціонуємо «активну» смугу між ними. CSS-стилі для бігунків — у globals.css (.range-thumb).
 interface Props {
   min: number
   max: number

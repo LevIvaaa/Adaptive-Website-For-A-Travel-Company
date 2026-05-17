@@ -1,7 +1,11 @@
+// GET /api/tours — список турів з фільтрами в query params:
+// type, country (multi), minPrice/maxPrice (+priceCurrency), minNights/maxNights,
+// dateFrom/dateTo (інтервал поїздки), hot, sort, q (текстовий пошук).
 import { NextResponse } from "next/server"
 import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
+// Білий список типів — все, що не в ньому, ігнорується (захист від сміття в URL).
 const allowedTypes = new Set([
   "BEACH",
   "EXCURSION",

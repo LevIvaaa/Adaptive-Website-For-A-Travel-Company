@@ -1,5 +1,7 @@
 "use client"
 
+// Форма бронювання туру. Доступна тільки залогіненим (інакше показує блок «Sign in to book»).
+// Total рахується live при зміні дорослих/дітей/ночей, ціни — у вибраній валюті.
 import { useState } from "react"
 import { useSession } from "next-auth/react"
 import { useForm, useWatch } from "react-hook-form"

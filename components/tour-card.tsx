@@ -1,5 +1,7 @@
 "use client"
 
+// Картка одного туру в каталозі. Показує фото, країну/місто, рейтинг, ціну.
+// Сердечко зверху додає/прибирає тур з обраного + показує тост.
 import Link from "next/link"
 import { Clock, Heart, MapPin, Plane, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"

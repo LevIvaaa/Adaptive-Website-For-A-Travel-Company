@@ -1,5 +1,7 @@
 "use client"
 
+// Форма «Напишіть нам» на /contacts. Валідація через Zod + react-hook-form,
+// надсилання через TanStack Query mutation на /api/contact.
 import { useMemo } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"

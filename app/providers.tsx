@@ -1,5 +1,9 @@
 "use client"
 
+// Кореневі провайдери для всього клієнтського дерева:
+// - SessionProvider — щоб useSession() працював в усіх компонентах;
+// - QueryClientProvider — TanStack Query для запитів /api/*;
+// - FavoritesSync — синхронізує локальне обране з БД при логіні.
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { SessionProvider } from "next-auth/react"
 import { useState, type ReactNode } from "react"

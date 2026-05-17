@@ -1,3 +1,5 @@
+// POST /api/contact — приймає заявку з форми «Напишіть нам» та зберігає її у ContactRequest.
+// Авторизації не вимагає (форма доступна всім відвідувачам).
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { prisma } from "@/lib/prisma"

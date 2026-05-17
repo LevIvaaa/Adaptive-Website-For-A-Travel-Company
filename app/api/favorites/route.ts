@@ -1,3 +1,7 @@
+// API обраних турів. Працює тільки для авторизованих юзерів.
+// GET    /api/favorites — список tourId, які залогінений юзер додав в обране.
+// POST   /api/favorites { tourId } — додати в обране (через upsert щоб не падало на дублі).
+// DELETE /api/favorites { tourId } — прибрати з обраного.
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { z } from "zod"

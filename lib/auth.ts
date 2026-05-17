@@ -1,9 +1,12 @@
+// Налаштування NextAuth: один CredentialsProvider (email + пароль), сесії через JWT.
+// Пароль перевіряємо bcrypt'ом. id/role/phone кладемо в токен — щоб не ходити в БД на кожен запит.
 import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcrypt"
 import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 
+// Перевірка вхідних даних перед запитом до БД.
 const credentialsSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8)
@@ -19,6 +22,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" }
       },
+      // Викликається при сабміті форми логіну. Має повернути об'єкт юзера або null.
       async authorize(raw) {
         const parsed = credentialsSchema.safeParse(raw)
         if (!parsed.success) return null

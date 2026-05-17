@@ -1,5 +1,7 @@
 "use client"
 
+// Поле «Куди» з автодоповненням країн у hero-формі.
+// Список країн тягне з /api/countries, фільтрує по підстроці у вибраній мові.
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { MapPin } from "lucide-react"

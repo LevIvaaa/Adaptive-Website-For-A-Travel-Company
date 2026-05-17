@@ -1,3 +1,6 @@
+// POST /api/bookings — створити нове бронювання.
+// GET  /api/bookings — список бронювань поточного юзера.
+// Обидва ендпоінти вимагають авторизації.
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { z } from "zod"

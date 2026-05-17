@@ -1,5 +1,7 @@
 "use client"
 
+// Бічна панель фільтрів у каталозі. Стан кожного фільтра живе в URL —
+// можна шерити посилання, і back/forward у браузері працює як очікувано.
 import { useRouter, useSearchParams } from "next/navigation"
 import { useTransition } from "react"
 import { useQuery } from "@tanstack/react-query"

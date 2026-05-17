@@ -1,3 +1,5 @@
+// Тур із БД має пари полів titleUk/titleEn, countryUk/countryEn тощо.
+// LocalizedTour — це той самий тур, але вже з полями в одній мові, готовий до показу.
 import type { Locale } from "@/lib/store"
 import type { Tour as DbTour } from "@prisma/client"
 
@@ -21,6 +23,8 @@ export interface LocalizedTour {
   included: string[]
 }
 
+// SQLite не вміє масивів, тож в БД списки «що включено» лежать як JSON-рядок.
+// Безпечно парсимо й повертаємо порожній масив, якщо щось пішло не так.
 function parseList(raw: string): string[] {
   try {
     const parsed = JSON.parse(raw)
@@ -30,6 +34,7 @@ function parseList(raw: string): string[] {
   }
 }
 
+// Конвертує DB-тур у вже локалізовану форму — обираючи Uk- або En-поле залежно від мови.
 export function localizeTour(tour: Tour, locale: Locale): LocalizedTour {
   return {
     id: tour.id,

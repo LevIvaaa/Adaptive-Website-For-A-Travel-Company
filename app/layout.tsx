@@ -1,3 +1,5 @@
+// Кореневий layout App Router'а. Тут визначаємо <html>/<body>, шрифти, шапку, футер, тости.
+// Метадані (title template, OG, favicon) теж тут — успадковуються всіма сторінками.
 import type { Metadata } from "next"
 import { Inter, Merriweather } from "next/font/google"
 import { Providers } from "./providers"

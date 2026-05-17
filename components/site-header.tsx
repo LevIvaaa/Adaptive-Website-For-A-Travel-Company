@@ -1,5 +1,7 @@
 "use client"
 
+// Шапка сайту: лого, навігація, перемикач валюти/мови, обране, меню юзера.
+// Прилипає до верху (sticky), на мобільних — гамбургер-меню.
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"

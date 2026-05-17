@@ -1,5 +1,8 @@
 "use client"
 
+// Невидимий компонент-синхронізатор. Слідкує за статусом сесії і:
+// - при логіні пушить локальні обрані тури в БД, потім підтягує єдиний об'єднаний список;
+// - при логауті — просто скидає прапорець authenticated (локальні дані лишаються).
 import { useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useFavorites } from "@/lib/store"
