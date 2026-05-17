@@ -16,13 +16,23 @@ export async function GET(req: Request) {
 
   const types = searchParams.getAll("type").filter((t) => allowedTypes.has(t))
   const countries = searchParams.getAll("country").filter(Boolean)
-  const minPrice = parseInt(searchParams.get("minPrice") ?? "")
-  const maxPrice = parseInt(searchParams.get("maxPrice") ?? "")
+  const minPriceRaw = parseInt(searchParams.get("minPrice") ?? "")
+  const maxPriceRaw = parseInt(searchParams.get("maxPrice") ?? "")
+  // Параметри ціни в URL у валюті користувача. Переводимо в UAH для фільтру по БД.
+  const priceCurrency = searchParams.get("priceCurrency") ?? "UAH"
+  const priceRate = priceCurrency === "USD" ? 40 : priceCurrency === "EUR" ? 43 : 1
+  const minPrice = Number.isNaN(minPriceRaw) ? NaN : Math.round(minPriceRaw * priceRate)
+  const maxPrice = Number.isNaN(maxPriceRaw) ? NaN : Math.round(maxPriceRaw * priceRate)
   const minNights = parseInt(searchParams.get("minNights") ?? "")
   const maxNights = parseInt(searchParams.get("maxNights") ?? "")
   const hot = searchParams.get("hot") === "1"
   const sort = searchParams.get("sort") ?? "popular"
   const q = (searchParams.get("q") ?? "").trim().toLowerCase()
+
+  // Якщо фільтр позначив себе невалідним — повертаємо порожній список, щоб користувач бачив empty state.
+  if (searchParams.get("_invalid") === "1") {
+    return NextResponse.json([])
+  }
 
   const where: Prisma.TourWhereInput = {}
   if (types.length) where.type = { in: types }

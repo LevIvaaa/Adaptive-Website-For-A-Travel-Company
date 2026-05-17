@@ -5,10 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { RangeSlider } from "@/components/range-slider"
 import { useCurrency, useLocale, type Currency } from "@/lib/store"
 
+// Ціни турів у БД зберігаються в гривнях. Для показу переводимо у валюту користувача.
 const PRICE_MIN_UAH = 0
 const PRICE_MAX_UAH = 200000
 const PRICE_STEP_UAH = 1000
 
+// Приблизні курси. Ті самі числа використовуються по всьому сайту.
 const rates: Record<Currency, number> = { UAH: 1, USD: 40, EUR: 43 }
 const symbols: Record<Currency, string> = { UAH: "₴", USD: "$", EUR: "€" }
 
@@ -21,26 +23,45 @@ export function PriceFilter() {
   const rate = rates[currency]
   const symbol = symbols[currency]
 
-  const urlMin = parseInt(params.get("minPrice") ?? "")
-  const urlMax = parseInt(params.get("maxPrice") ?? "")
-  const initialMin = Number.isNaN(urlMin) ? PRICE_MIN_UAH : urlMin
-  const initialMax = Number.isNaN(urlMax) ? PRICE_MAX_UAH : urlMax
+  // В URL ціна збережена у валюті, яка була активна на момент встановлення
+  // (параметр priceCurrency). При завантаженні переводимо в гривні — внутрішнє значення завжди в UAH.
+  const urlCurrencyRaw = params.get("priceCurrency")
+  const urlCurrency = (urlCurrencyRaw === "USD" || urlCurrencyRaw === "EUR" || urlCurrencyRaw === "UAH")
+    ? urlCurrencyRaw
+    : "UAH"
+  const urlRate = rates[urlCurrency as Currency]
+
+  const urlMinRaw = parseInt(params.get("minPrice") ?? "")
+  const urlMaxRaw = parseInt(params.get("maxPrice") ?? "")
+  const initialMin = Number.isNaN(urlMinRaw) ? PRICE_MIN_UAH : Math.round(urlMinRaw * urlRate)
+  const initialMax = Number.isNaN(urlMaxRaw) ? PRICE_MAX_UAH : Math.round(urlMaxRaw * urlRate)
 
   const [range, setRange] = useState<[number, number]>([initialMin, initialMax])
 
   useEffect(() => {
     setRange([initialMin, initialMax])
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.get("minPrice"), params.get("maxPrice")])
+  }, [params.get("minPrice"), params.get("maxPrice"), params.get("priceCurrency")])
 
+  // Записуємо діапазон в URL у валюті користувача — щоб при шерінгу посилання
+  // зберігалися ті ж самі числа, які він вводив.
   useEffect(() => {
-    if (range[0] > range[1]) return
     const handler = setTimeout(() => {
       const next = new URLSearchParams(params)
+      if (range[0] > range[1]) {
+        // Невалідний діапазон: дзеркалимо в URL, але кажемо серверу пропустити фільтр.
+        next.set("_invalid", "1")
+      } else {
+        next.delete("_invalid")
+      }
+      const displayMinForUrl = Math.round(range[0] / rate)
+      const displayMaxForUrl = Math.round(range[1] / rate)
       if (range[0] === PRICE_MIN_UAH) next.delete("minPrice")
-      else next.set("minPrice", String(range[0]))
+      else next.set("minPrice", String(displayMinForUrl))
       if (range[1] === PRICE_MAX_UAH) next.delete("maxPrice")
-      else next.set("maxPrice", String(range[1]))
+      else next.set("maxPrice", String(displayMaxForUrl))
+      if (next.get("minPrice") || next.get("maxPrice")) next.set("priceCurrency", currency)
+      else next.delete("priceCurrency")
       const target = `/tours?${next.toString()}`
       if (`${window.location.pathname}${window.location.search}` !== target) {
         router.replace(target)
@@ -48,7 +69,7 @@ export function PriceFilter() {
     }, 350)
     return () => clearTimeout(handler)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [range])
+  }, [range, currency])
 
   const displayMin = Math.round(range[0] / rate)
   const displayMax = Math.round(range[1] / rate)
