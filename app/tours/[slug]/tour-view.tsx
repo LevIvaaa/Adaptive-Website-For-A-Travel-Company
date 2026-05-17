@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { Check, Clock, MapPin, Plane, Star, Utensils } from "lucide-react"
 import { BookingForm } from "@/components/booking-form"
 import { SimilarTours } from "@/components/similar-tours"
@@ -15,6 +16,20 @@ export function TourView({ tour }: { tour: Tour }) {
   const { currency } = useCurrency()
   const T = useT()
   const t = localizeTour(tour, locale)
+
+  // Якщо користувач прийшов з hero-форми — підхоплюємо введені там параметри
+  // як дефолти для форми бронювання (щоб не вводив двічі).
+  const searchParams = useSearchParams()
+  const presetAdults = parseInt(searchParams.get("adults") ?? "")
+  const presetChildren = parseInt(searchParams.get("children") ?? "")
+  const presetDateFrom = searchParams.get("dateFrom") ?? ""
+  const presetDateTo = searchParams.get("dateTo") ?? ""
+  // Якщо обидві дати валідні — рахуємо кількість ночей.
+  let presetNights: number | undefined
+  if (presetDateFrom && presetDateTo) {
+    const ms = new Date(presetDateTo).getTime() - new Date(presetDateFrom).getTime()
+    if (Number.isFinite(ms) && ms > 0) presetNights = Math.round(ms / 86400000)
+  }
 
   // Title вкладки оновлюємо на клієнті — щоб він реагував на зміну локалі.
   // (Серверний generateMetadata встановлює його лише на початковий рендер.)
@@ -124,7 +139,15 @@ export function TourView({ tour }: { tour: Tour }) {
             <div className="mt-1 text-xs text-muted-foreground">{T.tourDetail.priceNote}</div>
 
             <div className="mt-5">
-              <BookingForm tourId={t.id} basePrice={t.price} baseNights={t.nights} />
+              <BookingForm
+                tourId={t.id}
+                basePrice={t.price}
+                baseNights={t.nights}
+                presetAdults={Number.isFinite(presetAdults) ? presetAdults : undefined}
+                presetChildren={Number.isFinite(presetChildren) ? presetChildren : undefined}
+                presetDate={presetDateFrom || undefined}
+                presetNights={presetNights}
+              />
             </div>
           </div>
         </aside>

@@ -37,9 +37,22 @@ interface Props {
   tourId: string
   basePrice: number
   baseNights: number
+  // Дефолти, прокинуті зі сторінки туру, коли користувач прийшов з пошуку на головній.
+  presetAdults?: number
+  presetChildren?: number
+  presetDate?: string
+  presetNights?: number
 }
 
-export function BookingForm({ tourId, basePrice, baseNights }: Props) {
+export function BookingForm({
+  tourId,
+  basePrice,
+  baseNights,
+  presetAdults,
+  presetChildren,
+  presetDate,
+  presetNights
+}: Props) {
   const { data: session, status } = useSession()
   const { currency } = useCurrency()
   const T = useT()
@@ -53,7 +66,12 @@ export function BookingForm({ tourId, basePrice, baseNights }: Props) {
     formState: { errors }
   } = useForm<FormInput>({
     resolver: zodResolver(schema),
-    defaultValues: { adults: 2, children: 0, nights: baseNights }
+    defaultValues: {
+      adults: presetAdults && presetAdults >= 1 && presetAdults <= 10 ? presetAdults : 2,
+      children: presetChildren && presetChildren >= 0 && presetChildren <= 10 ? presetChildren : 0,
+      nights: presetNights && presetNights >= 1 && presetNights <= 30 ? presetNights : baseNights,
+      departDate: presetDate ?? ""
+    }
   })
 
   // useWatch повертає те, що користувач реально ввів. Може бути будь-яким числом або NaN.
