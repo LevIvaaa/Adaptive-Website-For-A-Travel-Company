@@ -50,11 +50,22 @@
 
   html {
     scroll-behavior: smooth;
+    /* Захист від випадкового горизонтального скролу через будь-який «занадто широкий» елемент. */
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    /* Довгі слова без пробілів (URL, ID) переносяться, а не виштовхують контент за межі. */
+    overflow-wrap: anywhere;
+  }
+
+  /* Картинки за замовчуванням не виходять за межі контейнера. */
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
   }
 
   h1, h2, h3 {

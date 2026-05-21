@@ -76,7 +76,8 @@ export function DestinationPicker({ value, onChange }: Props) {
       </label>
 
       {open && filtered.length > 0 && (
-        <ul className="absolute left-0 top-[calc(100%+8px)] z-50 max-h-80 w-[280px] overflow-y-auto rounded-xl border border-border bg-background shadow-xl">
+        // Дропдаун: на вузьких екранах — на всю ширину інпута, на широких — фіксована 280px.
+        <ul className="absolute left-0 top-[calc(100%+8px)] z-50 max-h-80 w-full min-w-[200px] overflow-y-auto rounded-xl border border-border bg-background shadow-xl sm:w-[280px]">
           {filtered.map((c) => (
             <li key={c.en}>
               <button
