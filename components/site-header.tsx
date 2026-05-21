@@ -23,11 +23,14 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground">
+        {/* min-w-0 — щоб flex дозволяв truncate. На дуже вузьких текст ховається, лишається лише іконка. */}
+        <Link href="/" className="flex min-w-0 items-center gap-2">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground">
             <Plane className="h-4 w-4" />
           </span>
-          <span className="font-display text-lg font-bold">{T.brand}</span>
+          <span className="hidden truncate whitespace-nowrap font-display text-lg font-bold sm:inline">
+            {T.brand}
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
@@ -63,7 +66,7 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="grid h-10 w-10 place-items-center rounded-md border"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-md border"
             aria-label="Menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

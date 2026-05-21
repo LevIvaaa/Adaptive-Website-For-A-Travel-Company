@@ -57,8 +57,9 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
-    /* Довгі слова без пробілів (URL, ID) переносяться, а не виштовхують контент за межі. */
-    overflow-wrap: anywhere;
+    /* Довгі слова без пробілів (URL, ID) переносяться. break-word м'якший за anywhere —
+       не ламає короткі слова на літери в тісних UI-контейнерах. */
+    overflow-wrap: break-word;
   }
 
   /* Картинки за замовчуванням не виходять за межі контейнера. */

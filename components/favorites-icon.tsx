@@ -13,7 +13,7 @@ export function FavoritesIcon() {
     <Link
       href="/favorites"
       aria-label={T.favorites.title}
-      className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border hover:bg-muted"
+      className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border hover:bg-muted"
     >
       <Heart className="h-4 w-4" />
       {count > 0 && (
