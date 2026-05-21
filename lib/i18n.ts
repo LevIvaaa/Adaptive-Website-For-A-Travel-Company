@@ -102,9 +102,9 @@ export const translations = {
       similar: "Схожі тури"
     },
     about: {
-      title: "Про компанію",
+      title: "Про нас",
       description:
-        "Організовуємо подорожі з 2012 року. Знаємо регіони з перших рук, самі зупиняємось у готелях перш ніж пропонувати їх.",
+        "Туристична компанія — підбираємо тури за вашими побажаннями, бронюємо проживання та переліт, супроводжуємо від першої заявки до повернення додому.",
       stats: {
         years: "років на ринку",
         destinations: "напрямків",
@@ -113,11 +113,11 @@ export const translations = {
       },
       storyTitle: "Наша історія",
       storyPar1:
-        "У 2012 році троє друзів поверталися з поїздки на Крит і не могли знайти туроператора, який сам побував у готелі, куди відправляє клієнтів. Саме з цього питання починалася компанія «Мандри Світу».",
+        "Туристична компанія працює з 2012 року. За цей час ми склали власну базу перевірених готелів у більш ніж 180 напрямках — від пляжного відпочинку в Туреччині та Єгипті до гірськолижних курортів Грузії й екскурсійних турів Європою.",
       storyPar2:
-        "Сьогодні у нас 23 людини в команді, понад 180 напрямків у каталозі, і головне — кожен готель перевірений особисто менеджером або постійним клієнтом.",
+        "Сьогодні наша команда — це 23 спеціалісти, які допомагають клієнтам обрати тур під бюджет, дати та склад родини. Кожен готель у каталозі або відвіданий нашим менеджером особисто, або підтверджений відгуками постійних клієнтів.",
       storyPar3:
-        "Ми не продаємо «коти в мішку» — якщо не були в готелі самі, прямо кажемо про це та допомагаємо знайти альтернативу з відгуками."
+        "Ми не продаємо «кота в мішку»: якщо у нас немає підтвердженої інформації про готель — прямо кажемо про це та пропонуємо перевірену альтернативу. Прозорість та чесність — основа нашої роботи."
     },
     contacts: {
       title: "Контакти",
@@ -394,9 +394,9 @@ export const translations = {
       similar: "Similar tours"
     },
     about: {
-      title: "About the company",
+      title: "About us",
       description:
-        "Arranging trips since 2012. We know our destinations first-hand and stay at the hotels ourselves before offering them to you.",
+        "Travel Agency — we pick tours that match your preferences, book accommodation and flights, and stay with you from the first request until you’re back home.",
       stats: {
         years: "years on the market",
         destinations: "destinations",
@@ -405,11 +405,11 @@ export const translations = {
       },
       storyTitle: "Our story",
       storyPar1:
-        "In 2012 three friends came back from Crete and couldn’t find a travel agency whose staff had actually stayed in the hotels they were selling. That question became the starting point of our company.",
+        "Travel Agency has been operating since 2012. Over that time we’ve built our own database of verified hotels across 180+ destinations — from beach holidays in Turkey and Egypt to ski resorts in Georgia and city tours across Europe.",
       storyPar2:
-        "Today we are a team of 23, with more than 180 destinations in the catalogue — and, most importantly, every hotel has been personally verified by a manager or a returning client.",
+        "Today we are a team of 23 specialists helping clients pick tours that fit their budget, dates and family setup. Every hotel in our catalogue has either been personally visited by one of our managers or confirmed by returning clients.",
       storyPar3:
-        "We don’t sell sight-unseen. If we haven’t stayed at the hotel ourselves, we say so up front and help you pick a verified alternative."
+        "We don’t sell sight-unseen. If we don’t have verified information about a hotel — we say so up front and suggest a tested alternative. Transparency and honesty are the foundation of how we work."
     },
     contacts: {
       title: "Contacts",
