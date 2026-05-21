@@ -75,18 +75,26 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <nav className="container flex flex-col gap-1 border-t py-3 lg:hidden">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              className="rounded-md px-3 py-2.5 text-sm font-medium hover:bg-muted"
-            >
-              {T.nav[item.id]}
-            </Link>
-          ))}
-        </nav>
+        <div className="container flex flex-col gap-1 border-t py-3 lg:hidden">
+          <nav className="flex flex-col gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="rounded-md px-3 py-2.5 text-sm font-medium hover:bg-muted"
+              >
+                {T.nav[item.id]}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Перемикач валюти. На десктопі він у самій шапці, на мобільних — тут, у меню. */}
+          <div className="mt-2 flex items-center justify-between gap-3 border-t pt-3">
+            <span className="text-xs uppercase text-muted-foreground">{T.nav.currency}</span>
+            <CurrencySwitcher />
+          </div>
+        </div>
       )}
     </header>
   )

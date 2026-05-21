@@ -10,7 +10,8 @@ export const translations = {
       tours: "Тури",
       articles: "Блог",
       about: "Про нас",
-      contacts: "Контакти"
+      contacts: "Контакти",
+      currency: "Валюта"
     },
     articles: {
       title: "Блог",
@@ -307,7 +308,8 @@ export const translations = {
       tours: "Tours",
       articles: "Blog",
       about: "About",
-      contacts: "Contacts"
+      contacts: "Contacts",
+      currency: "Currency"
     },
     articles: {
       title: "Blog",
