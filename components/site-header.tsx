@@ -1,7 +1,8 @@
 "use client"
 
 // Шапка сайту: лого, навігація, перемикач валюти/мови, обране, меню юзера.
-// Прилипає до верху (sticky), на мобільних — гамбургер-меню.
+// Прилипає до верху (sticky). На мобільних і планшетах (<1024px) — гамбургер-меню,
+// інакше пункти навігації не вміщаються поруч з кнопками й перемикачами.
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -29,7 +30,7 @@ export function SiteHeader() {
           <span className="font-display text-lg font-bold">{T.brand}</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) => {
             const active =
               item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)
@@ -48,14 +49,14 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <CurrencySwitcher />
           <LocaleSwitcher />
           <FavoritesIcon />
           <UserMenu />
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <LocaleSwitcher />
           <FavoritesIcon />
           <UserMenu />
@@ -71,7 +72,7 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <nav className="container flex flex-col gap-1 border-t py-3 md:hidden">
+        <nav className="container flex flex-col gap-1 border-t py-3 lg:hidden">
           {navItems.map((item) => (
             <Link
               key={item.href}

@@ -63,7 +63,8 @@ export function SearchForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="grid gap-3 rounded-2xl bg-white p-4 text-slate-800 shadow-xl md:grid-cols-[1.2fr_1fr_1fr_1fr_auto] md:items-end md:gap-2 md:p-3"
+      // Адаптивна сітка: 1 колонка на мобільному, 2 на планшеті, 5 (із кнопкою в кінці) — на десктопі.
+      className="grid gap-3 rounded-2xl bg-white p-4 text-slate-800 shadow-xl sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_auto] lg:items-end lg:gap-2 lg:p-3"
     >
       <DestinationPicker
         value={destination}
@@ -71,7 +72,7 @@ export function SearchForm() {
       />
 
       {/* Пара інпутів «від»/«до» — щоб юзер задавав інтервал поїздки. */}
-      <label className="flex flex-col gap-0.5 rounded-lg bg-muted/60 px-3 py-2 md:bg-transparent">
+      <label className="flex flex-col gap-0.5 rounded-lg bg-muted/60 px-3 py-2 lg:bg-transparent">
         <span className="text-xs font-semibold uppercase text-slate-500">{T.search.dateFrom}</span>
         <input
           {...register("dateFrom")}
@@ -85,7 +86,7 @@ export function SearchForm() {
         />
       </label>
 
-      <label className="flex flex-col gap-0.5 rounded-lg bg-muted/60 px-3 py-2 md:bg-transparent">
+      <label className="flex flex-col gap-0.5 rounded-lg bg-muted/60 px-3 py-2 lg:bg-transparent">
         <span className="text-xs font-semibold uppercase text-slate-500">{T.search.dateTo}</span>
         <input
           {...register("dateTo")}
@@ -113,7 +114,8 @@ export function SearchForm() {
       <Button
         type="submit"
         size="lg"
-        className="md:self-stretch"
+        // На планшеті кнопка займає обидві колонки, на десктопі — лише свою.
+        className="sm:col-span-2 lg:col-span-1 lg:self-stretch"
         disabled={!canSubmit}
         title={!canSubmit ? (datesInvalid ? T.search.datesInvalid : T.search.submitHint) : undefined}
       >
@@ -122,7 +124,7 @@ export function SearchForm() {
       </Button>
 
       {datesInvalid && (
-        <p className="text-xs text-destructive md:col-span-5">{T.search.datesInvalid}</p>
+        <p className="text-xs text-destructive sm:col-span-2 lg:col-span-5">{T.search.datesInvalid}</p>
       )}
     </form>
   )
