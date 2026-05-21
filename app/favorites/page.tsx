@@ -11,6 +11,7 @@ import type { Tour } from "@/lib/tours"
 export default function FavoritesPage() {
   const T = useT()
   const ids = useFavorites((s) => s.ids)
+  const setAll = useFavorites((s) => s.setAll)
   const [tours, setTours] = useState<Tour[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -25,12 +26,32 @@ export default function FavoritesPage() {
       .then((r) => r.json())
       .then((all: Tour[]) => {
         if (cancelled) return
-        setTours(all.filter((t) => ids.includes(t.id)))
+        const matched = all.filter((t) => ids.includes(t.id))
+        setTours(matched)
         setLoading(false)
+
+        // Прибираємо «зомбі»-id — наприклад, що залишилися від
+        // старої БД (інші cuid після reseed/міграції з SQLite на Postgres).
+        const validIds = matched.map((t) => t.id)
+        const staleIds = ids.filter((id) => !validIds.includes(id))
+        if (staleIds.length > 0) {
+          setAll(validIds)
+          // Якщо юзер залогінений — також прибираємо зайві записи з БД.
+          const state = useFavorites.getState()
+          if (state.authenticated) {
+            staleIds.forEach((id) => {
+              fetch("/api/favorites", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tourId: id })
+              }).catch(() => {})
+            })
+          }
+        }
       })
       .catch(() => setLoading(false))
     return () => { cancelled = true }
-  }, [ids])
+  }, [ids, setAll])
 
   return (
     <section className="container py-10">
