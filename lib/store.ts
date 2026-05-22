@@ -4,7 +4,7 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 // Обране користувача. Для анонімних — лише в localStorage.
-// Для залогінених — синхронізується з БД через /api/favorites (див. components/favorites-sync.tsx).
+// Для залогінених — синхронізується з БД через /api/favorites
 interface FavoritesState {
   ids: string[]
   authenticated: boolean
