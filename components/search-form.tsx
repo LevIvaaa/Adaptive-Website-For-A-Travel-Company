@@ -53,6 +53,16 @@ export function SearchForm() {
     if (data.dateTo && data.dateTo >= today && (!data.dateFrom || data.dateTo >= data.dateFrom)) {
       params.set("dateTo", data.dateTo)
     }
+    // Якщо обрано обидві дати — рахуємо тривалість і автоматично виставляємо
+    // фільтр ночей у каталозі. Тоді результати одразу узгоджені з періодом поїздки.
+    if (data.dateFrom && data.dateTo && data.dateTo > data.dateFrom) {
+      const ms = new Date(data.dateTo).getTime() - new Date(data.dateFrom).getTime()
+      const nights = Math.round(ms / 86400000)
+      if (nights >= 1 && nights <= 21) {
+        params.set("minNights", String(nights))
+        params.set("maxNights", String(nights))
+      }
+    }
     if (data.adults && data.adults !== 2) params.set("adults", String(data.adults))
     if (data.children && data.children > 0) params.set("children", String(data.children))
     if (data.infants && data.infants > 0) params.set("infants", String(data.infants))

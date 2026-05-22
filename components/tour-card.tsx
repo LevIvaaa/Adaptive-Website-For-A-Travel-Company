@@ -3,6 +3,7 @@
 // Картка одного туру в каталозі. Уся картка клікабельна (через absolute overlay-link).
 // Сердечко й кнопка «Детальніше» з більшим z-index і stopPropagation — щоб не плодити подвійні кліки.
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { Clock, Flame, Heart, MapPin, Plane, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatPrice, cn } from "@/lib/utils"
@@ -19,6 +20,19 @@ export function TourCard({ tour }: { tour: Tour }) {
   const showToast = useToast((s) => s.show)
   const t = localizeTour(tour, locale)
   const fav = has(t.id)
+
+  // Якщо в URL вказані гості (з hero-форми), показуємо ціну саме за такий склад.
+  // tour.price — це базова ціна за 2 дорослих, тому ділимо на 2 і множимо на коефіцієнт.
+  const params = useSearchParams()
+  const urlAdults = parseInt(params.get("adults") ?? "")
+  const urlChildren = parseInt(params.get("children") ?? "")
+  const adults = Number.isFinite(urlAdults) && urlAdults >= 1 && urlAdults <= 10 ? urlAdults : 2
+  const children = Number.isFinite(urlChildren) && urlChildren >= 0 && urlChildren <= 10 ? urlChildren : 0
+  // Якщо склад відрізняється від базового (2 дорослих, 0 дітей) — рахуємо адаптовану ціну.
+  const customized = adults !== 2 || children !== 0
+  const displayPrice = customized
+    ? Math.round((t.price * (adults + 0.5 * children)) / 2)
+    : t.price
 
   function onFavClick(e: React.MouseEvent) {
     // stop, щоб клік сердечка не «провалився» через overlay-link на /tours/[slug].
@@ -93,8 +107,10 @@ export function TourCard({ tour }: { tour: Tour }) {
 
         <div className="mt-auto flex items-end justify-between pt-5">
           <div>
-            <div className="text-xs text-muted-foreground">{T.card.from}</div>
-            <div className="text-2xl font-bold">{formatPrice(t.price, currency)}</div>
+            <div className="text-xs text-muted-foreground">
+              {customized ? T.card.forGuests(adults, children) : T.card.from}
+            </div>
+            <div className="text-2xl font-bold">{formatPrice(displayPrice, currency)}</div>
           </div>
           <Button asChild size="sm" className="pointer-events-auto">
             <Link href={`/tours/${t.slug}`}>{T.card.details}</Link>

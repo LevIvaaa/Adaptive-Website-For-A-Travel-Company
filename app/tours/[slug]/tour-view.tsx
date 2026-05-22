@@ -22,6 +22,7 @@ export function TourView({ tour }: { tour: Tour }) {
   const searchParams = useSearchParams()
   const presetAdults = parseInt(searchParams.get("adults") ?? "")
   const presetChildren = parseInt(searchParams.get("children") ?? "")
+  const presetInfants = parseInt(searchParams.get("infants") ?? "")
   const presetDateFrom = searchParams.get("dateFrom") ?? ""
   const presetDateTo = searchParams.get("dateTo") ?? ""
   // Якщо обидві дати валідні — рахуємо кількість ночей.
@@ -145,6 +146,7 @@ export function TourView({ tour }: { tour: Tour }) {
                 baseNights={t.nights}
                 presetAdults={Number.isFinite(presetAdults) ? presetAdults : undefined}
                 presetChildren={Number.isFinite(presetChildren) ? presetChildren : undefined}
+                presetInfants={Number.isFinite(presetInfants) ? presetInfants : undefined}
                 presetDate={presetDateFrom || undefined}
                 presetDateTo={presetDateTo || undefined}
                 presetNights={presetNights}

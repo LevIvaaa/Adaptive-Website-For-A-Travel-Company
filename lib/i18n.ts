@@ -77,7 +77,11 @@ export const translations = {
     card: {
       from: "від",
       details: "Детальніше",
-      hot: "Гарячий"
+      hot: "Гарячий",
+      forGuests: (adults: number, children: number) =>
+        children > 0
+          ? `На ${adults} доросл. + ${children} діт.`
+          : `На ${adults} ${adults === 1 ? "дорослого" : "дорослих"}`
     },
     toursPage: {
       title: "Каталог турів",
@@ -269,6 +273,7 @@ export const translations = {
       departure: "Дата виїзду",
       adults: "Дорослі",
       children: "Діти",
+      infants: "Немовлята",
       nights: "Ночей",
       baseDuration: (n: number) => `Базова тривалість туру: ${n} ноч.`,
       comment: "Коментар",
@@ -369,7 +374,11 @@ export const translations = {
     card: {
       from: "from",
       details: "Details",
-      hot: "Hot"
+      hot: "Hot",
+      forGuests: (adults: number, children: number) =>
+        children > 0
+          ? `For ${adults} adults + ${children} kids`
+          : `For ${adults} ${adults === 1 ? "adult" : "adults"}`
     },
     toursPage: {
       title: "Tour catalogue",
@@ -561,6 +570,7 @@ export const translations = {
       departure: "Departure date",
       adults: "Adults",
       children: "Children",
+      infants: "Infants",
       nights: "Nights",
       baseDuration: (n: number) => `Base tour duration: ${n} night${n === 1 ? "" : "s"}`,
       comment: "Comment",

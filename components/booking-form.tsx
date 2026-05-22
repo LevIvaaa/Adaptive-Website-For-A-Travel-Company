@@ -20,6 +20,7 @@ import { formatAmountInCurrency } from "@/lib/utils"
 const schema = z.object({
   adults: z.coerce.number().int().min(1).max(10),
   children: z.coerce.number().int().min(0).max(10),
+  infants: z.coerce.number().int().min(0).max(5),
   dateFrom: z.string().min(1, "Pick a date").refine((v) => {
     const today = new Date().toISOString().split("T")[0]
     return v >= today
@@ -52,6 +53,7 @@ interface Props {
   // Дефолти, прокинуті зі сторінки туру, коли користувач прийшов з пошуку на головній.
   presetAdults?: number
   presetChildren?: number
+  presetInfants?: number
   presetDate?: string
   presetDateTo?: string
   presetNights?: number
@@ -63,6 +65,7 @@ export function BookingForm({
   baseNights,
   presetAdults,
   presetChildren,
+  presetInfants,
   presetDate,
   presetDateTo,
   presetNights
@@ -94,6 +97,7 @@ export function BookingForm({
     defaultValues: {
       adults: presetAdults && presetAdults >= 1 && presetAdults <= 10 ? presetAdults : 2,
       children: presetChildren && presetChildren >= 0 && presetChildren <= 10 ? presetChildren : 0,
+      infants: presetInfants && presetInfants >= 0 && presetInfants <= 5 ? presetInfants : 0,
       dateFrom: presetDate ?? "",
       dateTo: defaultDateTo
     }
@@ -101,11 +105,14 @@ export function BookingForm({
 
   const rawAdults = Number(useWatch({ control, name: "adults" }))
   const rawChildren = Number(useWatch({ control, name: "children" }))
+  const rawInfants = Number(useWatch({ control, name: "infants" }))
   const dateFrom = useWatch({ control, name: "dateFrom" }) || ""
   const dateTo = useWatch({ control, name: "dateTo" }) || ""
 
   const adults = Math.max(1, Math.min(10, Number.isFinite(rawAdults) ? rawAdults : 2))
   const children = Math.max(0, Math.min(10, Number.isFinite(rawChildren) ? rawChildren : 0))
+  // Немовлята (до 2 років) не впливають на ціну — летять безкоштовно, лише для інформації менеджеру.
+  const infants = Math.max(0, Math.min(5, Number.isFinite(rawInfants) ? rawInfants : 0))
   // Ночі рахуємо з обраного діапазону. Якщо невалідно — fallback на базову тривалість туру.
   const computedNights = nightsBetween(dateFrom, dateTo)
   const nights = computedNights >= 1 && computedNights <= 30 ? computedNights : baseNights
@@ -138,7 +145,11 @@ export function BookingForm({
           nights,
           departDate: data.dateFrom,
           returnDate: data.dateTo,
-          comment: data.comment,
+          // Кількість немовлят додаємо до коментаря (в БД немає окремого поля,
+          // але менеджеру важливо знати, щоб організувати трансфер з дитячим кріслом і т.д.).
+          comment: (data.infants ?? 0) > 0
+            ? `[Немовлят: ${data.infants}] ${data.comment ?? ""}`.trim()
+            : data.comment,
           displayTotal: total,
           displayCurrency: currency
         })
@@ -255,7 +266,7 @@ export function BookingForm({
         <p className="text-xs text-destructive">{T.bookingForm.datesError}</p>
       )}
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         <div>
           <Label htmlFor="adults">{T.bookingForm.adults}</Label>
           <Input
@@ -295,6 +306,22 @@ export function BookingForm({
             <p className="mt-1 text-xs text-destructive">{T.bookingForm.childrenError}</p>
           )}
         </div>
+        <div>
+          <Label htmlFor="infants">{T.bookingForm.infants}</Label>
+          <Input
+            id="infants"
+            type="number"
+            min={0}
+            max={5}
+            {...register("infants")}
+            onBlur={(e) => {
+              const v = Number(e.currentTarget.value)
+              if (!Number.isFinite(v) || v < 0) setValue("infants", 0, { shouldValidate: true })
+              else if (v > 5) setValue("infants", 5, { shouldValidate: true })
+            }}
+            className="mt-1.5"
+          />
+        </div>
       </div>
 
       <div>
@@ -317,6 +344,7 @@ export function BookingForm({
         </div>
         <p className="mt-0.5 text-xs text-muted-foreground">
           {T.bookingForm.breakdown(adults, children, nights)}
+          {infants > 0 && ` · ${infants} ${T.bookingForm.infants.toLowerCase()}`}
         </p>
       </div>
 
