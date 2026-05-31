@@ -1,8 +1,5 @@
 "use client"
 
-// Шапка сайту: лого, навігація, перемикач валюти/мови, обране, меню юзера.
-// Прилипає до верху (sticky). На мобільних і планшетах (<1024px) — гамбургер-меню,
-// інакше пункти навігації не вміщаються поруч з кнопками й перемикачами.
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
@@ -22,9 +19,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="container flex h-16 items-center justify-between">
-        {/* min-w-0 — щоб flex дозволяв truncate. На дуже вузьких текст ховається, лишається лише іконка. */}
-        <Link href="/" className="flex min-w-0 items-center gap-2">
+      <div className="container flex h-16 items-center justify-between"><Link href="/" className="flex min-w-0 items-center gap-2">
           <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground">
             <Plane className="h-4 w-4" />
           </span>
@@ -89,7 +84,6 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          {/* Перемикач валюти. На десктопі він у самій шапці, на мобільних — тут, у меню. */}
           <div className="mt-2 flex items-center justify-between gap-3 border-t pt-3">
             <span className="text-xs uppercase text-muted-foreground">{T.nav.currency}</span>
             <CurrencySwitcher />

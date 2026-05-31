@@ -5,12 +5,10 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { RangeSlider } from "@/components/range-slider"
 import { useCurrency, useLocale, type Currency } from "@/lib/store"
 
-// Ціни турів у БД зберігаються в гривнях. Для показу переводимо у валюту користувача.
 const PRICE_MIN_UAH = 0
 const PRICE_MAX_UAH = 200000
 const PRICE_STEP_UAH = 1000
 
-// Приблизні курси. Ті самі числа використовуються по всьому сайту.
 const rates: Record<Currency, number> = { UAH: 1, USD: 40, EUR: 43 }
 const symbols: Record<Currency, string> = { UAH: "₴", USD: "$", EUR: "€" }
 
@@ -23,8 +21,6 @@ export function PriceFilter() {
   const rate = rates[currency]
   const symbol = symbols[currency]
 
-  // В URL ціна збережена у валюті, яка була активна на момент встановлення
-  // (параметр priceCurrency). При завантаженні переводимо в гривні — внутрішнє значення завжди в UAH.
   const urlCurrencyRaw = params.get("priceCurrency")
   const urlCurrency = (urlCurrencyRaw === "USD" || urlCurrencyRaw === "EUR" || urlCurrencyRaw === "UAH")
     ? urlCurrencyRaw
@@ -43,13 +39,10 @@ export function PriceFilter() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.get("minPrice"), params.get("maxPrice"), params.get("priceCurrency")])
 
-  // Записуємо діапазон в URL у валюті користувача — щоб при шерінгу посилання
-  // зберігалися ті ж самі числа, які він вводив.
   useEffect(() => {
     const handler = setTimeout(() => {
       const next = new URLSearchParams(params)
       if (range[0] > range[1]) {
-        // Невалідний діапазон: дзеркалимо в URL, але кажемо серверу пропустити фільтр.
         next.set("_invalid", "1")
       } else {
         next.delete("_invalid")

@@ -1,7 +1,5 @@
 "use client"
 
-// Картка одного туру в каталозі. Уся картка клікабельна (через absolute overlay-link).
-// Сердечко й кнопка «Детальніше» з більшим z-index і stopPropagation — щоб не плодити подвійні кліки.
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Clock, Flame, Heart, MapPin, Plane, Star } from "lucide-react"
@@ -21,21 +19,17 @@ export function TourCard({ tour }: { tour: Tour }) {
   const t = localizeTour(tour, locale)
   const fav = has(t.id)
 
-  // Якщо в URL вказані гості (з hero-форми), показуємо ціну саме за такий склад.
-  // tour.price — це базова ціна за 2 дорослих, тому ділимо на 2 і множимо на коефіцієнт.
   const params = useSearchParams()
   const urlAdults = parseInt(params.get("adults") ?? "")
   const urlChildren = parseInt(params.get("children") ?? "")
   const adults = Number.isFinite(urlAdults) && urlAdults >= 1 && urlAdults <= 10 ? urlAdults : 2
   const children = Number.isFinite(urlChildren) && urlChildren >= 0 && urlChildren <= 10 ? urlChildren : 0
-  // Якщо склад відрізняється від базового (2 дорослих, 0 дітей) — рахуємо адаптовану ціну.
   const customized = adults !== 2 || children !== 0
   const displayPrice = customized
     ? Math.round((t.price * (adults + 0.5 * children)) / 2)
     : t.price
 
   function onFavClick(e: React.MouseEvent) {
-    // stop, щоб клік сердечка не «провалився» через overlay-link на /tours/[slug].
     e.preventDefault()
     e.stopPropagation()
     toggle(t.id)
@@ -43,9 +37,7 @@ export function TourCard({ tour }: { tour: Tour }) {
   }
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-      {/* Прозоре посилання на всю картку. Інтерактиви всередині мають вищий z-index. */}
-      <Link
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg"><Link
         href={`/tours/${t.slug}`}
         aria-label={t.title}
         className="absolute inset-0 z-0"
@@ -61,10 +53,7 @@ export function TourCard({ tour }: { tour: Tour }) {
           />
         ) : (
           <Plane className="h-14 w-14 text-primary/30" />
-        )}
-
-        {/* Бейдж «Гарячий» для турів з isHot=true. */}
-        {t.isHot && (
+        )}{t.isHot && (
           <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-red-500 px-2.5 py-1 text-xs font-semibold text-white shadow">
             <Flame className="h-3 w-3" />
             {T.card.hot}

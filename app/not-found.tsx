@@ -1,8 +1,5 @@
 "use client"
 
-// Кастомна сторінка 404. App Router показує її автоматично, коли
-// будь-яка сторінка викликає notFound() або шлях не знайдено.
-// Шапка/футер успадковуються з кореневого layout — не дублюємо їх тут.
 import Link from "next/link"
 import { useEffect } from "react"
 import { Compass } from "lucide-react"

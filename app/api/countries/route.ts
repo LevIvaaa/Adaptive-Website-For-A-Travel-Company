@@ -1,5 +1,3 @@
-// GET /api/countries — унікальний список країн із усіх турів (для фільтрів і автодоповнення).
-// force-dynamic щоб не кешувалось (хоча для дипломної можна було б і кешувати).
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 

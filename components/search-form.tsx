@@ -8,7 +8,6 @@ import { TravelersPicker } from "@/components/travelers-picker"
 import { DestinationPicker } from "@/components/destination-picker"
 import { useT } from "@/lib/i18n"
 
-// Поля форми пошуку. Замість одного date — діапазон dateFrom/dateTo.
 interface FormValues {
   destination: string
   dateFrom: string
@@ -41,7 +40,6 @@ export function SearchForm() {
 
   const today = new Date().toISOString().split("T")[0]
   const hasInput = Boolean(destination || dateFrom || dateTo)
-  // Помилка діапазону дат — коли «до» раніше за «від». Показуємо одразу під полями.
   const datesInvalid = Boolean(dateFrom && dateTo && dateTo < dateFrom)
   const canSubmit = hasInput && !datesInvalid
 
@@ -49,12 +47,9 @@ export function SearchForm() {
     const params = new URLSearchParams()
     if (data.destination) params.set("q", data.destination)
     if (data.dateFrom && data.dateFrom >= today) params.set("dateFrom", data.dateFrom)
-    // dateTo має бути не раніше dateFrom — інакше відкидаємо.
     if (data.dateTo && data.dateTo >= today && (!data.dateFrom || data.dateTo >= data.dateFrom)) {
       params.set("dateTo", data.dateTo)
     }
-    // Якщо обрано обидві дати — рахуємо тривалість і автоматично виставляємо
-    // фільтр ночей у каталозі. Тоді результати одразу узгоджені з періодом поїздки.
     if (data.dateFrom && data.dateTo && data.dateTo > data.dateFrom) {
       const ms = new Date(data.dateTo).getTime() - new Date(data.dateFrom).getTime()
       const nights = Math.round(ms / 86400000)
@@ -73,7 +68,6 @@ export function SearchForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      // Адаптивна сітка: 1 колонка на мобільному, 2 на планшеті, 5 (із кнопкою в кінці) — на десктопі.
       className="grid gap-3 rounded-2xl bg-white p-4 text-slate-800 shadow-xl sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_auto] lg:items-end lg:gap-2 lg:p-3"
     >
       <DestinationPicker
@@ -81,7 +75,6 @@ export function SearchForm() {
         onChange={(v) => setValue("destination", v)}
       />
 
-      {/* Пара інпутів «від»/«до» — щоб юзер задавав інтервал поїздки. */}
       <label className="flex flex-col gap-0.5 rounded-lg bg-muted/60 px-3 py-2 lg:bg-transparent">
         <span className="text-xs font-semibold uppercase text-slate-500">{T.search.dateFrom}</span>
         <input
@@ -118,13 +111,9 @@ export function SearchForm() {
           setValue("children", v.children)
           setValue("infants", v.infants)
         }}
-      />
-
-      {/* Якщо нічого не введено АБО діапазон дат невалідний — кнопка disabled. */}
-      <Button
+      /><Button
         type="submit"
         size="lg"
-        // На планшеті кнопка займає обидві колонки, на десктопі — лише свою.
         className="sm:col-span-2 lg:col-span-1 lg:self-stretch"
         disabled={!canSubmit}
         title={!canSubmit ? (datesInvalid ? T.search.datesInvalid : T.search.submitHint) : undefined}

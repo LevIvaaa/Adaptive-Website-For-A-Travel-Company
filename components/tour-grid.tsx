@@ -1,7 +1,5 @@
 "use client"
 
-// Сітка карток на /tours. Тягне дані через TanStack Query, ключ кешу залежить від URL —
-// тож зміна будь-якого фільтру в адресі автоматично робить новий запит.
 import { useSearchParams, useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { TourCard } from "@/components/tour-card"
@@ -22,7 +20,6 @@ export function TourGrid() {
       if (!res.ok) throw new Error("Failed to load tours")
       return res.json()
     },
-    // Тримаємо старі результати поки тягнемо нові — щоб skeleton не мерехтів при зміні фільтра.
     placeholderData: (prev) => prev
   })
 

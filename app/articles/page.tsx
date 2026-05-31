@@ -1,4 +1,3 @@
-// Сторінка блогу — список усіх статей. Серверна, тягне дані напряму з Prisma.
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { ArticlesHeading } from "@/components/articles-heading"
@@ -11,7 +10,6 @@ export default async function ArticlesPage() {
     orderBy: { publishedAt: "desc" }
   })
 
-  // Серіалізуємо дати в ISO, щоб віддати в клієнтські локалізовані компоненти.
   const items = articles.map((a) => ({
     id: a.id,
     slug: a.slug,

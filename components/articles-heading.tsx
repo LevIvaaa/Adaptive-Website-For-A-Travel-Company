@@ -1,6 +1,5 @@
 "use client"
 
-// Заголовок сторінки блогу. Окремий клієнтський компонент — щоб динамічно ставити title вкладки.
 import { useEffect } from "react"
 import { useT } from "@/lib/i18n"
 

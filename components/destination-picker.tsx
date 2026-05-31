@@ -1,7 +1,5 @@
 "use client"
 
-// Поле «Куди» з автодоповненням країн у hero-формі.
-// Список країн тягне з /api/countries, фільтрує по підстроці у вибраній мові.
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { MapPin } from "lucide-react"
@@ -64,7 +62,6 @@ export function DestinationPicker({ value, onChange }: Props) {
           type="text"
           value={value}
           onChange={(e) => {
-            // maxLength=80 — захист від вставки величезного тексту в інпут пошуку.
             onChange(e.target.value.slice(0, 80))
             if (!open) setOpen(true)
           }}
@@ -76,7 +73,6 @@ export function DestinationPicker({ value, onChange }: Props) {
       </label>
 
       {open && filtered.length > 0 && (
-        // Дропдаун: на вузьких екранах — на всю ширину інпута, на широких — фіксована 280px.
         <ul className="absolute left-0 top-[calc(100%+8px)] z-50 max-h-80 w-full min-w-[200px] overflow-y-auto rounded-xl border border-border bg-background shadow-xl sm:w-[280px]">
           {filtered.map((c) => (
             <li key={c.en}>

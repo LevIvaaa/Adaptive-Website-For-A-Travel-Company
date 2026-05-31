@@ -1,4 +1,3 @@
-// GET /api/articles — список усіх статей блогу, від нових до старих.
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 

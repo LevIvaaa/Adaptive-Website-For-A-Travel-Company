@@ -1,7 +1,5 @@
 "use client"
 
-// Клієнтська обгортка для серверної /account/page.tsx.
-// Існує, щоб мати доступ до useT()/useLocale() — заголовки, labels, дата виїзду.
 import { useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"

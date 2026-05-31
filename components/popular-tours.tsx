@@ -1,6 +1,5 @@
 "use client"
 
-// Блок «Популярні тури» на головній. Бере перші 6 турів із сортуванням «popular» (сортує hot-тури вгору)
 import { useQuery } from "@tanstack/react-query"
 import { TourCard } from "@/components/tour-card"
 import type { Tour } from "@/lib/tours"

@@ -1,6 +1,5 @@
 "use client"
 
-// Клієнтський рендер однієї статті
 import { useEffect } from "react"
 import Link from "next/link"
 import { useLocale } from "@/lib/store"

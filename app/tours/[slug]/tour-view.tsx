@@ -17,23 +17,18 @@ export function TourView({ tour }: { tour: Tour }) {
   const T = useT()
   const t = localizeTour(tour, locale)
 
-  // Якщо користувач прийшов з hero-форми — підхоплюємо введені там параметри
-  // як дефолти для форми бронювання (щоб не вводив двічі).
   const searchParams = useSearchParams()
   const presetAdults = parseInt(searchParams.get("adults") ?? "")
   const presetChildren = parseInt(searchParams.get("children") ?? "")
   const presetInfants = parseInt(searchParams.get("infants") ?? "")
   const presetDateFrom = searchParams.get("dateFrom") ?? ""
   const presetDateTo = searchParams.get("dateTo") ?? ""
-  // Якщо обидві дати валідні — рахуємо кількість ночей.
   let presetNights: number | undefined
   if (presetDateFrom && presetDateTo) {
     const ms = new Date(presetDateTo).getTime() - new Date(presetDateFrom).getTime()
     if (Number.isFinite(ms) && ms > 0) presetNights = Math.round(ms / 86400000)
   }
 
-  // Title вкладки оновлюємо на клієнті — щоб він реагував на зміну локалі.
-  // (Серверний generateMetadata встановлює його лише на початковий рендер.)
   useEffect(() => {
     document.title = `${t.title} · Travel Agency`
   }, [t.title, locale])

@@ -1,4 +1,3 @@
-// Сторінка окремої статті по slug. Серверна — рендеримо вміст одразу.
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"

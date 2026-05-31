@@ -1,7 +1,5 @@
 "use client"
 
-// Форма бронювання туру. Доступна тільки залогіненим (інакше показує блок «Sign in to book»).
-// Total рахується live при зміні дорослих/дітей/ночей, ціни — у вибраній валюті.
 import { useState } from "react"
 import { useSession } from "next-auth/react"
 import { useForm, useWatch } from "react-hook-form"
@@ -36,7 +34,6 @@ function todayIso() {
   return new Date().toISOString().split("T")[0]
 }
 
-// Скільки ночей між двома датами у форматі YYYY-MM-DD.
 function nightsBetween(from: string, to: string) {
   if (!from || !to) return 0
   const ms = new Date(to).getTime() - new Date(from).getTime()
@@ -50,7 +47,6 @@ interface Props {
   tourId: string
   basePrice: number
   baseNights: number
-  // Дефолти, прокинуті зі сторінки туру, коли користувач прийшов з пошуку на головній.
   presetAdults?: number
   presetChildren?: number
   presetInfants?: number
@@ -75,7 +71,6 @@ export function BookingForm({
   const T = useT()
   const [authOpen, setAuthOpen] = useState(false)
 
-  // Рахуємо дефолтний dateTo: presetDateTo якщо є, інакше dateFrom + baseNights днів.
   const defaultDateTo = (() => {
     if (presetDateTo) return presetDateTo
     if (presetDate) {
@@ -111,21 +106,15 @@ export function BookingForm({
 
   const adults = Math.max(1, Math.min(10, Number.isFinite(rawAdults) ? rawAdults : 2))
   const children = Math.max(0, Math.min(10, Number.isFinite(rawChildren) ? rawChildren : 0))
-  // Немовлята (до 2 років) не впливають на ціну — летять безкоштовно, лише для інформації менеджеру.
   const infants = Math.max(0, Math.min(5, Number.isFinite(rawInfants) ? rawInfants : 0))
-  // Ночі рахуємо з обраного діапазону. Якщо невалідно — fallback на базову тривалість туру.
   const computedNights = nightsBetween(dateFrom, dateTo)
   const nights = computedNights >= 1 && computedNights <= 30 ? computedNights : baseNights
 
   const adultsError = Number.isFinite(rawAdults) && (rawAdults < 1 || rawAdults > 10)
   const childrenError = Number.isFinite(rawChildren) && (rawChildren < 0 || rawChildren > 10)
-  // Помилка дат: «до» має бути пізніше «від» і не пізніше ніж +30 ночей.
   const datesError = Boolean(dateFrom && dateTo && (dateTo <= dateFrom || computedNights > 30))
   const inputsValid = !adultsError && !childrenError && !datesError && Boolean(dateFrom && dateTo)
 
-  // Total для відображення: рахуємо у валюті користувача через ОКРУГЛЕНУ ціну за людину.
-  // Інакше «$723 × 2» давало б 1446, а ми показували 1445 (через round тільки на фінальному UAH).
-  // Тепер $723 × 2 → $1446 — як інтуїтивно очікує користувач.
   const displayRates = { UAH: 1, USD: 1 / 40, EUR: 1 / 43 }
   const rate = displayRates[currency]
   const perPersonDisplay = Math.round(basePrice * rate)
@@ -133,8 +122,6 @@ export function BookingForm({
 
   const mutation = useMutation({
     mutationFn: async (data: FormInput) => {
-      // Передаємо обчислені ночі + departDate (для зворотньої сумісності з API) +
-      // snapshot displayTotal/displayCurrency, щоб у /account/bookings ціна збігалась.
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -145,8 +132,6 @@ export function BookingForm({
           nights,
           departDate: data.dateFrom,
           returnDate: data.dateTo,
-          // Кількість немовлят додаємо до коментаря (в БД немає окремого поля,
-          // але менеджеру важливо знати, щоб організувати трансфер з дитячим кріслом і т.д.).
           comment: (data.infants ?? 0) > 0
             ? `[Немовлят: ${data.infants}] ${data.comment ?? ""}`.trim()
             : data.comment,
@@ -205,7 +190,6 @@ export function BookingForm({
       onSubmit={handleSubmit((d) => mutation.mutate(d))}
       className="space-y-3"
     >
-      {/* Показуємо контакти юзера — щоб він знав, як з ним зв'яжеться менеджер. */}
       <div className="rounded-md bg-muted/60 p-3 text-xs text-muted-foreground">
         {phone ? (
           <>
@@ -218,7 +202,6 @@ export function BookingForm({
         )}
       </div>
 
-      {/* Пара інпутів дат — як у hero-формі. Ночі рахуються з різниці і показуються readonly. */}
       <div className="grid grid-cols-2 gap-3">
         <div>
           <Label htmlFor="dateFrom">{T.bookingForm.dateFrom}</Label>
@@ -254,10 +237,7 @@ export function BookingForm({
             <p className="mt-1 text-xs text-destructive">{errors.dateTo.message}</p>
           )}
         </div>
-      </div>
-
-      {/* Підказка з обчисленою тривалістю поїздки. */}
-      {dateFrom && dateTo && !datesError && (
+      </div>{dateFrom && dateTo && !datesError && (
         <p className="text-xs text-muted-foreground">
           {T.bookingForm.computedNights(nights)}
         </p>
@@ -276,7 +256,6 @@ export function BookingForm({
             max={10}
             {...register("adults")}
             onBlur={(e) => {
-              // Коли користувач виходить з поля — клампимо число в межі [1..10]
               const v = Number(e.currentTarget.value)
               if (!Number.isFinite(v) || v < 1) setValue("adults", 1, { shouldValidate: true })
               else if (v > 10) setValue("adults", 10, { shouldValidate: true })

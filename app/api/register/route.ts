@@ -1,11 +1,8 @@
-// POST /api/register — створення нового користувача.
-// Логіну тут немає — після реєстрації клієнт окремо викличе signIn() з NextAuth.
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import bcrypt from "bcrypt"
 import { prisma } from "@/lib/prisma"
 
-// Валідація форми реєстрації. Пароль обмежений 72 символами — обмеження bcrypt.
 const schema = z.object({
   firstName: z.string().min(2).max(60),
   lastName: z.string().min(2).max(60),

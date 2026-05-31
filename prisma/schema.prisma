@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Допустимі значення документуються коментарями (зберігаємо як String для простоти):
 // Role: CLIENT | MANAGER | ADMIN
 // BookingStatus: PENDING | CONFIRMED | CANCELLED | COMPLETED
 // TourType: BEACH | EXCURSION | SKI | CRUISE | FAMILY | CUSTOM
@@ -68,8 +67,8 @@ model Booking {
   adults       Int      @default(2)
   children     Int      @default(0)
   departDate   DateTime
-  total        Int      // загальна сума у UAH (канонічна валюта)
-  displayTotal Int?     // сума, яку юзер бачив у формі (у displayCurrency)
+  total        Int
+  displayTotal Int?
   displayCurrency String? @default("UAH")
   status       String   @default("PENDING")
   comment      String?
@@ -103,8 +102,6 @@ model ContactRequest {
   createdAt DateTime @default(now())
 }
 
-// Стаття/новина для блогу.
-// Зберігаємо двома мовами одразу — як і тури — щоб мати спільну схему підходу.
 model Article {
   id          String   @id @default(cuid())
   slug        String   @unique

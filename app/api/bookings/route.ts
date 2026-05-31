@@ -1,6 +1,3 @@
-// POST /api/bookings — створити нове бронювання.
-// GET  /api/bookings — список бронювань поточного юзера.
-// Обидва ендпоінти вимагають авторизації.
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { z } from "zod"
@@ -17,10 +14,8 @@ const schema = z.object({
     const today = new Date().toISOString().split("T")[0]
     return v >= today
   }, "Invalid or past date"),
-  // Опціональна дата повернення — якщо передана, з неї перерахуємо nights.
   returnDate: z.string().optional(),
   comment: z.string().max(1000).optional(),
-  // Валюта, в якій юзер бачив суму, та її значення — для збереження snapshot'у.
   displayCurrency: z.enum(["UAH", "USD", "EUR"]).optional(),
   displayTotal: z.number().int().nonnegative().optional()
 })
@@ -45,8 +40,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Tour not found" }, { status: 404 })
   }
 
-  // Спочатку пробуємо взяти nights з returnDate (якщо переданий діапазон).
-  // Інакше — поле nights, інакше — базова тривалість туру.
   let nights = parsed.data.nights ?? tour.nights
   if (parsed.data.returnDate) {
     const ms = new Date(parsed.data.returnDate).getTime() - new Date(parsed.data.departDate).getTime()
@@ -67,7 +60,6 @@ export async function POST(req: Request) {
       children: parsed.data.children,
       departDate: new Date(parsed.data.departDate),
       total,
-      // Snapshot того, що бачив юзер — щоб у списку бронювань ціна співпала з очікуваною.
       displayTotal: parsed.data.displayTotal ?? total,
       displayCurrency: parsed.data.displayCurrency ?? "UAH",
       comment: parsed.data.comment

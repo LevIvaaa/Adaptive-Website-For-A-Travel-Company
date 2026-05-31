@@ -1,7 +1,5 @@
 "use client"
 
-// Двопозиційний слайдер (low/high). Накладаємо два <input type="range"> один на одного
-// й позиціонуємо «активну» смугу між ними. CSS-стилі для бігунків — у globals.css (.range-thumb).
 interface Props {
   min: number
   max: number
@@ -15,7 +13,6 @@ export function RangeSlider({ min, max, step = 1, value, onChange, invalid = fal
   const [low, high] = value
   const pct = (v: number) => Math.max(0, Math.min(100, ((v - min) / (max - min)) * 100))
 
-  // Якщо діапазон невалідний — підсвічуємо смугу червоним.
   const trackColor = invalid ? "bg-destructive" : "bg-primary"
 
   return (

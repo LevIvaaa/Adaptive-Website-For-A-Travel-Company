@@ -1,5 +1,3 @@
-// PATCH /api/user — оновлення профілю поточного юзера (ім'я, прізвище, телефон).
-// Email не редагуємо — він унікальний ключ, зміна потребувала б підтвердження.
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { z } from "zod"
@@ -44,7 +42,6 @@ export async function PATCH(req: Request) {
   return NextResponse.json(updated)
 }
 
-// GET /api/user — повертає поточні дані юзера (для форми налаштувань).
 export async function GET() {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) {

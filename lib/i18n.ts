@@ -1,5 +1,3 @@
-// Простий i18n: словник UK/EN. Хук useT() читає поточну локаль зі стору й повертає потрібну гілку.
-// Окремих файлів на мову робити не став — для дипломної досить одного об'єкта.
 import { useLocale, type Locale } from "@/lib/store"
 
 export const translations = {
@@ -280,7 +278,6 @@ export const translations = {
       commentPh: "Маєте побажання? (необов’язково)",
       total: "Разом",
       breakdown: (adults: number, children: number, nights: number) => {
-        // Складаємо рядок без зайвих пробілів. Для UA — повні слова замість «доросл./діт.».
         const adultsWord = adults === 1 ? "дорослий" : "дорослих"
         const childrenWord = children === 1 ? "дитина" : children >= 2 && children <= 4 ? "дитини" : "дітей"
         const parts = [`${adults} ${adultsWord}`]
@@ -597,18 +594,15 @@ export const translations = {
   }
 } as const
 
-// Хук для компонентів: повертає словник для активної локалі.
 export function useT() {
   const { locale } = useLocale()
   return translations[locale]
 }
 
-// Не-хуковий варіант — для серверних утиліт, де хуки недоступні.
 export function t(locale: Locale) {
   return translations[locale]
 }
 
-// Узгодження «ніч / ночі / ночей» по українському. Для EN — просто s/no s.
 export function pluralNights(n: number, locale: Locale) {
   if (locale === "en") return n === 1 ? "night" : "nights"
   const mod10 = n % 10

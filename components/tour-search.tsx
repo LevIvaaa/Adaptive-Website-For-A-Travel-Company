@@ -19,8 +19,6 @@ export function TourSearch() {
   const [value, setValue] = useState(params.get("q") ?? "")
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-  // Запам'ятовуємо останнє значення, яке ми самі пхнули в URL. Це потрібно,
-  // щоб не «бекати» інпут користувача, коли URL змінили ми ж (а не back/forward).
   const lastPushedRef = useRef(params.get("q") ?? "")
 
   const { data: countries } = useQuery<Country[]>({
@@ -31,7 +29,6 @@ export function TourSearch() {
     }
   })
 
-  // Синхронізація URL → інпут лише коли зміни прийшли ззовні (back/forward).
   useEffect(() => {
     const urlValue = params.get("q") ?? ""
     if (urlValue !== lastPushedRef.current) {
@@ -48,7 +45,6 @@ export function TourSearch() {
     return () => document.removeEventListener("mousedown", onClick)
   }, [])
 
-  // Дебаунс: проштовхуємо значення в URL через 300мс після останнього натиснення клавіші.
   useEffect(() => {
     const handler = setTimeout(() => {
       const live = typeof window !== "undefined"
@@ -74,7 +70,6 @@ export function TourSearch() {
     )
   }, [countries, value])
 
-  // Клік по підказці — встановлюємо саме фільтр country (а не текстовий пошук).
   function pick(c: Country) {
     setOpen(false)
     setValue("")
@@ -98,7 +93,6 @@ export function TourSearch() {
         type="text"
         value={value}
         onChange={(e) => {
-          // Обрізаємо введення на 80 символів (захист від вставки великого тексту/паст-payload).
           setValue(e.target.value.slice(0, 80))
           if (!open) setOpen(true)
         }}

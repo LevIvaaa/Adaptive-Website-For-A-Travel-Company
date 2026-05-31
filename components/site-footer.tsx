@@ -1,7 +1,5 @@
 "use client"
 
-// Підвал сайту. Чотири колонки: бренд+теглайн, навігація, юридичні, контакти + соц.мережі.
-// Знизу — копірайт з динамічним роком (рахуємо new Date().getFullYear()).
 import Link from "next/link"
 import { Facebook, Instagram, Mail, MapPin, Phone, Plane, Send } from "lucide-react"
 import { useT } from "@/lib/i18n"
@@ -23,7 +21,6 @@ export function SiteFooter() {
           </Link>
           <p className="mt-3 max-w-sm text-sm text-slate-400">{T.footer.tagline}</p>
 
-          {/* Іконки соц.мереж — заглушки. На проді тут будуть реальні URL. */}
           <div className="mt-4 flex gap-2">
             <a
               href="https://facebook.com"

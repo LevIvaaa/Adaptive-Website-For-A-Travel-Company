@@ -1,5 +1,3 @@
-// Сторінка «Мої бронювання». Серверна — тягне дані напряму через Prisma.
-// UI делегуємо в клієнтський BookingsList (щоб використовувати локалізацію).
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
@@ -19,7 +17,6 @@ export default async function BookingsPage() {
     orderBy: { createdAt: "desc" }
   })
 
-  // Серіалізуємо Date → ISO для прокидання в Client Component.
   const serialized = bookings.map((b) => ({
     id: b.id,
     total: b.total,

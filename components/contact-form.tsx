@@ -1,7 +1,5 @@
 "use client"
 
-// Форма «Напишіть нам» на /contacts. Валідація через Zod + react-hook-form,
-// надсилання через TanStack Query mutation на /api/contact.
 import { useMemo } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
@@ -20,9 +18,6 @@ type ContactInput = {
   message: string
 }
 
-// Дозволені символи для імені: літери (UA/EN), пробіл, дефіс, апостроф.
-// Так відсікаємо HTML/JS-навантаження ще на клієнті. Виносимо назовні —
-// щоб не пересоздавалось на кожен рендер і не псувало deps useMemo.
 const NAME_REGEX = /^[\p{L}\s'\-]+$/u
 
 export function ContactForm() {

@@ -1,8 +1,5 @@
 "use client"
 
-// Модалка авторизації з двома вкладками: «Увійти» та «Реєстрація».
-// Логін — через NextAuth signIn. Реєстрація — POST /api/register, потім автологін.
-// + чекбокс згоди з обробкою персональних даних (GDPR/ЗУ "Про захист персональних даних").
 import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -62,10 +59,8 @@ function LoginPanel({ onClose }: { onClose: () => void }) {
   const T = useT()
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  // «Запам'ятати мене» — нічого складного не робимо, просто прапорець (NextAuth cookies живуть 30 днів за замовч.)
   const [remember, setRemember] = useState(true)
 
-  // Схема залежить від локалі (повідомлення про помилки) — обгортаємо в useMemo.
   const loginSchema = useMemo(
     () =>
       z.object({
@@ -158,7 +153,6 @@ function RegisterPanel({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
           phone: z.string().min(6, T.authDialog.errRequired),
           password: z.string().min(8, T.authDialog.errPassword),
           confirm: z.string(),
-          // Згода з обробкою персональних даних — обов'язкове поле.
           consent: z.literal(true, {
             errorMap: () => ({ message: T.authDialog.errConsent })
           })
@@ -260,7 +254,6 @@ function RegisterPanel({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
         </div>
       </div>
 
-      {/* Згода з обробкою персональних даних — обов'язково для відповідності законодавству. */}
       <label className="flex items-start gap-2 text-xs text-muted-foreground">
         <input
           type="checkbox"

@@ -30,13 +30,10 @@ export default function FavoritesPage() {
         setTours(matched)
         setLoading(false)
 
-        // Прибираємо «зомбі»-id — наприклад, що залишилися від
-        // старої БД (інші cuid після reseed/міграції з SQLite на Postgres).
         const validIds = matched.map((t) => t.id)
         const staleIds = ids.filter((id) => !validIds.includes(id))
         if (staleIds.length > 0) {
           setAll(validIds)
-          // Якщо юзер залогінений — також прибираємо зайві записи з БД.
           const state = useFavorites.getState()
           if (state.authenticated) {
             staleIds.forEach((id) => {

@@ -1,7 +1,5 @@
 "use client"
 
-// Клієнтський компонент для списку бронювань на /account/bookings.
-// Виокремили саме його (а не всю сторінку), щоб тримати запит до БД серверним.
 import Link from "next/link"
 import { useT } from "@/lib/i18n"
 import { LocalizedText, LocalizedDate } from "@/components/localized-tour-fields"
@@ -74,7 +72,6 @@ export function BookingsList({ bookings }: { bookings: Booking[] }) {
               )}
             </div>
             <div className="text-right">
-              {/* Якщо є snapshot — показуємо саме його (точна сума, яку бачив юзер при бронюванні). */}
               <div className="text-lg font-bold">
                 {b.displayTotal != null && b.displayCurrency
                   ? formatAmountInCurrency(b.displayTotal, b.displayCurrency as Currency)

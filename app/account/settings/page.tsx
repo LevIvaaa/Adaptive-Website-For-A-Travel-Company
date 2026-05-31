@@ -1,7 +1,5 @@
 "use client"
 
-// Сторінка налаштувань профілю: редагування імені, прізвища та телефону.
-// Email тут readonly — він унікальний ключ юзера й змінюватись через UI не може.
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -37,7 +35,6 @@ export default function SettingsPage() {
     if (status === "unauthenticated") router.replace("/")
   }, [status, router])
 
-  // Підтягуємо актуальні дані з БД (а не з сесії — там можуть бути stale).
   const { data: profile } = useQuery<Profile>({
     queryKey: ["profile"],
     queryFn: async () => {
@@ -59,7 +56,6 @@ export default function SettingsPage() {
     resolver: zodResolver(schema)
   })
 
-  // Заповнюємо форму, коли дані прийшли.
   useEffect(() => {
     if (profile) {
       reset({

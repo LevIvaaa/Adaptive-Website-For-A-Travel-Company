@@ -1,10 +1,6 @@
-// Стори стану на Zustand: обране, локаль, валюта.
-// Кожен зберігається в localStorage через persist — переживає перезавантаження сторінки.
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-// Обране користувача. Для анонімних — лише в localStorage.
-// Для залогінених — синхронізується з БД через /api/favorites
 interface FavoritesState {
   ids: string[]
   authenticated: boolean
@@ -41,7 +37,6 @@ export const useFavorites = create<FavoritesState>()(
   )
 )
 
-// Мова інтерфейсу. За замовчуванням — українська.
 export type Locale = "uk" | "en"
 
 interface LocaleState {
@@ -61,7 +56,6 @@ export const useLocale = create<LocaleState>()(
   )
 )
 
-// Валюта відображення. У БД ціни завжди в UAH; цей стор обирає, як їх показувати.
 export type Currency = "UAH" | "USD" | "EUR"
 
 interface CurrencyState {

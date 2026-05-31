@@ -1,4 +1,3 @@
-// Серверна сторінка особистого кабінету. Тільки запит даних — UI делегуємо в AccountPageContent.
 import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
@@ -9,7 +8,6 @@ export default async function AccountPage() {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) redirect("/")
 
-  // Тягнемо юзера + 3 останні бронювання паралельно.
   const [user, bookings] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.user.id },
@@ -30,7 +28,6 @@ export default async function AccountPage() {
 
   if (!user) redirect("/")
 
-  // Серіалізуємо Date в ISO-строку, щоб коректно прокинути в Client Component.
   const serializedBookings = bookings.map((b) => ({
     id: b.id,
     total: b.total,

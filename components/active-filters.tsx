@@ -1,13 +1,11 @@
 "use client"
 
-// Чипи активних фільтрів над сіткою турів. Кожен чип має ✕ — клік прибирає лише цей параметр.
-// Так юзер бачить, чим відфільтрував результати, і може швидко зняти будь-який.
 import { useRouter, useSearchParams } from "next/navigation"
 import { X } from "lucide-react"
 import { useT } from "@/lib/i18n"
 
 interface Chip {
-  key: string // унікальний ключ для React (наприклад "country:Turkey")
+  key: string
   label: string
   remove: () => void
 }
@@ -19,7 +17,6 @@ export function ActiveFilters() {
 
   const chips: Chip[] = []
 
-  // Допоміжна — формує функцію видалення одного значення з multi-параметра.
   function removeOne(key: string, value?: string) {
     return () => {
       const next = new URLSearchParams(params)
@@ -30,7 +27,6 @@ export function ActiveFilters() {
         next.delete(key)
         all.forEach((v) => next.append(key, v))
       }
-      // priceCurrency без minPrice/maxPrice — не має сенсу, чистимо разом.
       if ((key === "minPrice" || key === "maxPrice") && !next.get("minPrice") && !next.get("maxPrice")) {
         next.delete("priceCurrency")
       }

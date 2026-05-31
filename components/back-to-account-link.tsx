@@ -1,6 +1,5 @@
 "use client"
 
-// Локалізована «← Особистий кабінет» — використовуємо в server-сторінках через client-обгортку.
 import Link from "next/link"
 import { useT } from "@/lib/i18n"
 

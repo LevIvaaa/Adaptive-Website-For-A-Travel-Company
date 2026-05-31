@@ -1,6 +1,5 @@
 "use client"
 
-// Іконка-сердечко в шапці з лічильником обраних турів. Веде на /favorites.
 import Link from "next/link"
 import { Heart } from "lucide-react"
 import { useFavorites } from "@/lib/store"

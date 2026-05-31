@@ -1,11 +1,8 @@
-// GET /api/tours — список турів з фільтрами в query params:
 // type, country (multi), minPrice/maxPrice (+priceCurrency), minNights/maxNights,
-// dateFrom/dateTo (інтервал поїздки), hot, sort, q (текстовий пошук).
 import { NextResponse } from "next/server"
 import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
-// Білий список типів — все, що не в ньому, ігнорується (захист від сміття в URL).
 const allowedTypes = new Set([
   "BEACH",
   "EXCURSION",
@@ -22,7 +19,6 @@ export async function GET(req: Request) {
   const countries = searchParams.getAll("country").filter(Boolean)
   const minPriceRaw = parseInt(searchParams.get("minPrice") ?? "")
   const maxPriceRaw = parseInt(searchParams.get("maxPrice") ?? "")
-  // Параметри ціни в URL у валюті користувача. Переводимо в UAH для фільтру по БД.
   const priceCurrency = searchParams.get("priceCurrency") ?? "UAH"
   const priceRate = priceCurrency === "USD" ? 40 : priceCurrency === "EUR" ? 43 : 1
   const minPrice = Number.isNaN(minPriceRaw) ? NaN : Math.round(minPriceRaw * priceRate)
@@ -33,8 +29,6 @@ export async function GET(req: Request) {
   const sort = searchParams.get("sort") ?? "popular"
   const q = (searchParams.get("q") ?? "").trim().toLowerCase()
 
-  // Якщо передано dateFrom/dateTo з hero — рахуємо кількість ночей у вибраному інтервалі
-  // і додаємо фільтр: тур має «вміщуватися» — кількість його ночей не більша за інтервал.
   const dateFromStr = searchParams.get("dateFrom") ?? ""
   const dateToStr = searchParams.get("dateTo") ?? ""
   let intervalNights = NaN
@@ -46,7 +40,6 @@ export async function GET(req: Request) {
     }
   }
 
-  // Якщо фільтр позначив себе невалідним — повертаємо порожній список, щоб користувач бачив empty state.
   if (searchParams.get("_invalid") === "1") {
     return NextResponse.json([])
   }
@@ -61,7 +54,6 @@ export async function GET(req: Request) {
     if (!Number.isNaN(minPrice)) where.price.gte = minPrice
     if (!Number.isNaN(maxPrice)) where.price.lte = maxPrice
   }
-  // Фільтр по ночам комбінуємо з тривалістю інтервалу з hero — беремо найжорсткіший maxNights.
   const effectiveMaxNights = Number.isFinite(intervalNights)
     ? (Number.isNaN(maxNights) ? intervalNights : Math.min(maxNights, intervalNights))
     : maxNights

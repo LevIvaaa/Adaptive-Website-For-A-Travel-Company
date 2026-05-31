@@ -1,6 +1,5 @@
 import "next-auth"
 
-// Розширюємо стандартні типи NextAuth — додаємо id, role, phone у сесію та JWT.
 declare module "next-auth" {
   interface Session {
     user: {

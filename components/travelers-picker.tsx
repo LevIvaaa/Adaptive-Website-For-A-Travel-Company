@@ -54,7 +54,6 @@ export function TravelersPicker({ value, onChange }: Props) {
       </button>
 
       {open && (
-        // На вузьких екранах розкривається на повну ширину батьківського поля.
         <div className="absolute left-0 top-[calc(100%+8px)] z-50 w-full min-w-[260px] rounded-xl border border-border bg-background p-4 shadow-xl sm:w-[300px]">
           <div className="mb-3 text-sm font-semibold">
             {T.search.travelersPicker.title}
